@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 
 public class Drawer {
@@ -20,7 +21,10 @@ public class Drawer {
 		font = new BitmapFont();
 		font.setColor(Color.BLACK);
 	}
-		
+	public void SetProjectionMatrix(Matrix4 projectionMatrix)
+	{
+		batch.setProjectionMatrix(projectionMatrix);
+	}
 	public void DrawLine(Vector2 start, Vector2 end, int lineWidth, Color color)
     {
 		InitLineRenderingWithWidthAndColor(lineWidth,color);
@@ -70,9 +74,9 @@ public class Drawer {
 	}
 	
 	
-	public void DrawHex(Vector2 center,float radius, int lineWidth, Color color,HexTopping hexTop)
+	public void DrawHex(Vector2 center,float radius,HexTopping topping, Color color)
 	{
-        DrawConnectedPointsArray(HexUtilites.getHexPoints(center,radius,hexTop),lineWidth,color);
+		DrawConnectedPointsArray(HexUtilites.getHexPoints(center, radius, topping),3,color);
 	}
 	
 	public void DrawFont(String textValue,Vector2 position)
@@ -81,6 +85,20 @@ public class Drawer {
 	    font.draw(batch, textValue, position.x, position.y);
 	    batch.end();
 	}
+	
+	private float[] ConvertVectors2ToVerts(Vector2[] points)
+	{
+		float[] toReturn = new float[points.length*2];
+		int index = 0;
+		for(Vector2 vec2 : points)
+		{
+			toReturn[index] = vec2.x;
+			toReturn[index+1] = vec2.y;
+			index++;
+		}
+		return toReturn;
+	}
+	
 	
 	public void Dispose()
 	{
