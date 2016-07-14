@@ -61,10 +61,10 @@ public class MainGame extends ApplicationAdapter  {
         drawer = new Drawer();
     	map = new HexMap(new Vector2(0,0),40,10);
     	
-    	inputCatcher.AddInputListener((position) ->{
+    	/*inputCatcher.AddInputListener((position) ->{
     		currentMouseCoor = map.positionToHex(position);
     		debugString = currentMouseCoor.toString(); 
-    	});
+    	});*/
     }
 
     @Override

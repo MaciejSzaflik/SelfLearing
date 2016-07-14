@@ -23,7 +23,8 @@ public class InputCatcher implements InputProcessor{
 	
 	private void notifyAllOnMouseMove(Vector3 currentPosition)
 	{
-		onMouseMoveListeners.forEach(listeners -> listeners.onMouseMove(currentPosition));
+		for(OnMouseMove listener : onMouseMoveListeners)
+			listener.onMouseMove(currentPosition);
 	}
 	
 	Vector3 tp = new Vector3();

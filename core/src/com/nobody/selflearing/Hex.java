@@ -25,7 +25,7 @@ public class Hex {
 	
 	public String getStringRep()
 	{
-		return String.format("%1$d:%2$d", coor.q, coor.r);
+		return coor.toString();
 	}
 	
 }

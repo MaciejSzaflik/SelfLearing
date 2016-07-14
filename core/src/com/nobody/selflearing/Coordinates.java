@@ -23,9 +23,9 @@ public class Coordinates {
 		this.r = c;
 	}
 	
-	@Override public String toString()
+	public String toString()
 	{
-		return String.format("%1$d:%2$d", q, r);
+		return q+":"+r;
 	}
 	
 }
