@@ -56,8 +56,9 @@ class HexMap extends BoardMap
 		trace("end");
 	}
 	
-	public function positionToHex(position : FlxPoint) : Coordinates
+	public function positionToHex(rawPosition : FlxPoint) : Coordinates
 	{
+		var position = new FlxPoint(rawPosition.x - mapCenter.x, rawPosition.y - mapCenter.y);
 		var q =  Std.int((position.x*Math.sqrt(3)/3 + position.y/3)/hexSize*2);
 		var r =  Std.int(-((position.y)/hexSize*2));
 		return new Coordinates(q,r);	
