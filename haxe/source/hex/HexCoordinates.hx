@@ -27,8 +27,24 @@ class HexCoordinates
 		this.r = r;
 	}
 	
+	public function getOddRCol():Int
+	{
+		return Math.round(getX() + (getZ() - getZ() & 1) / 2);
+	}
+	public function getOddRRow():Int
+	{
+		return getZ();
+	}
+	
 	static public function fromCube(x:Int,z:Int):HexCoordinates
 	{
+		return new HexCoordinates(x, z);
+	}
+	
+	static public function fromOddR(row:Int,col:Int):HexCoordinates
+	{
+		var x = Math.round(col - (row - (row & 1)) / 2);
+		var z = row;
 		return new HexCoordinates(x, z);
 	}
 	

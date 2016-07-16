@@ -5,57 +5,40 @@ import source.BoardMap;
 
 class HexMap extends BoardMap
 {
-	public var precalculatedPoints : List<Array<FlxPoint>>;
-	private var hexes : List<Hex>;
+	public var precalculatedPoints:List<Array<FlxPoint>>;
+	private var hexes:List<Hex>;
 	
-	private var radius : Int;
-	private var topping : HexTopping;
-	private var hexSize : Float;
-	private var mapCenter : FlxPoint;
+	private var topping:HexTopping;
+	private var mapCenter:FlxPoint;
 	
-	public function new(mapCenter : FlxPoint, hexSize : Float, radius : Int) 
+	public var hexSize(get, set):Float;
+	private var _hexSize:Float;
+	function get_hexSize():Float {
+		return _hexSize;
+	}
+
+	function set_hexSize(value:Float) {
+		return _hexSize = value;
+	}
+	
+	private var boardsType:BoardShape;
+	
+	public function new(mapCenter:FlxPoint, hexSize:Float) 
 	{
-		this.radius = radius;
 		this.hexSize = hexSize;
 		this.mapCenter = mapCenter;
 		this.topping = HexTopping.Pointy;
-		CalculatePointToppedPoints();
 		super();
 	}
-	
-	private function CalculatePointToppedPoints() : Void
+	public function InitPoints()
 	{
-		precalculatedPoints = new List<Array<FlxPoint>>();
-		hexes = new List<Hex>();
-		var i = -radius;
-		while(i<=radius)
-		{
-			trace(i);
-			var j = -radius;
-			while(j<=radius)
-			{
-				trace(j);
-				if(i+j > radius || i+j < -radius)
-				{
-					trace("no");
-				}
-				else
-				{
-					hexes.add(new Hex(
-						getHexCenterByAxialCor(new HexCoordinates(i,j)),
-						new HexCoordinates(i,j)
-					));
-
-					precalculatedPoints.add(HexUtilites.getHexPoints(
-							hexes.last().center,
-							hexSize,
-							topping));	
-				}
-				j++;
-			}
-			i++;
-		}
-		trace("end");
+		resetLists();
+	}
+	
+	private function resetLists():Void
+	{
+		this.precalculatedPoints = new List<Array<FlxPoint>>();
+		this.hexes = new List<Hex>();
 	}
 	
 	public function positionToHex(rawPosition:FlxPoint):HexCoordinates

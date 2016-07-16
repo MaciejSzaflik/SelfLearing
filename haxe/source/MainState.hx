@@ -8,6 +8,8 @@ import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
 import flixel.math.FlxPoint;
 import flixel.FlxBasic;
+import hex.HexagonalHexMap;
+import hex.RectangleHexMap;
 import source.Drawer;
 import hex.HexMap;
 import hex.HexTopping;
@@ -66,7 +68,8 @@ class MainState extends FlxState
 	
 	private function createMap():Void
 	{
-		this.hexMap = new HexMap(new FlxPoint(FlxG.width*0.5, FlxG.height*0.5),30, 6);
+		this.hexMap = new RectangleHexMap(new FlxPoint(FlxG.width * 0.1, FlxG.height * 0.7), 22,22,15);
+		this.hexMap.InitPoints();
 	}
 	private function createDrawer():Void
 	{
@@ -92,6 +95,6 @@ class MainState extends FlxState
 
 		var center = getHexMap().getHexCenterByAxialCor(coor);
 		drawer.clear(1);
-		drawer.drawHex(center, 30, HexTopping.Pointy, FlxColor.WHITE,1);
+		drawer.drawHex(center, getHexMap().hexSize, HexTopping.Pointy, FlxColor.WHITE,1);
 	}
 }
