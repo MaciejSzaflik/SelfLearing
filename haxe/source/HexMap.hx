@@ -56,15 +56,42 @@ class HexMap extends BoardMap
 		trace("end");
 	}
 	
-	public function positionToHex(rawPosition : FlxPoint) : Coordinates
+	public function positionToHex(rawPosition:FlxPoint):Coordinates
 	{
-		var position = new FlxPoint(rawPosition.x - mapCenter.x, rawPosition.y - mapCenter.y);
-		var q =  Std.int((position.x*Math.sqrt(3)/3 + position.y/3)/hexSize*2);
-		var r =  Std.int(-((position.y)/hexSize*2));
-		return new Coordinates(q,r);	
+		var position = new FlxPoint(rawPosition.x - mapCenter.x, -(rawPosition.y - mapCenter.y));
+		var q =  (position.x*Math.sqrt(3)/3 - position.y/3)/hexSize*2;
+		var r =  (position.y * (2/3))/hexSize*2;
+		return cubeRand(q,-q-r,r);	
 	}
 	
-	public function getHexCenterByAxialCor(coor : Coordinates) : FlxPoint
+	public function cubeRand(hx:Float, hy:Float, hz:Float):Coordinates
+	{
+		var rx = Math.round(hx);
+		var ry = Math.round(hy);
+		var rz = Math.round(hz);
+		
+		var x_diff = Math.abs(rx - hx);
+		var y_diff = Math.abs(ry - hy);
+		var z_diff = Math.abs(rz - hz);
+		
+		if (x_diff > y_diff && x_diff > z_diff)
+			rx = -ry - rz;
+		else if (y_diff > z_diff)
+			ry = -rx - rz;
+		else
+			rz = -rx - ry;
+			
+		return Coordinates.fromCube(rx, rz);
+	}
+	
+	public function hexToPosition(coor:Coordinates):FlxPoint
+	{
+		var x = hexSize * 2 * Math.sqrt(3) * (coor.q + coor.r / 2);
+		var y = hexSize * 3 * coor.r;
+		return new FlxPoint(x,y);
+	}
+	
+	public function getHexCenterByAxialCor(coor:Coordinates):FlxPoint
 	{
 		return new FlxPoint(mapCenter.x + coor.q*hexSize + coor.r*hexSize*0.5,mapCenter.y - coor.r*hexSize*0.75);
 	}
