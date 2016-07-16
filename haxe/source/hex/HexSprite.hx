@@ -1,9 +1,9 @@
-package;
+package hex;
 import flixel.FlxSprite;
 import flixel.FlxSprite;
 import source.Drawer;
 import flixel.util.FlxColor;
-import source.HexTopping;
+import hex.HexTopping;
 
 class HexSprite extends FlxSprite
 {

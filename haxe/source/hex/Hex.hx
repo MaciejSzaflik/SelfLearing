@@ -1,13 +1,13 @@
-package source;
+package hex;
 
 import flixel.math.FlxPoint;
 
 class Hex
 {
 	public var center : FlxPoint;
-	private var coor : Coordinates;
+	private var coor : HexCoordinates;
 	
-	public function new(center:FlxPoint, coor:Coordinates) 
+	public function new(center:FlxPoint, coor:HexCoordinates) 
 	{
 		this.center = center;
 		this.coor = coor;

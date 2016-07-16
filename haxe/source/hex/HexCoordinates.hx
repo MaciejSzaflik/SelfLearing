@@ -1,7 +1,7 @@
-package source;
+package hex;
 
 
-class Coordinates
+class HexCoordinates
 {
 	public var q:Int;
 	public var r:Int;
@@ -27,9 +27,9 @@ class Coordinates
 		this.r = r;
 	}
 	
-	static public function fromCube(x:Int,z:Int):Coordinates
+	static public function fromCube(x:Int,z:Int):HexCoordinates
 	{
-		return new Coordinates(x, z);
+		return new HexCoordinates(x, z);
 	}
 	
 	public function toString():String

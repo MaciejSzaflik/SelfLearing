@@ -5,6 +5,9 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
 import flixel.FlxG;
+import hex.HexMap;
+import hex.HexTopping;
+import hex.HexUtilites;
 using flixel.util.FlxSpriteUtil;
 
 class Drawer

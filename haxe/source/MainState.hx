@@ -9,8 +9,8 @@ import flixel.util.FlxColor;
 import flixel.math.FlxPoint;
 import flixel.FlxBasic;
 import source.Drawer;
-import source.HexMap;
-import source.HexTopping;
+import hex.HexMap;
+import hex.HexTopping;
 
 using flixel.util.FlxSpriteUtil;
 
