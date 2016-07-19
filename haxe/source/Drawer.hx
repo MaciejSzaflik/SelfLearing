@@ -19,16 +19,11 @@ class Drawer
 	{
 		this.layers = new FlxTypedGroup<FlxSprite>();
 		for (i in 0...numberOfLayers)
-		{
-			this.layers.add(createNewLayer(stateToAdd));
-		}
+			createNewLayer(stateToAdd);
 	}
 	private function createNewLayer(stateToAdd:FlxState):FlxSprite
 	{
-		var canvas = new FlxSprite();
-		canvas.makeGraphic(FlxG.width, FlxG.height, FlxColor.TRANSPARENT, true);
-		stateToAdd.add(canvas);
-		return canvas;
+		return SpriteFactory.instance.createNewLayer(stateToAdd,this.layers);
 	}
 	
 	public function drawHex(center:FlxPoint, radius:Float, hexTopping:HexTopping, fillColor:FlxColor, layer:Int) : Void

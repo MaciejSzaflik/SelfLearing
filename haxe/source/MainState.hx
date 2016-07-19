@@ -8,6 +8,7 @@ import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
 import flixel.math.FlxPoint;
 import flixel.FlxBasic;
+import game.StageDescription;
 import hex.HexagonalHexMap;
 import hex.RectangleHexMap;
 import source.Drawer;
@@ -27,7 +28,8 @@ class MainState extends FlxState
 	private var btnPlay:FlxButton;
 	private var drawer:Drawer;
 	private var hexMap:HexMap;
-
+	private var stageDescription:StageDescription;
+	
 	private var fpsText:FlxText;
 	private var debugText:FlxText;
 	
@@ -47,8 +49,13 @@ class MainState extends FlxState
 	override public function create():Void
 	{
 		_instance = this;
+		stageDescription = new StageDescription();
+		stageDescription.InitTestStage();
 		drawMap();
 		addText();
+		
+		stageDescription.AddCreaturesToScene(this);
+			
 		super.create();
 	}
 	
@@ -68,7 +75,12 @@ class MainState extends FlxState
 	
 	private function createMap():Void
 	{
-		this.hexMap = new RectangleHexMap(new FlxPoint(FlxG.width * 0.1, FlxG.height * 0.7), 22,22,15);
+		this.hexMap = new RectangleHexMap(
+			new FlxPoint(FlxG.width * 0.1, FlxG.height * 0.7),
+			stageDescription.mapHexSize,
+			stageDescription.mapCols,
+			stageDescription.mapRows);
+			
 		this.hexMap.InitPoints();
 	}
 	private function createDrawer():Void
