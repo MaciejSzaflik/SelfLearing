@@ -1,13 +1,14 @@
 package hex;
 import flixel.math.FlxPoint;
+import graph.Graph;
 import hex.Hex;
 import source.BoardMap;
 
 class HexMap extends BoardMap
 {
 	public var precalculatedPoints:List<Array<FlxPoint>>;
-	private var hexes:List<Hex>;
-	
+	private var hexes:Map<Int,Hex>;
+	private var graphConnections:Graph;
 	private var topping:HexTopping;
 	private var mapCenter:FlxPoint;
 	
@@ -28,6 +29,7 @@ class HexMap extends BoardMap
 		this.hexSize = hexSize;
 		this.mapCenter = mapCenter;
 		this.topping = HexTopping.Pointy;
+		graphConnections = new Graph();
 		super();
 	}
 	public function InitPoints()
@@ -38,7 +40,7 @@ class HexMap extends BoardMap
 	private function resetLists():Void
 	{
 		this.precalculatedPoints = new List<Array<FlxPoint>>();
-		this.hexes = new List<Hex>();
+		this.hexes = new Map<Int,Hex>();
 	}
 	
 	public function positionToHex(rawPosition:FlxPoint):HexCoordinates
@@ -59,6 +61,11 @@ class HexMap extends BoardMap
 	public function getHexCenterByAxialCor(coor:HexCoordinates):FlxPoint
 	{
 		return new FlxPoint(mapCenter.x + coor.q*hexSize + coor.r*hexSize*0.5,mapCenter.y - coor.r*hexSize*0.75);
+	}
+	
+	public function getGraph()
+	{
+		return this.graphConnections;
 	}
 	
 }

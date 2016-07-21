@@ -25,21 +25,21 @@ class RectangleHexMap extends HexMap
 	private function CalculatePoints():Void
 	{
 		var i = 0;
+		var hexIndex = 0;
 		while(i<width)
 		{
 			var j = 0;
 			while(j<height)
 			{
-				hexes.add(new Hex(
-					getHexCenterByAxialCor(HexCoordinates.fromOddR(j,i)),
-					new HexCoordinates(i,j)
-				));
+				var hex = new Hex(getHexCenterByAxialCor(HexCoordinates.fromOddR(j, i)), new HexCoordinates(i, j));
+				hexes.set(hexIndex,hex);
 
 				precalculatedPoints.add(HexUtilites.getHexPoints(
-						hexes.last().center,
+						hex.center,
 						hexSize,
 						topping));	
 				j++;
+				hexIndex++;
 			}
 			i++;
 		}

@@ -19,6 +19,7 @@ class HexagonalHexMap extends HexMap
 	
 	private function CalculatePoints():Void
 	{
+		var hexIndex = 0;
 		var i = -radius;
 		while(i<=radius)
 		{
@@ -30,15 +31,11 @@ class HexagonalHexMap extends HexMap
 				}
 				else
 				{
-					hexes.add(new Hex(
-						getHexCenterByAxialCor(new HexCoordinates(i,j)),
-						new HexCoordinates(i,j)
-					));
+					var hex = new Hex(getHexCenterByAxialCor(new HexCoordinates(i, j)), new HexCoordinates(i, j));
+					hexes.set(hexIndex,hex);
 
-					precalculatedPoints.add(HexUtilites.getHexPoints(
-							hexes.last().center,
-							hexSize,
-							topping));	
+					precalculatedPoints.add(HexUtilites.getHexPoints(hex.center,hexSize,topping));	
+					hexIndex++;
 				}
 				j++;
 			}

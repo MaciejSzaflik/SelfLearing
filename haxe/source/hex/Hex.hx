@@ -4,8 +4,9 @@ import flixel.math.FlxPoint;
 
 class Hex
 {
-	public var center : FlxPoint;
-	private var coor : HexCoordinates;
+	public var center:FlxPoint;
+	private var coor:HexCoordinates;
+	private var index:Int;
 	
 	public function new(center:FlxPoint, coor:HexCoordinates) 
 	{
@@ -13,7 +14,7 @@ class Hex
 		this.coor = coor;
 	}
 	
-	public function toString() : String
+	public function toString():String
 	{
 		return coor.toString();
 	}
