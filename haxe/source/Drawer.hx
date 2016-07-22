@@ -26,6 +26,20 @@ class Drawer
 		return SpriteFactory.instance.createNewLayer(stateToAdd,this.layers);
 	}
 	
+	public function drawListOfLines(listOfLines:List<FlxPoint>, lineColor:FlxColor, layer:Int):Void
+	{
+		while (!listOfLines.isEmpty())
+		{
+			drawLine(listOfLines.pop(), listOfLines.pop(), lineColor, layer);
+		}
+	}
+	
+	public function drawLine(begin:FlxPoint, end:FlxPoint, lineColor:FlxColor, layer:Int):Void
+	{
+		var lineStyle = { color: lineColor, thickness: 1.0 };
+		this.layers.members[layer].drawLine(begin.x, begin.y, end.x, end.y,lineStyle);
+	}
+	
 	public function drawHex(center:FlxPoint, radius:Float, hexTopping:HexTopping, fillColor:FlxColor, layer:Int) : Void
 	{
 		this.layers.members[layer].drawPolygon(HexUtilites.getHexPoints(center, radius, hexTopping),fillColor);

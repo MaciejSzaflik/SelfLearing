@@ -53,7 +53,7 @@ class MainState extends FlxState
 		stageDescription.InitTestStage();
 		drawMap();
 		addText();
-		
+		drawDebugGraph();
 		stageDescription.AddCreaturesToScene(this);
 			
 		super.create();
@@ -90,6 +90,12 @@ class MainState extends FlxState
 	private function drawMap():Void
 	{
 		getDrawer().drawHexMap(getHexMap(),0xFFFFFFFF,0x00000000,0);
+	}
+	
+	private function drawDebugGraph():Void
+	{
+		var lines = getHexMap().getArrayOfPoints();
+		getDrawer().drawListOfLines(lines, 0x66FF0000, 0);
 	}
 
 	override public function update(elapsed:Float):Void

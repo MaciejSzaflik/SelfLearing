@@ -32,13 +32,13 @@ class StageDescription
 		var spriteDefinition = new SpriteDefinition("assets/images/blob.png", true, 36, 32, animationList);
 		listOfSpriteDefinition.add(spriteDefinition);
 		
-		var i = 0;
+		/*var i = 0;
 		while (i < 4)
 		{
 			var creature = new Creature(SpriteFactory.instance.createNewCreature(spriteDefinition),i*100,20);
 			listOfCreatures.add(creature);
 			i++;
-		}
+		}*/
 		
 		mapRows = 10;
 		mapCols = 12;

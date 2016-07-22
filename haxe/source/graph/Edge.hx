@@ -15,4 +15,9 @@ class Edge
 		this.right = right;
 	}
 	
+	public function toString():String
+	{
+		return "Edge:"+left + "|" + right;
+	}
+	
 }

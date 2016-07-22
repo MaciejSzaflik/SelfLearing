@@ -63,9 +63,29 @@ class HexMap extends BoardMap
 		return new FlxPoint(mapCenter.x + coor.q*hexSize + coor.r*hexSize*0.5,mapCenter.y - coor.r*hexSize*0.75);
 	}
 	
-	public function getGraph()
+	public function getGraph():Graph
 	{
 		return this.graphConnections;
+	}
+	
+	public function getArrayOfPoints():List<FlxPoint>
+	{
+		var edges = getGraph().getListOfEdges();
+		var listOfPoints = new List<FlxPoint>();
+		for (edge in edges)
+		{
+			if (hexes.exists(edge.left) && hexes.exists(edge.right))
+			{
+				listOfPoints.add(hexes.get(edge.left).center);
+				listOfPoints.add(hexes.get(edge.right).center);
+			}
+			else
+			{
+				trace("Invalid edge: "+edge.toString());
+			}
+			
+		}
+		return listOfPoints;
 	}
 	
 }

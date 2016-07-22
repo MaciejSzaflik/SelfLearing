@@ -1,5 +1,6 @@
 package hex;
 
+import flash.display3D.IndexBuffer3D;
 import flixel.math.FlxPoint;
 
 class RectangleHexMap extends HexMap
@@ -38,6 +39,22 @@ class RectangleHexMap extends HexMap
 						hex.center,
 						hexSize,
 						topping));	
+				
+				if(j < height - 1)
+					graphConnections.addConnection(hexIndex, hexIndex + 1);
+					
+				if(i < width - 1)
+					graphConnections.addConnection(hexIndex, hexIndex + height);
+					
+				if(i < width - 1 && j <height -1 && j%2 == 1)
+					graphConnections.addConnection(hexIndex, hexIndex + height + 1);
+					
+				if(i > 0 && j <height -1 && j%2 == 0)
+					graphConnections.addConnection(hexIndex, hexIndex - height + 1);
+					
+				if(i < width - 1 && j > 0)
+					graphConnections.addConnection(hexIndex, hexIndex -1);
+					
 				j++;
 				hexIndex++;
 			}
