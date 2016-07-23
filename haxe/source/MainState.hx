@@ -9,6 +9,8 @@ import flixel.util.FlxColor;
 import flixel.math.FlxPoint;
 import flixel.FlxBasic;
 import game.StageDescription;
+import graph.BreadthFirstSearch;
+import graph.Vertex;
 import hex.HexagonalHexMap;
 import hex.RectangleHexMap;
 import source.Drawer;
@@ -54,7 +56,14 @@ class MainState extends FlxState
 		drawMap();
 		addText();
 		drawDebugGraph();
-		stageDescription.AddCreaturesToScene(this);
+		var bfs = new BreadthFirstSearch(getHexMap().getGraph());
+		var listOfSelect =  bfs.findRange(new Vertex(40), 2);
+		for (index in listOfSelect)
+		{
+			var hex = getHexMap().getHexByIndex(index);
+			getDrawer().drawHex(hex.center, getHexMap().hexSize, HexTopping.Pointy, 0x7700FFFF, 0);
+		}
+		//stageDescription.AddCreaturesToScene(this);
 			
 		super.create();
 	}

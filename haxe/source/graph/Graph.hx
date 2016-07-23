@@ -7,6 +7,9 @@ package graph;
 class Graph
 {
 	public var adjacencyList:Map<Int,Map<Int,Bool>>;
+	private var vertices:Map<Int,Vertex>;
+	private var edges:List<Edge>;
+	
 	public function new() 
 	{
 		this.adjacencyList = new Map<Int,Map<Int,Bool>>();
@@ -46,16 +49,36 @@ class Graph
 			return false;
 	}
 	
+	public function getConnected(vertex:Int):Iterator<Int>
+	{
+		if (adjacencyList.exists(vertex))
+		{
+			return adjacencyList.get(vertex).keys();
+		}
+		else 
+			return null;
+	}
 	
 	public function getListOfEdges():List<Edge>
 	{
-		var toReturn = new List<Edge>();
-		for (key in adjacencyList.keys()) {
-			for (connected in adjacencyList.get(key).keys())
-			{
-				toReturn.add(new Edge(key, connected));
+		if (edges == null)
+		{		
+			edges = new List<Edge>();
+			for (key in adjacencyList.keys()) {
+				for (connected in adjacencyList.get(key).keys())
+				{
+					edges.add(new Edge(key, connected));
+				}
 			}
 		}
-		return toReturn;
+		return edges;
+	}
+	
+	public function getVertices():Map<Int,Vertex>
+	{
+		vertices = new Map<Int,Vertex>();
+		for (key in adjacencyList.keys()) 
+			vertices.set(key,new Vertex(key));
+		return vertices;
 	}
 }

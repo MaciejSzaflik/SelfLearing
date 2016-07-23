@@ -1,5 +1,6 @@
 package hex;
 import flixel.math.FlxPoint;
+import graph.BreadthFirstSearch;
 import graph.Graph;
 import hex.Hex;
 import source.BoardMap;
@@ -11,6 +12,7 @@ class HexMap extends BoardMap
 	private var graphConnections:Graph;
 	private var topping:HexTopping;
 	private var mapCenter:FlxPoint;
+	private var bfs:BreadthFirstSearch;
 	
 	public var hexSize(get, set):Float;
 	private var _hexSize:Float;
@@ -30,6 +32,7 @@ class HexMap extends BoardMap
 		this.mapCenter = mapCenter;
 		this.topping = HexTopping.Pointy;
 		graphConnections = new Graph();
+		bfs = new BreadthFirstSearch(graphConnections);
 		super();
 	}
 	public function InitPoints()
@@ -66,6 +69,14 @@ class HexMap extends BoardMap
 	public function getGraph():Graph
 	{
 		return this.graphConnections;
+	}
+	
+	public function getHexByIndex(index:Int):Hex
+	{
+		if (hexes.exists(index))
+			return hexes.get(index);
+		else
+			return new Hex(new FlxPoint(0,0),new HexCoordinates(0,0));
 	}
 	
 	public function getArrayOfPoints():List<FlxPoint>

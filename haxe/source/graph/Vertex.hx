@@ -6,10 +6,20 @@ package graph;
  */
 class Vertex
 {
+	public static inline var MAX = 1000000;
 	public var index:Int;
-	public function new(value:index)
+	public var distance:Int;
+	public var parent:Vertex;
+	public function new(value:Int)
 	{
-		this.index = index;
+		this.index = value;
+		this.distance = MAX; //supposed to be infinity
+		this.parent = null;
 	}
+	
+	public function hashCode():Int
+    {
+        return index;
+    }
 	
 }
