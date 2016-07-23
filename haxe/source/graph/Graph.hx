@@ -48,6 +48,10 @@ class Graph
 		else
 			return false;
 	}
+	public function getDistance(begin:Int, end:Int):Int
+	{
+		return 1;
+	}
 	
 	public function getConnected(vertex:Int):Iterator<Int>
 	{

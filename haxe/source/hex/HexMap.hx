@@ -1,9 +1,12 @@
 package hex;
 import flixel.math.FlxPoint;
 import graph.BreadthFirstSearch;
+import graph.DjikstraPath;
 import graph.Graph;
+import graph.Pathfinder;
 import graph.Vertex;
 import hex.Hex;
+import js.html.rtc.IdentityAssertion;
 import source.BoardMap;
 
 class HexMap extends BoardMap
@@ -14,6 +17,7 @@ class HexMap extends BoardMap
 	private var topping:HexTopping;
 	private var mapCenter:FlxPoint;
 	private var bfs:BreadthFirstSearch;
+	private var pathfinder:Pathfinder;
 	
 	public var hexSize(get, set):Float;
 	private var _hexSize:Float;
@@ -34,6 +38,7 @@ class HexMap extends BoardMap
 		this.topping = HexTopping.Pointy;
 		graphConnections = new Graph();
 		bfs = new BreadthFirstSearch(graphConnections);
+		pathfinder = new DjikstraPath(graphConnections);
 		super();
 	}
 	public function InitPoints()
@@ -98,6 +103,18 @@ class HexMap extends BoardMap
 			
 		}
 		return listOfPoints;
+	}
+	
+	public function getPathCenters(start:Int, end:Int):List<FlxPoint>
+	{
+		var centers = new List<FlxPoint>();
+		if (hexes.exists(start) && hexes.exists(end))
+		{
+			var listOfVertices = pathfinder.findPath(start, end);
+			for (vert in listOfVertices)
+				centers.add(hexes.get(vert).center);
+		}
+		return centers;
 	}
 	
 	public function getRangeCenters(index:Int,rangeSize:Int):List<FlxPoint>
