@@ -53,4 +53,12 @@ class HexCoordinates
 		return "Coordinates("+q+","+r+")";
 	}
 	
+	public function toKey():Int
+	{
+		var x = q < 0 ? q + 5000 : q;
+		var y = r < 0 ? r + 5000 : r;
+		
+		return Math.floor(((x + y + 1) * (x + y)) / 2) + y; 
+	}
+	
 }

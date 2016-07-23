@@ -2,6 +2,7 @@ package hex;
 import flixel.math.FlxPoint;
 import graph.BreadthFirstSearch;
 import graph.Graph;
+import graph.Vertex;
 import hex.Hex;
 import source.BoardMap;
 
@@ -97,6 +98,23 @@ class HexMap extends BoardMap
 			
 		}
 		return listOfPoints;
+	}
+	
+	public function getRangeCenters(index:Int,rangeSize:Int):List<FlxPoint>
+	{
+		var centers = new List<FlxPoint>();
+		if (hexes.exists(index))
+		{
+			var listOfVertices = bfs.findRange(new Vertex(index), rangeSize);
+			for (vert in listOfVertices)
+			{
+				if (hexes.exists(vert))
+				{
+					centers.add(hexes.get(vert).center);
+				}
+			}
+		}
+		return centers;
 	}
 	
 }

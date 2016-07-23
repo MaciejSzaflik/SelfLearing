@@ -26,37 +26,45 @@ class RectangleHexMap extends HexMap
 	private function CalculatePoints():Void
 	{
 		var i = 0;
-		var hexIndex = 0;
 		while(i<width)
 		{
 			var j = 0;
 			while(j<height)
 			{
-				var hex = new Hex(getHexCenterByAxialCor(HexCoordinates.fromOddR(j, i)), new HexCoordinates(i, j));
+				var hexCoordinates = HexCoordinates.fromOddR(j, i);
+				var hexIndex = hexCoordinates.toKey();
+				
+				var hex = new Hex(getHexCenterByAxialCor(hexCoordinates), hexCoordinates);
 				hexes.set(hexIndex,hex);
 
+				
 				precalculatedPoints.add(HexUtilites.getHexPoints(
 						hex.center,
 						hexSize,
 						topping));	
 				
-				if(j < height - 1)
-					graphConnections.addConnection(hexIndex, hexIndex + 1);
-					
-				if(i < width - 1)
-					graphConnections.addConnection(hexIndex, hexIndex + height);
-					
-				if(i < width - 1 && j <height -1 && j%2 == 1)
-					graphConnections.addConnection(hexIndex, hexIndex + height + 1);
-					
-				if(i > 0 && j <height -1 && j%2 == 0)
-					graphConnections.addConnection(hexIndex, hexIndex - height + 1);
-					
-				if(i < width - 1 && j > 0)
-					graphConnections.addConnection(hexIndex, hexIndex -1);
-					
+				if (j < height - 1)
+				{
+					hexCoordinates = HexCoordinates.fromOddR(j+1, i);
+					graphConnections.addConnection(hexIndex, hexCoordinates.toKey());
+				}
+				if (i < width - 1)
+				{
+					hexCoordinates = HexCoordinates.fromOddR(j, i+1);
+					graphConnections.addConnection(hexIndex, hexCoordinates.toKey());
+				}
+				if (i < width - 1 && j < height -1 && j % 2 == 1)
+				{
+					hexCoordinates = HexCoordinates.fromOddR(j+1, i+1);
+					graphConnections.addConnection(hexIndex, hexCoordinates.toKey());
+				}
+				if (i > 0 && j < height -1 && j % 2 == 0)
+				{
+					hexCoordinates = HexCoordinates.fromOddR(j+1, i-1);
+					graphConnections.addConnection(hexIndex, hexCoordinates.toKey());
+				}					
+
 				j++;
-				hexIndex++;
 			}
 			i++;
 		}

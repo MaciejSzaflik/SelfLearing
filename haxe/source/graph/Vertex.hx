@@ -6,7 +6,7 @@ package graph;
  */
 class Vertex
 {
-	public static inline var MAX = 1000000;
+	public static inline var MAX = 10000000;
 	public var index:Int;
 	public var distance:Int;
 	public var parent:Vertex;

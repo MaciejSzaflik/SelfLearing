@@ -56,13 +56,13 @@ class MainState extends FlxState
 		drawMap();
 		addText();
 		drawDebugGraph();
-		var bfs = new BreadthFirstSearch(getHexMap().getGraph());
+		/*var bfs = new BreadthFirstSearch(getHexMap().getGraph());
 		var listOfSelect =  bfs.findRange(new Vertex(40), 2);
 		for (index in listOfSelect)
 		{
 			var hex = getHexMap().getHexByIndex(index);
 			getDrawer().drawHex(hex.center, getHexMap().hexSize, HexTopping.Pointy, 0x7700FFFF, 0);
-		}
+		}*/
 		//stageDescription.AddCreaturesToScene(this);
 			
 		super.create();
@@ -118,10 +118,16 @@ class MainState extends FlxState
 	{
 		var mousePoint = new FlxPoint(FlxG.mouse.x, FlxG.mouse.y);
 		var coor = getHexMap().positionToHex(mousePoint);
-		setTextToTextObj(debugText, coor.toString());
+		setTextToTextObj(debugText, coor.toString() + " " + coor.toKey());
 
 		var center = getHexMap().getHexCenterByAxialCor(coor);
 		drawer.clear(1);
-		drawer.drawHex(center, getHexMap().hexSize, HexTopping.Pointy, FlxColor.WHITE,1);
+		
+		
+		var range = getHexMap().getRangeCenters(coor.toKey(), 2);
+		for (hex in range)
+			drawer.drawHex(hex, getHexMap().hexSize, HexTopping.Pointy, 0x7700ffff, 1);
+			
+		drawer.drawHex(center, getHexMap().hexSize, HexTopping.Pointy, FlxColor.WHITE, 1);
 	}
 }
