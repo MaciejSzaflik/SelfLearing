@@ -1,5 +1,7 @@
 package;
 
+import animation.MoveBetweenPoints;
+import animation.Tweener;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -57,9 +59,19 @@ class MainState extends FlxState
 		addText();
 		drawDebugGraph();
 		
-		//stageDescription.AddCreaturesToScene(this);
-			
+		TestCreatureMovement();
+		
 		super.create();
+	}
+	
+	private function TestCreatureMovement()
+	{
+		stageDescription.AddCreaturesToScene(this);
+		var testMoveAnimation = new MoveBetweenPoints(
+			stageDescription.listOfCreatures[0],
+			getHexMap().getPathCenters(0, 540)
+			,0.1);
+		Tweener.instance.addAnimation(testMoveAnimation);
 	}
 	
 	private function addText()
@@ -83,8 +95,6 @@ class MainState extends FlxState
 		
 		var startPoisitionX = (1 - (mapWidth / FlxG.width))/2;
 		var startPoisitionY = 1 - ((1- (mapHeight / FlxG.height))/2);
-		trace(mapWidth + " " + startPoisitionX);
-		trace(mapHeight + " " + startPoisitionY + " " + FlxG.height);
 		
 		this.hexMap = new RectangleHexMap(
 			new FlxPoint(FlxG.width * startPoisitionX, FlxG.height * startPoisitionY),
@@ -112,6 +122,7 @@ class MainState extends FlxState
 	override public function update(elapsed:Float):Void
 	{
 		setTextToTextObj(fpsText, Math.floor(1 / elapsed) + ":time");
+		Tweener.instance.update(elapsed);
 		onMouse();
 		super.update(elapsed);
 	}

@@ -1,5 +1,6 @@
 package game;
 import flixel.FlxState;
+import flixel.math.FlxPoint;
 
 /**
  * ...
@@ -16,6 +17,21 @@ class Creature
 		this.x = x;
 		this.y = y;
 		this.sprite = sprite;
+	}
+	
+	public function setPosition(position:FlxPoint)
+	{
+		sprite.setPosition(position.x - getWidth()*0.5, position.y - getHeight()*0.5);
+	}
+	
+	public function getHeight():Float
+	{
+		return sprite.height;
+	}
+	
+	public function getWidth():Float
+	{
+		return sprite.width;
 	}
 	
 	public function addCreatureToState(stateToAdd:FlxState)

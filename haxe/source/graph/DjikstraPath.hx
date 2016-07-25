@@ -1,10 +1,6 @@
 package graph;
 import haxe.ds.ListSort;
 
-/**
- * ...
- * @author ...
- */
 class DjikstraPath implements Pathfinder
 {
 	private var graphObject:Graph;
