@@ -78,8 +78,16 @@ class MainState extends FlxState
 	
 	private function createMap():Void
 	{
+		var mapWidth = stageDescription.mapCols * stageDescription.mapHexSize;
+		var mapHeight = stageDescription.mapRows * stageDescription.mapHexSize*0.75;
+		
+		var startPoisitionX = (1 - (mapWidth / FlxG.width))/2;
+		var startPoisitionY = 1 - ((1- (mapHeight / FlxG.height))/2);
+		trace(mapWidth + " " + startPoisitionX);
+		trace(mapHeight + " " + startPoisitionY + " " + FlxG.height);
+		
 		this.hexMap = new RectangleHexMap(
-			new FlxPoint(FlxG.width * 0.1, FlxG.height * 0.7),
+			new FlxPoint(FlxG.width * startPoisitionX, FlxG.height * startPoisitionY),
 			stageDescription.mapHexSize,
 			stageDescription.mapCols,
 			stageDescription.mapRows);
