@@ -14,6 +14,11 @@ class Hex
 		this.coor = coor;
 	}
 	
+	public function getIndex():Int
+	{
+		return coor.toKey();
+	}
+	
 	public function toString():String
 	{
 		return coor.toString();

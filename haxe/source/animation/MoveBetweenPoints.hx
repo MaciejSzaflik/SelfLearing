@@ -2,6 +2,7 @@ package animation;
 import flixel.FlxSprite;
 import flixel.math.FlxPoint;
 import game.Creature;
+import haxe.Constraints.Function;
 import utilites.MathUtil;
 
 /**
@@ -21,7 +22,9 @@ class MoveBetweenPoints implements TweenAnimation
 	
 	private var haveEnded:Bool;
 	
-	public function new(movingSprite:Creature,checkpoints:List<FlxPoint>,timeOfAnimation:Float) 
+	private var callback:Function;
+	
+	public function new(movingSprite:Creature,checkpoints:List<FlxPoint>,timeOfAnimation:Float, callback:Function) 
 	{
 		this.movingSprite = movingSprite;
 		this.checkpoints = checkpoints;
@@ -30,6 +33,7 @@ class MoveBetweenPoints implements TweenAnimation
 		this.currentProgress = 0;
 		this.startCheckpoint = checkpoints.pop();
 		this.endCheckpoint = checkpoints.pop();
+		this.callback = callback;
 		
 		this.haveEnded = false;
 	}
@@ -52,6 +56,10 @@ class MoveBetweenPoints implements TweenAnimation
 			}
 			else
 			{
+				if (callback != null)
+				{
+					callback();
+				}
 				haveEnded = true;
 				return true;
 			}

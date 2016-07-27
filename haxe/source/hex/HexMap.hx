@@ -52,6 +52,11 @@ class HexMap extends BoardMap
 		this.hexes = new Map<Int,Hex>();
 	}
 	
+	public function getRandomHex():Hex
+	{
+		return Random.fromIterable(hexes);
+	}
+	
 	public function positionToHex(rawPosition:FlxPoint):HexCoordinates
 	{
 		var position = new FlxPoint(rawPosition.x - mapCenter.x, -(rawPosition.y - mapCenter.y));

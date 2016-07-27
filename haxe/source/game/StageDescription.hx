@@ -31,19 +31,17 @@ class StageDescription
 		animationList.add(animationDef);
 		var spriteDefinition = new SpriteDefinition("assets/images/blob.png", true, 36, 32, animationList);
 		listOfSpriteDefinition.add(spriteDefinition);
-		var creature = new Creature(SpriteFactory.instance.createNewCreature(spriteDefinition),30,30);
-		listOfCreatures.push(creature);
-		/*var i = 0;
-		while (i < 4)
+		var i = 0;
+		while (i < 5)
 		{
-			var creature = new Creature(SpriteFactory.instance.createNewCreature(spriteDefinition),i*100,20);
-			listOfCreatures.add(creature);
+			var creature = new Creature(SpriteFactory.instance.createNewCreature(spriteDefinition),0,20);
+			listOfCreatures.push(creature);
 			i++;
-		}*/
+		}
 		
-		mapRows = 18;
-		mapCols = 30;
-		mapHexSize = 35;
+		mapRows = 14;
+		mapCols = 24;
+		mapHexSize = 40;
 	}
 	
 	public function AddCreaturesToScene(scene:FlxState)

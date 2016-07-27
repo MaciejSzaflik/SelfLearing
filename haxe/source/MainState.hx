@@ -67,10 +67,35 @@ class MainState extends FlxState
 	private function TestCreatureMovement()
 	{
 		stageDescription.AddCreaturesToScene(this);
+		var creatureIndex = 0;
+		for (creature in stageDescription.listOfCreatures)
+		{
+			var hex = getHexMap().getRandomHex();
+			addTestAnimation(creatureIndex, 0, hex.getIndex());
+			creatureIndex++;
+		}
+	}
+	private function addTestAnimation(creatureIndex:Int,from:Int, to:Int)
+	{
+		var checkpoints = getHexMap().getPathCenters(from, to);
+		
+		drawer.clear(creatureIndex + 1);
+		for (hex in checkpoints)
+			drawer.drawHex(hex, getHexMap().hexSize, HexTopping.Pointy, 0x7700ffff, creatureIndex + 1);
+		
 		var testMoveAnimation = new MoveBetweenPoints(
-			stageDescription.listOfCreatures[0],
-			getHexMap().getPathCenters(0, 540)
-			,0.1);
+			stageDescription.listOfCreatures[creatureIndex],
+			checkpoints
+			,0.1,
+			function() 
+			{	
+				var randomHex = 0;
+				do
+					randomHex = getHexMap().getRandomHex().getIndex()
+				while (randomHex == to);
+				
+				addTestAnimation(creatureIndex,to,randomHex); 				
+			});
 		Tweener.instance.addAnimation(testMoveAnimation);
 	}
 	
@@ -106,7 +131,7 @@ class MainState extends FlxState
 	}
 	private function createDrawer():Void
 	{
-		this.drawer = new Drawer(3,this);
+		this.drawer = new Drawer(7,this);
 	}
 	private function drawMap():Void
 	{
@@ -134,17 +159,5 @@ class MainState extends FlxState
 		setTextToTextObj(debugText, coor.toString() + " " + coor.toKey());
 
 		var center = getHexMap().getHexCenterByAxialCor(coor);
-		drawer.clear(1);
-		drawer.clear(2);
-		
-		var range = getHexMap().getRangeCenters(coor.toKey(), 2);
-		for (hex in range)
-			drawer.drawHex(hex, getHexMap().hexSize, HexTopping.Pointy, 0x7700ffff, 1);
-			
-		drawer.drawHex(center, getHexMap().hexSize, HexTopping.Pointy, FlxColor.WHITE, 1);
-		
-		var path = getHexMap().getPathCenters(0, coor.toKey());
-		for (hex in path)
-			drawer.drawHex(hex, getHexMap().hexSize, HexTopping.Pointy, 0x77ff00ff, 2);
 	}
 }
