@@ -5,9 +5,18 @@ import flixel.math.FlxPoint;
 
 class RectangleHexMap extends HexMap
 {
-	private var width:Int;
-	private var height:Int;
+	public var width(get, null):Int;
+	public var height(get, null):Int;
 	
+	public function get_width():Int
+	{
+		return width;
+	}
+	
+	public function get_height():Int
+	{
+		return height;
+	}	
 	
 	public function new(mapCenter:FlxPoint, hexSize:Float,width:Int,height:Int) 
 	{

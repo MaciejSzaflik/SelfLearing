@@ -1,4 +1,5 @@
 package gameLogic;
+import gameLogic.states.StartState;
 
 /**
  * ...
@@ -6,10 +7,12 @@ package gameLogic;
  */
 class GameStateMachine extends StateMachine
 {
-
-	public function new() 
+	public var gameData:GameContext;
+	
+	public function new(gameData:GameContext); 
 	{
-		
+		this.gameData = gameData;
+		set_currentState(new StartState());
 	}
 	
 }

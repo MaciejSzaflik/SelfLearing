@@ -12,6 +12,11 @@ class Creature
 	public var x:Int;
 	public var y:Int;
 	
+	public var initiative = 5;
+	public var range = 5;
+	
+	public var idPlayerId:Int;
+	
 	public function new(sprite:CreatureSprite,x:Int = 0,y:Int = 0)
 	{
 		this.x = x;

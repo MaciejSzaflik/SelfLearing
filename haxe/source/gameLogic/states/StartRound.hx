@@ -6,13 +6,13 @@ import gameLogic.StateMachine;
  * ...
  * @author 
  */
-class MoveChooseState extends State
+class StartRound extends State
 {
 
 	public function new(stateMachine:StateMachine) 
 	{
 		super(stateMachine);
-		//stateMachin
+		
 	}
 	
 }

@@ -1,4 +1,5 @@
 package gameLogic;
+import flash.display3D.Context3D;
 
 /**
  * ...
@@ -8,6 +9,7 @@ class StateMachine
 {
 	public var currentState(get, set):State;
 	private var changeListeners:List<StateChangeListener>;
+	private var Contex:Context;
 	
 	public function new() 
 	{
