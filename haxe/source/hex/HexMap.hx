@@ -18,6 +18,19 @@ class HexMap extends BoardMap
 	private var mapCenter:FlxPoint;
 	private var bfs:BreadthFirstSearch;
 	private var pathfinder:Pathfinder;
+		
+	public var width(get, null):Int;
+	public var height(get, null):Int;
+	
+	public function get_width():Int
+	{
+		return width;
+	}
+	
+	public function get_height():Int
+	{
+		return height;
+	}	
 	
 	public var hexSize(get, set):Float;
 	private var _hexSize:Float;

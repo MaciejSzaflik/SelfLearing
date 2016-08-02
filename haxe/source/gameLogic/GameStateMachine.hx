@@ -9,10 +9,11 @@ class GameStateMachine extends StateMachine
 {
 	public var gameData:GameContext;
 	
-	public function new(gameData:GameContext); 
+	public function new(gameData:GameContext)
 	{
 		this.gameData = gameData;
-		set_currentState(new StartState());
+	    this.currentState = new StartState(this);
+		super();
 	}
 	
 }

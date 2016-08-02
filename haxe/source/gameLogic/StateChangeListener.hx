@@ -5,5 +5,5 @@ package gameLogic;
  */
 interface StateChangeListener 
 {
-	function onStateChange(stateName:String);
+	function onStateChange(stateName:String):Void;
 }

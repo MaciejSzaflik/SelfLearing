@@ -14,7 +14,7 @@ class StartState extends State
 	public function new(stateMachine:StateMachine) 
 	{
 		super(stateMachine);
-		stateName = "Start";
+		stateName = "Start Game";
 	}
 	
 	private function selectRandomPlayer():Int
@@ -24,12 +24,24 @@ class StartState extends State
 	
 	override public function onEnter():Void 
 	{
-		
+		placeCreaturesOnMap();
+		stateMachine.currentState = new StartRound(this.stateMachine);
 	}
 	
 	public function placeCreaturesOnMap()
 	{
-		
+		var playerIndex = 0;
+		for (player in GameContext.instance.listOfPlayers)
+		{
+			var creatureIndex = 0;
+			for (creature in player.creatures)
+			{
+				var col = playerIndex % 2 == 0 ? 0 : GameContext.instance.mapWidth() - 1;
+				var point = GameContext.instance.getPositionOnMapOddR(col, creatureIndex);
+				creature.setPosition(point);
+				creatureIndex++;
+			}
+			playerIndex++;
+		}
 	}
-	
 }

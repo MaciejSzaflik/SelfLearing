@@ -8,8 +8,8 @@ import game.Creature;
 class Player
 {
 	public var id(default, null):Int;
-	public var creatures:List<Creature>;
-	public function new(id:Int,creatures:List<Creature>) 
+	public var creatures:Array<Creature>;
+	public function new(id:Int,creatures:Array<Creature>) 
 	{
 		this.id = id;
 		this.creatures = creatures;

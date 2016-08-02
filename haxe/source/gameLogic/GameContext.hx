@@ -1,5 +1,7 @@
 package gameLogic;
+import flixel.math.FlxPoint;
 import hex.BoardShape;
+import hex.HexCoordinates;
 import hex.HexMap;
 import source.BoardMap;
 
@@ -9,18 +11,24 @@ import source.BoardMap;
  */
 class GameContext
 {
-	static public var instance(get,never) : GameContext;
-	function get_instance() : GameContext
+	@:isVar static public var instance(get,set) : GameContext;
+	static function get_instance() : GameContext
 	{
 		if (instance == null)
 		{
-			instance == new GameContext();
+			instance = new GameContext();
 		}
 		return instance;
 	}
 	
+	static function set_instance(contex:GameContext)
+	{
+		return instance = contex;
+	}
+	
 	public var map:HexMap;
 	public var listOfPlayers:Array<Player>;
+	private var _currentPlayerIndex:Int;
 	public var currentPlayerIndex(get,set):Int;
 	public var inititativeQueue:InitiativeQueue;
 	private var currentPlayer:Player;
@@ -29,23 +37,44 @@ class GameContext
 	
 	public function new() 
 	{
-		stateMachine = new GameStateMachine();
 	}
 	
-	public function Init(map:HexMap, numberOfPlayers:Int)
+	public function mapHeight():Int
 	{
-		
+		return map.height;
+	}
+	
+	public function mapWidth():Int
+	{
+		return map.width;
+	}
+	
+	public function getPositionOnMapOddR(x:Int, y:Int):FlxPoint
+	{
+		return this.map.getHexCenterByAxialCor(HexCoordinates.fromOddR(x, y));
+	}
+	
+	public function getPositionOnMap(coor:HexCoordinates):FlxPoint
+	{
+		return this.map.getHexCenterByAxialCor(coor);
+	}
+	
+	public function Init(map:HexMap, listOfPlayers:Array<Player>)
+	{
+		stateMachine = new GameStateMachine(this);
+		this.map = map;
+		this.listOfPlayers = listOfPlayers;
 	}
 	
 	public function get_currentPlayerIndex():Int
 	{
-		return currentPlayerIndex;
+		return _currentPlayerIndex;
 	}
 	
 	public function set_currentPlayerIndex(index:Int)
 	{
-		currentPlayerIndex = index;
 		currentPlayer = listOfPlayers[index];
+		return _currentPlayerIndex = index;
 	}
 	
 	public function getNumberOfPlayers():Int

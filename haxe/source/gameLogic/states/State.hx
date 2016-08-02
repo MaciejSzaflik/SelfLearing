@@ -14,7 +14,7 @@ class State
 		this.stateMachine = stateMachine;
 	}
 	
-	public function handleInput(input:Input):Input
+	public function handleInput(input:Input)
 	{
 		
 	}

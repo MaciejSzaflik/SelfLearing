@@ -1,5 +1,6 @@
 package gameLogic;
 import game.Creature;
+import haxe.ds.ListSort;
 
 /**
  * ...
@@ -7,17 +8,29 @@ import game.Creature;
  */
 class InitiativeQueue
 {
-	private var queue:List<Creature>;
+	private var queue:Array<Creature>;
 	
 	public function new() 
 	{
-		queue = new List<Creature>();
+		queue = new Array<Creature>();
 	}
 	
-	public function fillWithPlayers(players:Array<Player>):void
+	public function fillWithPlayers(players:Array<Player>)
 	{
-		
-		
+		for (player in players)
+		{
+			for (creature in player.creatures)
+			{
+				queue.push(creature);
+			}
+		}
+		queue.sort(function(x:Creature, y:Creature):Int 
+		{
+			if (x.initiative == y.initiative)
+				return Random.int( -1, 1);
+			else
+				return x.initiative - y.initiative;
+		});		
 	}
 	
 }

@@ -1,5 +1,6 @@
 package gameLogic;
 import flash.display3D.Context3D;
+import gameLogic.states.State;
 
 /**
  * ...
@@ -7,9 +8,9 @@ import flash.display3D.Context3D;
  */
 class StateMachine
 {
-	public var currentState(get, set):State;
+	@:isVar public var currentState(get, set):State;
 	private var changeListeners:List<StateChangeListener>;
-	private var Contex:Context;
+	private var Contex:GameContext;
 	
 	public function new() 
 	{
@@ -21,14 +22,22 @@ class StateMachine
 		return currentState;
 	}
 	
-	public function set_currentState(stateTochange:State):Void
+	public function set_currentState(state:State)
 	{
-		currentState = stateTochange;
-		informListeners(stateTochange.stateName);
+		if(this.currentState!=null)
+			this.currentState.onLeave();
+		
+		informListeners(state.stateName);
+		state.onEnter();
+		return this.currentState = state;
 	}
 	
 	public function informListeners(stateName:String)
 	{
+		trace(stateName);
+		if (changeListeners == null)
+			return;
+		
 		for (listener in changeListeners)
 			listener.onStateChange(stateName);
 	}
@@ -39,5 +48,4 @@ class StateMachine
 			currentState.handleInput(input);
 	}
 	
-import gameLogic.states.State;
 }

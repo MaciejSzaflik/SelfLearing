@@ -2,6 +2,8 @@ package;
 
 import animation.MoveBetweenPoints;
 import animation.Tweener;
+import data.FrameAnimationDef;
+import data.SpriteDefinition;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -10,7 +12,10 @@ import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
 import flixel.math.FlxPoint;
 import flixel.FlxBasic;
+import game.Creature;
 import game.StageDescription;
+import gameLogic.GameContext;
+import gameLogic.Player;
 import graph.BreadthFirstSearch;
 import graph.Vertex;
 import hex.HexagonalHexMap;
@@ -18,6 +23,7 @@ import hex.RectangleHexMap;
 import source.Drawer;
 import hex.HexMap;
 import hex.HexTopping;
+import source.SpriteFactory;
 
 using flixel.util.FlxSpriteUtil;
 
@@ -59,10 +65,36 @@ class MainState extends FlxState
 		addText();
 		drawDebugGraph();
 		
-		TestCreatureMovement();
-		
+		//TestCreatureMovement();
+		CreateGameContex();
 		super.create();
 	}
+	
+	private function CreateGameContex()
+	{
+		var player1 = new Player(0, CreateDubugCreatureList());
+		var player2 = new Player(1, CreateDubugCreatureList());
+		GameContext.instance.Init(getHexMap(), [player1, player2]);
+	}
+	
+	private function CreateDubugCreatureList():Array<Creature>
+	{
+		var animationDef = new FrameAnimationDef("idle", 6, true, [0, 1, 2, 3, 4, 5]);
+		var animationList = new List<FrameAnimationDef>();
+		animationList.add(animationDef);
+		var spriteDefinition = new SpriteDefinition("assets/images/blob.png", true, 36, 32, animationList);
+		var creatureList = new Array<Creature>();
+		
+		var i = 0;
+		while (i < 5)
+		{
+			var creature = new Creature(SpriteFactory.instance.createNewCreature(spriteDefinition),0,20);
+			creatureList.push(creature);
+			i++;
+		}
+		return creatureList;
+	}
+	
 	
 	private function TestCreatureMovement()
 	{
