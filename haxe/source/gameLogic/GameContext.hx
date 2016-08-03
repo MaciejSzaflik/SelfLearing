@@ -1,5 +1,6 @@
 package gameLogic;
 import flixel.math.FlxPoint;
+import game.Creature;
 import hex.BoardShape;
 import hex.HexCoordinates;
 import hex.HexMap;
@@ -47,6 +48,15 @@ class GameContext
 	public function mapWidth():Int
 	{
 		return map.width;
+	}
+	
+	public function handleInput(input:Input)
+	{
+		stateMachine.handleInput(input);
+	}
+	public function getNextCreature():Creature
+	{
+		return inititativeQueue.getNextCreature();
 	}
 	
 	public function getPositionOnMapOddR(x:Int, y:Int):FlxPoint

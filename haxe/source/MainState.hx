@@ -15,6 +15,7 @@ import flixel.FlxBasic;
 import game.Creature;
 import game.StageDescription;
 import gameLogic.GameContext;
+import gameLogic.Input;
 import gameLogic.Player;
 import graph.BreadthFirstSearch;
 import graph.Vertex;
@@ -183,6 +184,12 @@ class MainState extends FlxState
 		getDrawer().drawHexMap(getHexMap(),0xFFFFFFFF,0x00000000,0);
 	}
 	
+	public function drawHexesRange(range:List<FlxPoint>,layer:Int)
+	{
+		for (hex in range)  
+			drawer.drawHex(hex, getHexMap().hexSize, HexTopping.Pointy, 0x7700ffff, layer); 
+	}
+	
 	private function drawDebugGraph():Void
 	{
 		var lines = getHexMap().getArrayOfPoints();
@@ -202,7 +209,8 @@ class MainState extends FlxState
 		var mousePoint = new FlxPoint(FlxG.mouse.x, FlxG.mouse.y);
 		var coor = getHexMap().positionToHex(mousePoint);
 		setTextToTextObj(debugText, coor.toString() + " " + coor.toKey());
-
 		var center = getHexMap().getHexCenterByAxialCor(coor);
+		
+		GameContext.instance.handleInput(new Input());
 	}
 }

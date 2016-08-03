@@ -3,6 +3,7 @@ package gameLogic.states;
 import gameLogic.GameStateMachine;
 import gameLogic.Player;
 import gameLogic.StateMachine;
+import hex.HexCoordinates;
 
 /**
  * ...
@@ -36,9 +37,11 @@ class StartState extends State
 			var creatureIndex = 0;
 			for (creature in player.creatures)
 			{
-				var col = playerIndex % 2 == 0 ? 0 : GameContext.instance.mapWidth()-1;
-				var point = GameContext.instance.getPositionOnMapOddR(creatureIndex,col);
+				var col = playerIndex % 2 == 0 ? 0 : GameContext.instance.mapWidth() - 1;
+				var coor = HexCoordinates.fromOddR(creatureIndex, col);
+				var point = GameContext.instance.getPositionOnMap(coor);
 				creature.setPosition(point);
+				creature.setCoodinates(coor);
 				creatureIndex+=2;
 			}
 			playerIndex++;

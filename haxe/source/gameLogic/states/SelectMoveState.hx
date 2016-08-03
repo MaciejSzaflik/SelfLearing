@@ -14,6 +14,10 @@ class SelectMoveState extends State
 		this.stateName = "Select Move";
 		super(stateMachine);
 		
+		var creature = GameContext.instance.getNextCreature();
+		var rangeInfo = MainState.getInstance().getHexMap().getRange(creature.getTileId(), creature.range);
+		MainState.getInstance().drawHexesRange(rangeInfo.centers, 1);
 	}
+	
 	
 }

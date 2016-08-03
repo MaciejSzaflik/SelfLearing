@@ -33,4 +33,9 @@ class InitiativeQueue
 		});		
 	}
 	
+	public function getNextCreature():Creature
+	{
+		return queue.pop();
+	}
+	
 }

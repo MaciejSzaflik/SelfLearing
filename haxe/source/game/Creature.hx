@@ -1,6 +1,7 @@
 package game;
 import flixel.FlxState;
 import flixel.math.FlxPoint;
+import hex.HexCoordinates;
 
 /**
  * ...
@@ -12,6 +13,8 @@ class Creature
 	public var x:Int;
 	public var y:Int;
 	
+	public var currentCordinates:HexCoordinates;
+	
 	public var initiative = 5;
 	public var range = 5;
 	
@@ -22,6 +25,16 @@ class Creature
 		this.x = x;
 		this.y = y;
 		this.sprite = sprite;
+	}
+	
+	public function getTileId():Int
+	{
+		return currentCordinates.toKey();
+	}
+	
+	public function setCoodinates(coor:HexCoordinates)
+	{
+		this.currentCordinates = coor;
 	}
 	
 	public function setPosition(position:FlxPoint)

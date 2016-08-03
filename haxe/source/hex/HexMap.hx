@@ -6,6 +6,7 @@ import graph.Graph;
 import graph.Pathfinder;
 import graph.Vertex;
 import hex.Hex;
+import hex.RangeInformation;
 import js.html.rtc.IdentityAssertion;
 import source.BoardMap;
 
@@ -135,21 +136,15 @@ class HexMap extends BoardMap
 		return centers;
 	}
 	
-	public function getRangeCenters(index:Int,rangeSize:Int):List<FlxPoint>
+	public function getRange(index:Int,rangeSize:Int):RangeInformation
 	{
-		var centers = new List<FlxPoint>();
+		var range = new RangeInformation();
 		if (hexes.exists(index))
 		{
 			var listOfVertices = bfs.findRange(new Vertex(index), rangeSize);
-			for (vert in listOfVertices)
-			{
-				if (hexes.exists(vert))
-				{
-					centers.add(hexes.get(vert).center);
-				}
-			}
+			range.FillRange(listOfVertices, hexes);
 		}
-		return centers;
+		return range;
 	}
 	
 }
