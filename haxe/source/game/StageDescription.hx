@@ -39,9 +39,9 @@ class StageDescription
 			i++;
 		}
 		
-		mapRows = 20;
-		mapCols = 14;
-		mapHexSize = 32;
+		mapRows = 15;
+		mapCols = 10;
+		mapHexSize = 40;
 	}
 	
 	public function AddCreaturesToScene(scene:FlxState)

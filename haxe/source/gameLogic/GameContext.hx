@@ -61,9 +61,10 @@ class GameContext
 	
 	public function Init(map:HexMap, listOfPlayers:Array<Player>)
 	{
-		stateMachine = new GameStateMachine(this);
 		this.map = map;
 		this.listOfPlayers = listOfPlayers;
+		this.inititativeQueue = new InitiativeQueue();
+		stateMachine = new GameStateMachine(this);
 	}
 	
 	public function get_currentPlayerIndex():Int

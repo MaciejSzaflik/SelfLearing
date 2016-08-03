@@ -90,6 +90,7 @@ class MainState extends FlxState
 		{
 			var creature = new Creature(SpriteFactory.instance.createNewCreature(spriteDefinition),0,20);
 			creatureList.push(creature);
+			creature.addCreatureToState(this);
 			i++;
 		}
 		return creatureList;
