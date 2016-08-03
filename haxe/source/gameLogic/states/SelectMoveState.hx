@@ -11,6 +11,7 @@ class SelectMoveState extends State
 
 	public function new(stateMachine:StateMachine) 
 	{
+		this.stateName = "Select Move";
 		super(stateMachine);
 		
 	}

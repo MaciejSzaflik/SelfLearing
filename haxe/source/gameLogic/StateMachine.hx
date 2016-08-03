@@ -1,6 +1,7 @@
 package gameLogic;
 import flash.display3D.Context3D;
 import gameLogic.states.State;
+import haxe.Constraints.Function;
 
 /**
  * ...
@@ -9,12 +10,12 @@ import gameLogic.states.State;
 class StateMachine
 {
 	@:isVar public var currentState(get, set):State;
-	private var changeListeners:List<StateChangeListener>;
+	private var changeListeners:List<Function>;
 	private var Contex:GameContext;
 	
 	public function new() 
 	{
-		this.changeListeners = new List<StateChangeListener>();
+		this.changeListeners = new List<Function>();
 	}
 	
 	public function get_currentState():State
@@ -32,14 +33,21 @@ class StateMachine
 		return this.currentState = state;
 	}
 	
+	public function addNewStateChangeListener(newListener:Function)
+	{
+		if (changeListeners == null)
+			this.changeListeners = new List<Function>();
+		changeListeners.add(newListener);
+	}
+	
 	public function informListeners(stateName:String)
 	{
-		trace(stateName);
 		if (changeListeners == null)
 			return;
-		
 		for (listener in changeListeners)
-			listener.onStateChange(stateName);
+		{
+			listener(stateName);
+		}
 	}
 	
 	public function handleInput(input:Input):Void

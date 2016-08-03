@@ -42,6 +42,7 @@ class MainState extends FlxState
 	
 	private var fpsText:FlxText;
 	private var debugText:FlxText;
+	private var currentStateText:FlxText;
 	
 	public function getHexMap() : HexMap
 	{
@@ -75,7 +76,16 @@ class MainState extends FlxState
 		var player1 = new Player(0, CreateDubugCreatureList());
 		var player2 = new Player(1, CreateDubugCreatureList());
 		GameContext.instance.Init(getHexMap(), [player1, player2]);
+		
+		GameContext.instance.stateMachine.addNewStateChangeListener(function(state:String)
+		{
+			trace(state);
+			currentStateText.text = state;
+		});
+		
+		GameContext.instance.Start();
 	}
+	
 	
 	private function CreateDubugCreatureList():Array<Creature>
 	{
@@ -136,8 +146,10 @@ class MainState extends FlxState
 	{
 		fpsText = new FlxText(0, 0, 500);
 		debugText = new FlxText(0, 10, 500);
+		currentStateText = new FlxText(0, 20, 500);
 		add(fpsText);
 		add(debugText);
+		add(currentStateText);
 	}
 	
 	private function setTextToTextObj(textObj:FlxText, text:String)

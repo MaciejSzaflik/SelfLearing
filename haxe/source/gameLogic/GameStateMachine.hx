@@ -12,8 +12,12 @@ class GameStateMachine extends StateMachine
 	public function new(gameData:GameContext)
 	{
 		this.gameData = gameData;
-	    this.currentState = new StartState(this);
+	   
 		super();
+	}
+	public function init()
+	{
+		this.currentState = new StartState(this);
 	}
 	
 }

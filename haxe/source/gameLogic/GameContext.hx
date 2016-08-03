@@ -67,6 +67,11 @@ class GameContext
 		stateMachine = new GameStateMachine(this);
 	}
 	
+	public function Start()
+	{
+		stateMachine.init();
+	}
+	
 	public function get_currentPlayerIndex():Int
 	{
 		return _currentPlayerIndex;

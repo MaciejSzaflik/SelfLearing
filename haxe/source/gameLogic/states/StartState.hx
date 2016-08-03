@@ -36,7 +36,7 @@ class StartState extends State
 			var creatureIndex = 0;
 			for (creature in player.creatures)
 			{
-				var col = playerIndex % 2 == 0 ? 0 : GameContext.instance.mapWidth() - 1;
+				var col = playerIndex % 2 == 0 ? 0 : GameContext.instance.mapWidth()-1;
 				var point = GameContext.instance.getPositionOnMapOddR(creatureIndex,col);
 				creature.setPosition(point);
 				creatureIndex+=2;
