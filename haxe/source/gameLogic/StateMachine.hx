@@ -9,7 +9,7 @@ import haxe.Constraints.Function;
  */
 class StateMachine
 {
-	@:isVar public var currentState(get, set):State;
+	private var currentState:State;
 	private var changeListeners:List<Function>;
 	private var Contex:GameContext;
 	
@@ -23,14 +23,15 @@ class StateMachine
 		return currentState;
 	}
 	
-	public function set_currentState(state:State)
+	public function setCurrentState(state:State)
 	{
-		if(this.currentState!=null)
-			this.currentState.onLeave();
-		
+		if (currentState != null)
+		{
+			currentState.onLeave();
+		}
 		informListeners(state.stateName);
+		currentState = state;
 		state.onEnter();
-		return this.currentState = state;
 	}
 	
 	public function addNewStateChangeListener(newListener:Function)

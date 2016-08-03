@@ -26,7 +26,7 @@ class StartState extends State
 	override public function onEnter():Void 
 	{
 		placeCreaturesOnMap();
-		stateMachine.currentState = new StartRound(this.stateMachine);
+		stateMachine.setCurrentState(new StartRound(this.stateMachine));
 	}
 	
 	public function placeCreaturesOnMap()

@@ -1,4 +1,8 @@
 package gameLogic;
+import flixel.input.FlxPointer;
+import flixel.math.FlxPoint;
+import hex.HexCoordinates;
+import utilites.InputType;
 
 /**
  * ...
@@ -6,10 +10,16 @@ package gameLogic;
  */
 class Input
 {
-
-	public function new() 
+	public var coor:HexCoordinates;
+	public var hexCenter:FlxPoint;
+	public var rawPosition:FlxPoint;
+	public var type:InputType;
+	public function new(type:InputType,hexCenter:FlxPoint,rawPosition:FlxPoint,coor:HexCoordinates) 
 	{
-		
+		this.type = type;
+		this.rawPosition = rawPosition;
+		this.coor = coor;
+		this.hexCenter = hexCenter;
 	}
 	
 }

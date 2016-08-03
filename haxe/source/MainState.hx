@@ -25,6 +25,7 @@ import source.Drawer;
 import hex.HexMap;
 import hex.HexTopping;
 import source.SpriteFactory;
+import utilites.InputType;
 
 using flixel.util.FlxSpriteUtil;
 
@@ -80,7 +81,6 @@ class MainState extends FlxState
 		
 		GameContext.instance.stateMachine.addNewStateChangeListener(function(state:String)
 		{
-			trace(state);
 			currentStateText.text = state;
 		});
 		
@@ -189,6 +189,10 @@ class MainState extends FlxState
 		for (hex in range)  
 			drawer.drawHex(hex, getHexMap().hexSize, HexTopping.Pointy, 0x7700ffff, layer); 
 	}
+	public function drawHex(position:FlxPoint,layer:Int)
+	{
+		drawer.drawHex(position, getHexMap().hexSize, HexTopping.Pointy, 0x99ffffff, layer); 
+	}
 	
 	private function drawDebugGraph():Void
 	{
@@ -201,16 +205,34 @@ class MainState extends FlxState
 		setTextToTextObj(fpsText, Math.floor(1 / elapsed) + ":time");
 		Tweener.instance.update(elapsed);
 		onMouse();
+		
+		if (FlxG.mouse.justReleased)
+		{
+			onClick();
+		}
+		
 		super.update(elapsed);
+	}
+	
+	private function onClick()
+	{
+		GameContext.instance.handleInput(getInputFromMouse(InputType.click));
 	}
 	
 	private function onMouse()
 	{
+		var input = getInputFromMouse(InputType.move);
+		setTextToTextObj(debugText,input.coor.toString() + " " + input.coor.toKey());
+		
+		GameContext.instance.handleInput(input);
+	}
+	
+	private function getInputFromMouse(type:InputType)
+	{
 		var mousePoint = new FlxPoint(FlxG.mouse.x, FlxG.mouse.y);
 		var coor = getHexMap().positionToHex(mousePoint);
-		setTextToTextObj(debugText, coor.toString() + " " + coor.toKey());
 		var center = getHexMap().getHexCenterByAxialCor(coor);
 		
-		GameContext.instance.handleInput(new Input());
+		return new Input(type, center, mousePoint, coor);
 	}
 }

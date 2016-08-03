@@ -8,7 +8,7 @@ import flixel.math.FlxPoint;
 class RangeInformation
 {
 	public var centers:List<FlxPoint>;
-	public var hexList:List<Hex>;
+	public var hexList:Map<Int,Hex>;
 	
 	public function FillRange(indexes:List<Int>,mapToCheck:Map<Int,Hex>)
 	{
@@ -17,7 +17,7 @@ class RangeInformation
 			if (mapToCheck.exists(vert))
 			{
 				var hex = mapToCheck.get(vert);
-				hexList.add(hex);
+				hexList.set(vert,hex);
 				centers.add(hex.center);
 			}
 		}
@@ -25,7 +25,7 @@ class RangeInformation
 	
 	public function new()
 	{
-		hexList = new List<Hex>();
+		hexList = new Map<Int,Hex>();
 		centers = new List<FlxPoint>();
 	}
 }

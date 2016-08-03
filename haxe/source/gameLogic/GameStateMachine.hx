@@ -17,7 +17,7 @@ class GameStateMachine extends StateMachine
 	}
 	public function init()
 	{
-		this.currentState = new StartState(this);
+		this.setCurrentState(new StartState(this));
 	}
 	
 }

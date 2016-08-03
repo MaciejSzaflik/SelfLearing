@@ -52,6 +52,7 @@ class GameContext
 	
 	public function handleInput(input:Input)
 	{
+		//trace("input context");
 		stateMachine.handleInput(input);
 	}
 	public function getNextCreature():Creature
