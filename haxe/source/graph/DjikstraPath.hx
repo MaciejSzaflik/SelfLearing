@@ -37,11 +37,14 @@ class DjikstraPath implements Pathfinder
 			Q.remove(u);
 			for (neighbor in graphObject.getConnected(u))
 			{
-				var alt = distance.get(u) + graphObject.getDistance(u, neighbor);
-				if (alt < distance.get(neighbor))
+				if (graphObject.isThisVerPassable(neighbor))
 				{
-					distance.set(neighbor, alt);
-					predecessors.set(neighbor, u);
+					var alt = distance.get(u) + graphObject.getDistance(u, neighbor);
+					if (alt < distance.get(neighbor))
+					{
+						distance.set(neighbor, alt);
+						predecessors.set(neighbor, u);
+					}
 				}
 			}
 			

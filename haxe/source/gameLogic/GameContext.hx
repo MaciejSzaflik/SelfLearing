@@ -50,6 +50,15 @@ class GameContext
 		return map.width;
 	}
 	
+	public function setHexImpassable(hex:hex.HexCoordinates)
+	{
+		map.setHexImpassable(hex);
+	}
+	public function setHexPassable(hex:hex.HexCoordinates)
+	{
+		map.setHexPassable(hex);
+	}
+	
 	public function handleInput(input:Input)
 	{
 		//trace("input context");

@@ -184,14 +184,14 @@ class MainState extends FlxState
 		getDrawer().drawHexMap(getHexMap(),0xFFFFFFFF,0x00000000,0);
 	}
 	
-	public function drawHexesRange(range:List<FlxPoint>,layer:Int)
+	public function drawHexesRange(range:List<FlxPoint>,layer:Int,color:FlxColor)
 	{
 		for (hex in range)  
-			drawer.drawHex(hex, getHexMap().hexSize, HexTopping.Pointy, 0x7700ffff, layer); 
+			drawer.drawHex(hex, getHexMap().hexSize, HexTopping.Pointy, color, layer); 
 	}
-	public function drawHex(position:FlxPoint,layer:Int)
+	public function drawHex(position:FlxPoint,layer:Int,color:FlxColor)
 	{
-		drawer.drawHex(position, getHexMap().hexSize, HexTopping.Pointy, 0x99ffffff, layer); 
+		drawer.drawHex(position, getHexMap().hexSize, HexTopping.Pointy, color, layer); 
 	}
 	
 	private function drawDebugGraph():Void

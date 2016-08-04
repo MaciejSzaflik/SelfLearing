@@ -7,12 +7,14 @@ package graph;
 class Graph
 {
 	public var adjacencyList:Map<Int,Map<Int,Bool>>;
+	public var impassableVertices:Map<Int,Bool>;
 	private var vertices:Map<Int,Vertex>;
 	private var edges:List<Edge>;
 	
 	public function new() 
 	{
 		this.adjacencyList = new Map<Int,Map<Int,Bool>>();
+		this.impassableVertices = new Map<Int,Bool>();
 	}
 	
 	public function addConnection(first:Int, second:Int)
@@ -63,6 +65,21 @@ class Graph
 			return null;
 	}
 	
+	public function setImpassable(vertex:Int)
+	{
+		trace(vertex + " " + (impassableVertices == null));
+		impassableVertices.set(vertex, true);
+	}
+	public function setPassable(vertex:Int)
+	{
+		impassableVertices.remove(vertex);
+	}
+	
+	public function isThisVerPassable(vertex:Int):Bool
+	{
+		return !impassableVertices.exists(vertex);
+	}
+	
 	public function getListOfEdges():List<Edge>
 	{
 		if (edges == null)
@@ -82,7 +99,10 @@ class Graph
 	{
 		vertices = new Map<Int,Vertex>();
 		for (key in adjacencyList.keys()) 
-			vertices.set(key,new Vertex(key));
+		{
+			//if (isThisVerPassable(key))
+				vertices.set(key, new Vertex(key));
+		}
 		return vertices;
 	}
 }

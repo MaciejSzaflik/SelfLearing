@@ -1,6 +1,7 @@
 package game;
 import flixel.FlxState;
 import flixel.math.FlxPoint;
+import gameLogic.GameContext;
 import hex.HexCoordinates;
 
 /**
@@ -34,7 +35,10 @@ class Creature
 	
 	public function setCoodinates(coor:HexCoordinates)
 	{
-		this.currentCordinates = coor;
+		if (currentCordinates != null)
+			GameContext.instance.setHexPassable(currentCordinates);
+		currentCordinates = coor;
+		GameContext.instance.setHexImpassable(currentCordinates);
 	}
 	
 	public function setPosition(position:FlxPoint)

@@ -21,10 +21,27 @@ class SelectMoveState extends State
 		super(stateMachine);
 		
 		selectedCreature = GameContext.instance.getNextCreature();
+		if (selectedCreature == null)
+		{
+			GameContext.instance.inititativeQueue.fillWithPlayers(GameContext.instance.listOfPlayers);
+			selectedCreature = GameContext.instance.getNextCreature();
+		}
+		
+		
 		rangeInfo = MainState.getInstance().getHexMap().getRange(selectedCreature.getTileId(), selectedCreature.range);
 		
 		MainState.getInstance().getDrawer().clear(1);
-		MainState.getInstance().drawHexesRange(rangeInfo.centers, 1);
+		colorRange();
+		colorHexStatingOn();
+	}
+	
+	private function colorRange()
+	{
+		MainState.getInstance().drawHexesRange(rangeInfo.centers, 1, 0x440033ff);
+	}
+	private function colorHexStatingOn()
+	{
+		MainState.getInstance().drawHex(MainState.getInstance().getHexMap().getHexCenterByAxialCor(selectedCreature.currentCordinates),1,0x99ff0000);
 	}
 	
 	override public function handleInput(input:Input) 
@@ -49,7 +66,7 @@ class SelectMoveState extends State
 	{
 		MainState.getInstance().getDrawer().clear(2);
 		if(rangeInfo.hexList.exists(input.coor.toKey()))
-			MainState.getInstance().drawHex(input.hexCenter, 2);
+			MainState.getInstance().drawHex(input.hexCenter, 2,0x99ffffff);
 	}
 	
 	

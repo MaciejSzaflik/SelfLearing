@@ -27,15 +27,18 @@ class BreadthFirstSearch
 			
 			for (nodeIndex in graphObject.getConnected(current.index))
 			{
-				var node = nodes.get(nodeIndex);
-				if (node.distance == Vertex.MAX)
+				if (graphObject.isThisVerPassable(nodeIndex))
 				{
-					node.distance = current.distance + 1;
-					node.parent = current;
-					if (node.distance <= rangeSize)
+					var node = nodes.get(nodeIndex);
+					if (node.distance == Vertex.MAX)
 					{
-						queue.add(node);
-						range.add(node.index);
+						node.distance = current.distance + 1;
+						node.parent = current;
+						if (node.distance <= rangeSize)
+						{
+							queue.add(node);
+							range.add(node.index);
+						}
 					}
 				}
 			}

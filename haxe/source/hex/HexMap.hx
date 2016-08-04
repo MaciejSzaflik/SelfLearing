@@ -71,6 +71,15 @@ class HexMap extends BoardMap
 		return Random.fromIterable(hexes);
 	}
 	
+	public function setHexImpassable(hex:hex.HexCoordinates)
+	{
+		getGraph().setImpassable(hex.toKey());
+	}
+	public function setHexPassable(hex:hex.HexCoordinates)
+	{
+		getGraph().setPassable(hex.toKey());
+	}
+	
 	public function positionToHex(rawPosition:FlxPoint):HexCoordinates
 	{
 		var position = new FlxPoint(rawPosition.x - mapCenter.x, -(rawPosition.y - mapCenter.y));
