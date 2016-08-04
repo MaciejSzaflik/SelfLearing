@@ -37,9 +37,12 @@ class SelectMoveState extends State
 	
 	private function handleClick(input:Input)
 	{
-		MainState.getInstance().getDrawer().clear(1);
-		MainState.getInstance().getDrawer().clear(2);
-		//stateMachine.setCurrentState(new MoveState(this.stateMachine));
+		if (rangeInfo.hexList.exists(input.coor.toKey()))
+		{
+			MainState.getInstance().getDrawer().clear(1);
+			MainState.getInstance().getDrawer().clear(2);
+			stateMachine.setCurrentState(new MoveState(this.stateMachine, selectedCreature, input.coor));
+		}
 	}
 	
 	private function handleMove(input:Input) 
