@@ -67,7 +67,6 @@ class Graph
 	
 	public function setImpassable(vertex:Int)
 	{
-		trace(vertex + " " + (impassableVertices == null));
 		impassableVertices.set(vertex, true);
 	}
 	public function setPassable(vertex:Int)

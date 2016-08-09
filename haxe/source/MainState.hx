@@ -13,6 +13,7 @@ import flixel.util.FlxColor;
 import flixel.math.FlxPoint;
 import flixel.FlxBasic;
 import game.Creature;
+import game.CreatureDefinition;
 import game.StageDescription;
 import gameLogic.GameContext;
 import gameLogic.Input;
@@ -25,7 +26,9 @@ import source.Drawer;
 import hex.HexMap;
 import hex.HexTopping;
 import source.SpriteFactory;
+import utilites.GameConfiguration;
 import utilites.InputType;
+import utilites.JsonSerializer;
 
 using flixel.util.FlxSpriteUtil;
 
@@ -61,16 +64,33 @@ class MainState extends FlxState
 
 	override public function create():Void
 	{
-		_instance = this;
-		stageDescription = new StageDescription();
-		stageDescription.InitTestStage();
-		drawMap();
-		addText();
-		drawDebugGraph();
-		
-		//TestCreatureMovement();
-		CreateGameContex();
 		super.create();
+		
+		GameConfiguration.init(function(){
+			_instance = this;
+			stageDescription = new StageDescription();
+			stageDescription.InitTestStage();
+			drawMap();
+			addText();
+			drawDebugGraph();
+			testParser();
+			CreateGameContex();
+		});
+		
+	}
+	
+	private function testParser()
+	{
+		var testdef = new CreatureDefinition(
+		0,1,1,1, 1, 1, 1, 1, "a", "a");
+		var testdef2 = new CreatureDefinition(
+		1,1,1,1, 1, 1, 1, 1, "a", "b");
+		var testLis = new List<CreatureDefinition>();
+		testLis.add(testdef);
+		testLis.add(testdef2);
+		var result = JsonSerializer.serialize(testdef2);
+		var newCreature = JsonSerializer.deserializeCreature(result);
+		trace(newCreature);
 	}
 	
 	private function CreateGameContex()
@@ -86,7 +106,6 @@ class MainState extends FlxState
 		
 		GameContext.instance.Start();
 	}
-	
 	
 	private function CreateDubugCreatureList():Array<Creature>
 	{
@@ -105,42 +124,6 @@ class MainState extends FlxState
 			i++;
 		}
 		return creatureList;
-	}
-	
-	
-	private function TestCreatureMovement()
-	{
-		stageDescription.AddCreaturesToScene(this);
-		var creatureIndex = 0;
-		for (creature in stageDescription.listOfCreatures)
-		{
-			var hex = getHexMap().getRandomHex();
-			addTestAnimation(creatureIndex, 0, hex.getIndex());
-			creatureIndex++;
-		}
-	}
-	private function addTestAnimation(creatureIndex:Int,from:Int, to:Int)
-	{
-		var checkpoints = getHexMap().getPathCenters(from, to);
-		
-		drawer.clear(creatureIndex + 1);
-		for (hex in checkpoints)
-			drawer.drawHex(hex, getHexMap().hexSize, HexTopping.Pointy, 0x7700ffff, creatureIndex + 1);
-		
-		var testMoveAnimation = new MoveBetweenPoints(
-			stageDescription.listOfCreatures[creatureIndex],
-			checkpoints
-			,0.1,
-			function() 
-			{	
-				var randomHex = 0;
-				do
-					randomHex = getHexMap().getRandomHex().getIndex()
-				while (randomHex == to);
-				
-				addTestAnimation(creatureIndex,to,randomHex); 				
-			});
-		Tweener.instance.addAnimation(testMoveAnimation);
 	}
 	
 	private function addText()
@@ -202,6 +185,9 @@ class MainState extends FlxState
 
 	override public function update(elapsed:Float):Void
 	{
+		if (_instance == null)
+			return;
+			
 		setTextToTextObj(fpsText, Math.floor(1 / elapsed) + ":time");
 		Tweener.instance.update(elapsed);
 		onMouse();
