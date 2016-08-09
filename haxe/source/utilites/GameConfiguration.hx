@@ -41,12 +41,15 @@ class GameConfiguration
 	{
 		var map = JsonSerializer.deserialize(data);
 		var content = Reflect.getProperty(map.files, "configuration.json").content;
-		var parsedContent:Array<Dynamic> = Json.parse(content);
-		for (creature in parsedContent)
+		var parsedContent = Json.parse(content);
+		var parsedCreatures:Array<Dynamic> = parsedContent[0].creatures;
+		for (creature in parsedCreatures)
 		{
 			var creatureDef = CreatureDefinition.fromDynamic(creature);
 			creatures.set(creatureDef.id, creatureDef);
+			trace(creatureDef.toString());
 		}
+		
 	}
 	
 	public static function init(callBack:Function)

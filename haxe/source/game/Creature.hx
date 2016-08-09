@@ -20,6 +20,7 @@ class Creature
 	public var range = 5;
 	
 	public var idPlayerId:Int;
+	private var definitionId:Int;
 	
 	public function new(sprite:CreatureSprite,x:Int = 0,y:Int = 0)
 	{
