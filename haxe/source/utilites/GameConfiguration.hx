@@ -2,6 +2,7 @@ package utilites;
 import game.CreatureDefinition;
 import haxe.Constraints.Function;
 import haxe.Http;
+import haxe.Json;
 import tjson.TJSON;
 /**
  * ...
@@ -39,7 +40,13 @@ class GameConfiguration
 	private function parseRawData(data:String)
 	{
 		var map = JsonSerializer.deserialize(data);
-		trace(map);
+		var content = Reflect.getProperty(map.files, "configuration.json").content;
+		var parsedContent:Array<Dynamic> = Json.parse(content);
+		for (creature in parsedContent)
+		{
+			var creatureDef = CreatureDefinition.fromDynamic(creature);
+			creatures.set(creatureDef.id, creatureDef);
+		}
 	}
 	
 	public static function init(callBack:Function)

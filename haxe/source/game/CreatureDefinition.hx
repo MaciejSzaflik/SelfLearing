@@ -35,6 +35,23 @@ class CreatureDefinition
 		this.spriteName = spriteName;
 	}
 	
+	public static function fromDynamic(object:Dynamic):CreatureDefinition
+	{
+		return new CreatureDefinition(
+			object.id,
+			object.attackPower,
+			object.attackRandom,
+			object.initiative,
+			object.health,
+			object.actionPoints,
+			object.attackRange,
+			object.attackPointCost,
+			
+			object.name,
+			object.spriteName
+		);
+	}
+	
 	public function toString():String
 	{
 		return 'I:$initiative, H:$health, AP:$actionPoints, APC:$attackPointCost, N:$name, SN:$spriteName';

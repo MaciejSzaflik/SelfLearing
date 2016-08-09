@@ -73,26 +73,11 @@ class MainState extends FlxState
 			drawMap();
 			addText();
 			drawDebugGraph();
-			testParser();
 			CreateGameContex();
 		});
 		
 	}
-	
-	private function testParser()
-	{
-		var testdef = new CreatureDefinition(
-		0,1,1,1, 1, 1, 1, 1, "a", "a");
-		var testdef2 = new CreatureDefinition(
-		1,1,1,1, 1, 1, 1, 1, "a", "b");
-		var testLis = new List<CreatureDefinition>();
-		testLis.add(testdef);
-		testLis.add(testdef2);
-		var result = JsonSerializer.serialize(testdef2);
-		var newCreature = JsonSerializer.deserializeCreature(result);
-		trace(newCreature);
-	}
-	
+
 	private function CreateGameContex()
 	{
 		var player1 = new Player(0, CreateDubugCreatureList());
