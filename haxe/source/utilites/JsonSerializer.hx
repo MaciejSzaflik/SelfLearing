@@ -1,5 +1,4 @@
 package utilites;
-import game.CreatureDefinition;
 import tjson.TJSON;
 class JsonSerializer
 {
@@ -20,18 +19,17 @@ class JsonSerializer
 		return TJSON.parse(json);
 	}
 	
-	public static function deserializeCreature(encoded:String):CreatureDefinition
+	@:generic
+	public static function fillObjectWithDynamic<T>(object:T, objectDynamic:Dynamic):T
 	{
-		var parsed:Dynamic = TJSON.parse(encoded);
-		var result:CreatureDefinition = Type.createEmptyInstance(CreatureDefinition);
-		for (field in Type.getInstanceFields(CreatureDefinition))
+		for (field in Type.getInstanceFields(Type.getClass(object)))
 		{
-			if (Reflect.hasField(parsed, field))
+			if (Reflect.hasField(objectDynamic, field))
 			{
-				Reflect.setProperty(result, field, Reflect.getProperty(parsed, field));
+				Reflect.setProperty(object, field, Reflect.getProperty(objectDynamic, field));
 			}
 		}
-		return result;
+		return object;
 	}
 	
 }

@@ -13,7 +13,7 @@ import flixel.util.FlxColor;
 import flixel.math.FlxPoint;
 import flixel.FlxBasic;
 import game.Creature;
-import game.CreatureDefinition;
+import data.CreatureDefinition;
 import game.StageDescription;
 import gameLogic.GameContext;
 import gameLogic.Input;
@@ -94,17 +94,12 @@ class MainState extends FlxState
 	
 	private function CreateDubugCreatureList():Array<Creature>
 	{
-		var animationDef = new FrameAnimationDef("idle", 6, true, [0, 1, 2, 3, 4, 5]);
-		var animationList = new List<FrameAnimationDef>();
-		animationList.add(animationDef);
-		var spriteDefinition = new SpriteDefinition("assets/images/blob.png", true, 36, 32, animationList);
+		var creatureDefinition = GameConfiguration.instance.creatures.get(0);
 		var creatureList = new Array<Creature>();
-		
 		var i = 0;
 		while (i < 5)
 		{
-			var creature = new Creature(SpriteFactory.instance.createNewCreature(spriteDefinition), 0, 20);
-			
+			var creature = Creature.fromDefinition(creatureDefinition);
 			creatureList.push(creature);
 			creature.addCreatureToState(this);
 			i++;

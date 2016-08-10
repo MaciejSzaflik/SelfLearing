@@ -1,8 +1,11 @@
 package game;
+import data.CreatureDefinition;
 import flixel.FlxState;
 import flixel.math.FlxPoint;
 import gameLogic.GameContext;
 import hex.HexCoordinates;
+import source.SpriteFactory;
+import utilites.GameConfiguration;
 
 /**
  * ...
@@ -20,7 +23,18 @@ class Creature
 	public var range = 5;
 	
 	public var idPlayerId:Int;
-	private var definitionId:Int;
+	public var definitionId:Int;
+	
+	public static function fromDefinition(definition:CreatureDefinition):Creature
+	{
+		var creature = new Creature(null);
+		creature.definitionId = definition.id;
+		trace(definition.spriteDef);
+		var spriteDefinition = GameConfiguration.instance.spriteDefinitions.get(definition.spriteDef);
+		
+		creature.sprite =SpriteFactory.instance.createNewCreature(spriteDefinition);
+		return creature;
+	}
 	
 	public function new(sprite:CreatureSprite,x:Int = 0,y:Int = 0)
 	{

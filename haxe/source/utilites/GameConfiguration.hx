@@ -1,5 +1,7 @@
 package utilites;
-import game.CreatureDefinition;
+import data.FrameAnimationDef;
+import data.SpriteDefinition;
+import data.CreatureDefinition;
 import haxe.Constraints.Function;
 import haxe.Http;
 import haxe.Json;
@@ -11,6 +13,8 @@ import tjson.TJSON;
 class GameConfiguration
 {
 	public var creatures:Map<Int,CreatureDefinition>;
+	public var frameAnimations:Map<Int,FrameAnimationDef>;
+	public var spriteDefinitions:Map<Int,SpriteDefinition>;
 	
 	@:isVar static public var instance(get,set) : GameConfiguration;
 	static function get_instance() : GameConfiguration
@@ -26,6 +30,8 @@ class GameConfiguration
 	private function new(callBack:Function) 
 	{
 		creatures = new Map<Int,CreatureDefinition>();
+		frameAnimations = new Map<Int,FrameAnimationDef>();
+		spriteDefinitions= new Map<Int,SpriteDefinition>();
 		
 		var loadConfigurationRequest = new Http("https://api.github.com/gists/6477e19437bc24fc24ebc1879b6087a4");
 		loadConfigurationRequest.request(false);
@@ -42,15 +48,43 @@ class GameConfiguration
 		var map = JsonSerializer.deserialize(data);
 		var content = Reflect.getProperty(map.files, "configuration.json").content;
 		var parsedContent = Json.parse(content);
-		var parsedCreatures:Array<Dynamic> = parsedContent[0].creatures;
-		for (creature in parsedCreatures)
-		{
-			var creatureDef = CreatureDefinition.fromDynamic(creature);
-			creatures.set(creatureDef.id, creatureDef);
-			trace(creatureDef.toString());
-		}
+		parseCreatures(parsedContent[0].creatures);
+		parseFrameAnimations(parsedContent[0].creatureAnimations);
+		parseSpriteDefinitions(parsedContent[0].creatureSprites);
 		
 	}
+	
+	private function parseCreatures(data:Array<Dynamic>)
+	{
+		for (creature in data)
+		{
+			var creatureDef = CreatureDefinition.createEmpty();
+			JsonSerializer.fillObjectWithDynamic(creatureDef, creature);
+			creatures.set(creatureDef.id, creatureDef);
+		}
+	}
+	
+	private function parseFrameAnimations(data:Array<Dynamic>)
+	{
+		for (frameAnimation in data)
+		{
+			var frameAnimationDef = FrameAnimationDef.createEmpty();
+			JsonSerializer.fillObjectWithDynamic(frameAnimationDef, frameAnimation);
+			frameAnimations.set(frameAnimationDef.id, frameAnimationDef);
+		}
+	}
+	
+	private function parseSpriteDefinitions(data:Array<Dynamic>)
+	{
+		for (sprite in data)
+		{
+			var spriteDef = SpriteDefinition.createEmpty();
+			JsonSerializer.fillObjectWithDynamic(spriteDef, sprite);
+			spriteDefinitions.set(spriteDef.id, spriteDef);
+			trace(spriteDef.graphicName + " graphic name");  
+		}
+	}
+	
 	
 	public static function init(callBack:Function)
 	{

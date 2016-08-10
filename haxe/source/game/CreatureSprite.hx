@@ -2,6 +2,7 @@ package game;
 import data.FrameAnimationDef;
 import data.SpriteDefinition;
 import flixel.FlxSprite;
+import utilites.GameConfiguration;
 
 class CreatureSprite extends FlxSprite
 {
@@ -22,7 +23,8 @@ class CreatureSprite extends FlxSprite
 			
 		for (animation in spriteDef.animationList)
 		{
-			this.animation.add(animation.name, animation.frameOrder, animation.framesPerSecond, animation.looped);
+			var animationDef = GameConfiguration.instance.frameAnimations.get(animation);
+			this.animation.add(animationDef.name, animationDef.frameOrder, animationDef.framesPerSecond, animationDef.looped);
 		}
 	}
 	
