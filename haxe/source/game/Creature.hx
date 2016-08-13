@@ -1,5 +1,6 @@
 package game;
 import data.CreatureDefinition;
+import data.SpriteDefinition;
 import flixel.FlxState;
 import flixel.math.FlxPoint;
 import gameLogic.GameContext;
@@ -19,11 +20,32 @@ class Creature
 	
 	public var currentCordinates:HexCoordinates;
 	
-	public var initiative = 5;
-	public var range = 5;
+	public var initiative(get, never):Int;
+	public var range(get, never):Int;
+	
+	function get_initiative():Int
+	{
+		return definition.initiative;
+	}
+	
+	function get_range():Int
+	{
+		return definition.actionPoints;
+	}
 	
 	public var idPlayerId:Int;
 	public var definitionId:Int;
+	
+	private var _definition:CreatureDefinition;
+	public var definition(get, never):CreatureDefinition;
+	public function get_definition():CreatureDefinition
+	{
+		if (_definition == null)
+		{
+			_definition = GameConfiguration.instance.creatures.get(definitionId);
+		}
+		return _definition;
+	}
 	
 	public static function fromDefinition(definition:CreatureDefinition):Creature
 	{

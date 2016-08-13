@@ -3,6 +3,7 @@ package gameLogic.states;
 import game.Creature;
 import gameLogic.Input;
 import gameLogic.StateMachine;
+import gameLogic.actions.MoveAction;
 import hex.RangeInformation;
 import utilites.InputType;
 
@@ -58,7 +59,16 @@ class SelectMoveState extends State
 		{
 			MainState.getInstance().getDrawer().clear(1);
 			MainState.getInstance().getDrawer().clear(2);
-			stateMachine.setCurrentState(new MoveState(this.stateMachine, selectedCreature, input.coor));
+			
+			
+			var action = new MoveAction(selectedCreature,input.coor,		
+				function() 
+				{	
+					MainState.getInstance().getDrawer().clear(1);
+					stateMachine.setCurrentState(new SelectMoveState(this.stateMachine));				
+				}
+			);
+			action.performAction();
 		}
 	}
 	
