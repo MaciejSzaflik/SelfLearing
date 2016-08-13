@@ -99,7 +99,7 @@ class MainState extends FlxState
 		var i = 0;
 		while (i < 5)
 		{
-			var creature = Creature.fromDefinition(creatureDefinition);
+			var creature = Creature.fromDefinition(creatureDefinition,10);
 			creatureList.push(creature);
 			creature.addCreatureToState(this);
 			i++;

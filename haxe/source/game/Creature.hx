@@ -24,19 +24,57 @@ class Creature
 	public var range(get, never):Int;
 	public var attackRange(get, never):Int;
 	
+	public var currentHealth:Int;
+	public var totalHealth(get, never):Int;
+	public var unitHealth(get, never):Int;
+	public var attack(get, never):Int;
+	public var attackVariance(get, never):Int;
+	
+	public var stackCounter:Int;
+	
+	function get_attack():Int
+	{
+		return definition.attackPower;
+	}
+	function get_attackVariance():Int
+	{
+		return definition.attackRandom;
+	}
+	function get_unitHealth():Int
+	{
+		return definition.health;
+	}
+	function get_totalHealth():Int
+	{
+		return unitHealth*stackCounter + currentHealth;
+	}
 	function get_initiative():Int
 	{
 		return definition.initiative;
 	}
-	
 	function get_range():Int
 	{
 		return definition.actionPoints;
 	}
-	
 	function get_attackRange():Int
 	{
 		return definition.attackRange;
+	}
+		
+	public function getHit(hitPower:Int):Bool
+	{
+		var currentHealth = totalHealth - hitPower;
+		if (currentHealth <= 0)
+			return false;
+		
+		stackCounter = Math.floor(currentHealth / unitHealth);
+		currentHealth = currentHealth - stackCounter * unitHealth;
+		return true;
+	}
+	
+	public function calculateAttack():Int
+	{
+		return (attack + Random.int( -attackVariance, attackVariance)) * stackCounter;
 	}
 	
 	public var idPlayerId:Int;
@@ -53,9 +91,10 @@ class Creature
 		return _definition;
 	}
 	
-	public static function fromDefinition(definition:CreatureDefinition):Creature
+	public static function fromDefinition(definition:CreatureDefinition,stackCounter:Int):Creature
 	{
 		var creature = new Creature(null);
+		creature.stackCounter;
 		creature.definitionId = definition.id;
 		var spriteDefinition = GameConfiguration.instance.spriteDefinitions.get(definition.spriteDef);
 		
