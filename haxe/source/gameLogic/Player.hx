@@ -13,6 +13,8 @@ class Player
 	{
 		this.id = id;
 		this.creatures = creatures;
+		for (creature in creatures)
+			creature.idPlayerId = id;
 	}
 	
 }

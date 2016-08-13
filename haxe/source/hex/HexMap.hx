@@ -145,12 +145,12 @@ class HexMap extends BoardMap
 		return centers;
 	}
 	
-	public function getRange(index:Int,rangeSize:Int):RangeInformation
+	public function getRange(index:Int,rangeSize:Int,checkPassble:Bool):RangeInformation
 	{
 		var range = new RangeInformation();
 		if (hexes.exists(index))
 		{
-			var listOfVertices = bfs.findRange(new Vertex(index), rangeSize);
+			var listOfVertices = bfs.findRange(new Vertex(index), rangeSize, checkPassble);
 			range.FillRange(listOfVertices, hexes);
 		}
 		return range;

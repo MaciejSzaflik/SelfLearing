@@ -1,4 +1,5 @@
 package gameLogic;
+import data.CreatureDefinition;
 import flixel.math.FlxPoint;
 import game.Creature;
 import hex.BoardShape;
@@ -28,7 +29,7 @@ class GameContext
 	}
 	
 	public var map:HexMap;
-	public var listOfPlayers:Array<Player>;
+	public var mapOfPlayers:Map<Int,Player>;
 	private var _currentPlayerIndex:Int;
 	public var currentPlayerIndex(get,set):Int;
 	public var inititativeQueue:InitiativeQueue;
@@ -82,7 +83,10 @@ class GameContext
 	public function Init(map:HexMap, listOfPlayers:Array<Player>)
 	{
 		this.map = map;
-		this.listOfPlayers = listOfPlayers;
+		this.mapOfPlayers = new Map<Int,Player>();
+		for (player in listOfPlayers)
+			mapOfPlayers.set(player.id, player);
+		
 		this.inititativeQueue = new InitiativeQueue();
 		stateMachine = new GameStateMachine(this);
 	}
@@ -92,6 +96,30 @@ class GameContext
 		stateMachine.init();
 	}
 	
+	public function getCreaturesInAttackRange(creature:Creature):PossibleAttacksInfo
+	{
+		var rangeInformation = map.getRange(creature.getTileId(), creature.attackRange, false);
+		var attackTargets = new List<Creature>();
+		var attackCenters = new List<FlxPoint>();
+		for (player in mapOfPlayers)
+		{
+			if (player.id != creature.idPlayerId)
+			{
+				for (playerCreature in player.creatures)
+				{
+					if (rangeInformation.hexList.exists(playerCreature.getTileId()))
+					{
+						attackTargets.push(playerCreature);
+						attackCenters.push(map.getHexCenterByAxialCor(playerCreature.currentCordinates));
+					}
+				}
+			}
+			else
+				continue;
+		}
+		return new PossibleAttacksInfo(attackTargets,attackCenters);
+	}
+	
 	public function get_currentPlayerIndex():Int
 	{
 		return _currentPlayerIndex;
@@ -99,13 +127,16 @@ class GameContext
 	
 	public function set_currentPlayerIndex(index:Int)
 	{
-		currentPlayer = listOfPlayers[index];
+		currentPlayer = mapOfPlayers[index];
 		return _currentPlayerIndex = index;
 	}
 	
 	public function getNumberOfPlayers():Int
 	{
-		return listOfPlayers.length;
+		var counter = 0;
+		for (player in mapOfPlayers)
+			counter++;
+		return counter;
 	}
 	
 }

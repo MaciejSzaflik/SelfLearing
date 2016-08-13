@@ -22,6 +22,7 @@ class Creature
 	
 	public var initiative(get, never):Int;
 	public var range(get, never):Int;
+	public var attackRange(get, never):Int;
 	
 	function get_initiative():Int
 	{
@@ -31,6 +32,11 @@ class Creature
 	function get_range():Int
 	{
 		return definition.actionPoints;
+	}
+	
+	function get_attackRange():Int
+	{
+		return definition.attackRange;
 	}
 	
 	public var idPlayerId:Int;
@@ -51,7 +57,6 @@ class Creature
 	{
 		var creature = new Creature(null);
 		creature.definitionId = definition.id;
-		trace(definition.spriteDef);
 		var spriteDefinition = GameConfiguration.instance.spriteDefinitions.get(definition.spriteDef);
 		
 		creature.sprite =SpriteFactory.instance.createNewCreature(spriteDefinition);

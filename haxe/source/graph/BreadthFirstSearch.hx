@@ -13,7 +13,7 @@ class BreadthFirstSearch
 		this.graphObject = graph;
 	}
 	
-	public function findRange(root:Vertex, rangeSize:Int):List<Int>
+	public function findRange(root:Vertex, rangeSize:Int, checkPassable:Bool):List<Int>
 	{
 		var range = new List<Int>();
 		var nodes = this.graphObject.getVertices();
@@ -27,7 +27,7 @@ class BreadthFirstSearch
 			
 			for (nodeIndex in graphObject.getConnected(current.index))
 			{
-				if (graphObject.isThisVerPassable(nodeIndex))
+				if (!checkPassable || graphObject.isThisVerPassable(nodeIndex))
 				{
 					var node = nodes.get(nodeIndex);
 					if (node.distance == Vertex.MAX)

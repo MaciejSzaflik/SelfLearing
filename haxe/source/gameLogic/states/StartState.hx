@@ -32,7 +32,7 @@ class StartState extends State
 	public function placeCreaturesOnMap()
 	{
 		var playerIndex = 0;
-		for (player in GameContext.instance.listOfPlayers)
+		for (player in GameContext.instance.mapOfPlayers)
 		{
 			var creatureIndex = 0;
 			for (creature in player.creatures)

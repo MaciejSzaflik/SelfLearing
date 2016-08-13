@@ -15,7 +15,7 @@ class InitiativeQueue
 		queue = new Array<Creature>();
 	}
 	
-	public function fillWithPlayers(players:Array<Player>)
+	public function fillWithPlayers(players:Map<Int,Player>)
 	{
 		for (player in players)
 		{
