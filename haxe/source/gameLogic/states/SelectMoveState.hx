@@ -18,6 +18,8 @@ class SelectMoveState extends State
 	private var moveRangeInfo:RangeInformation;
 	private var attacksInfo:PossibleAttacksInfo;
 	
+	private var isAnimationPlaying = false;
+	
 	public function new(stateMachine:StateMachine) 
 	{
 		this.stateName = "Select Move";
@@ -62,6 +64,9 @@ class SelectMoveState extends State
 	
 	override public function handleInput(input:Input) 
 	{
+		if (isAnimationPlaying)
+			return;
+		
 		if (input.type == InputType.move)
 			handleMove(input);
 		else
@@ -70,27 +75,60 @@ class SelectMoveState extends State
 	
 	private function handleClick(input:Input)
 	{
-		if (moveRangeInfo.hexList.exists(input.coor.toKey()))
+		if (moveRangeInfo !=null && moveRangeInfo.hexList.exists(input.coor.toKey()))
 		{
-			MainState.getInstance().getDrawer().clear(1);
-			MainState.getInstance().getDrawer().clear(2);
-			
-			
-			var action = new MoveAction(selectedCreature,input.coor,		
-				function() 
-				{	
-					MainState.getInstance().getDrawer().clear(1);
-					stateMachine.setCurrentState(new SelectMoveState(this.stateMachine));				
-				}
-			);
-			action.performAction();
+			handleMoveClick(input);
 		}
+		else if (attacksInfo != null && attacksInfo.listOfHex.exists(input.coor.toKey()))
+		{
+			handleAttackClick(input);
+		}
+		else if (moveRangeInfo == null)
+			endState();
+	}
+	
+	private function handleAttackClick(input:Input)
+	{
+		endState();
+	}
+	
+	private function endState()
+	{
+		stateMachine.setCurrentState(new SelectMoveState(this.stateMachine));
+	}
+	
+	private function handleMoveClick(input:Input)
+	{
+		MainState.getInstance().getDrawer().clear(1);
+		MainState.getInstance().getDrawer().clear(2);
+			
+		isAnimationPlaying = true; 
+		var action = new MoveAction(selectedCreature,input.coor,		
+			function() 
+			{		
+				MainState.getInstance().getDrawer().clear(1);
+				moveRangeInfo = null;
+				checkAttackPossiblity();
+				isAnimationPlaying = false;
+			}
+		);
+		action.performAction();
+	}
+	
+	
+	private function checkAttackPossiblity()
+	{
+		getAttackRange();
+		if (attacksInfo.lenght <= 0)
+			endState();
 	}
 	
 	private function handleMove(input:Input) 
 	{
 		MainState.getInstance().getDrawer().clear(2);
-		if(moveRangeInfo.hexList.exists(input.coor.toKey()))
+		if (moveRangeInfo == null || 
+			moveRangeInfo.hexList.exists(input.coor.toKey()) || 
+			attacksInfo.listOfHex.exists(input.coor.toKey()))
 			MainState.getInstance().drawHex(input.hexCenter, 2,0x99ffffff);
 	}
 	

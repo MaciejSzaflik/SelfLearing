@@ -3,6 +3,7 @@ import data.CreatureDefinition;
 import flixel.math.FlxPoint;
 import game.Creature;
 import hex.BoardShape;
+import hex.Hex;
 import hex.HexCoordinates;
 import hex.HexMap;
 import source.BoardMap;
@@ -101,6 +102,7 @@ class GameContext
 		var rangeInformation = map.getRange(creature.getTileId(), creature.attackRange, false);
 		var attackTargets = new List<Creature>();
 		var attackCenters = new List<FlxPoint>();
+		var attackHexesIds = new Map<Int,Bool>();
 		for (player in mapOfPlayers)
 		{
 			if (player.id != creature.idPlayerId)
@@ -111,13 +113,14 @@ class GameContext
 					{
 						attackTargets.push(playerCreature);
 						attackCenters.push(map.getHexCenterByAxialCor(playerCreature.currentCordinates));
+						attackHexesIds.set(playerCreature.getTileId(), true);
 					}
 				}
 			}
 			else
 				continue;
 		}
-		return new PossibleAttacksInfo(attackTargets,attackCenters);
+		return new PossibleAttacksInfo(attackTargets,attackCenters,attackHexesIds);
 	}
 	
 	public function get_currentPlayerIndex():Int
