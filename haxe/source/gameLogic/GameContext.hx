@@ -100,7 +100,7 @@ class GameContext
 	public function getCreaturesInAttackRange(creature:Creature):PossibleAttacksInfo
 	{
 		var rangeInformation = map.getRange(creature.getTileId(), creature.attackRange, false);
-		var attackTargets = new List<Creature>();
+		var attackTargets = new Map<Int,Creature>();
 		var attackCenters = new List<FlxPoint>();
 		var attackHexesIds = new Map<Int,Bool>();
 		for (player in mapOfPlayers)
@@ -111,7 +111,7 @@ class GameContext
 				{
 					if (rangeInformation.hexList.exists(playerCreature.getTileId()))
 					{
-						attackTargets.push(playerCreature);
+						attackTargets.set(playerCreature.getTileId(),playerCreature);
 						attackCenters.push(map.getHexCenterByAxialCor(playerCreature.currentCordinates));
 						attackHexesIds.set(playerCreature.getTileId(), true);
 					}

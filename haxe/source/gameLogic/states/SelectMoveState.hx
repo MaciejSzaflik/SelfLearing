@@ -4,6 +4,7 @@ import game.Creature;
 import gameLogic.Input;
 import gameLogic.PossibleAttacksInfo;
 import gameLogic.StateMachine;
+import gameLogic.actions.AttackAction;
 import gameLogic.actions.MoveAction;
 import hex.RangeInformation;
 import utilites.InputType;
@@ -75,20 +76,26 @@ class SelectMoveState extends State
 	
 	private function handleClick(input:Input)
 	{
-		if (moveRangeInfo !=null && moveRangeInfo.hexList.exists(input.coor.toKey()))
+		var key = input.coor.toKey();
+		if (moveRangeInfo !=null && moveRangeInfo.hexList.exists(key))
 		{
 			handleMoveClick(input);
 		}
-		else if (attacksInfo != null && attacksInfo.listOfHex.exists(input.coor.toKey()))
+		else if (attacksInfo != null && attacksInfo.listOfHex.exists(key))
 		{
-			handleAttackClick(input);
+			handleAttackClick(key);
 		}
 		else if (moveRangeInfo == null)
 			endState();
 	}
 	
-	private function handleAttackClick(input:Input)
+	private function handleAttackClick(key:Int)
 	{
+		if (attacksInfo.listOfCreatures.exists(key))
+		{
+			var attackAction = new AttackAction(selectedCreature, attacksInfo.listOfCreatures.get(key));
+			attackAction.performAction();
+		}
 		endState();
 	}
 	

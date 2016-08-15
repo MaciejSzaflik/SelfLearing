@@ -9,11 +9,11 @@ import hex.Hex;
  */
 class PossibleAttacksInfo
 {
-	public var listOfCreatures:List<Creature>;
+	public var listOfCreatures:Map<Int,Creature>;
 	public var listOfCenters:List<FlxPoint>;
 	public var listOfHex:Map<Int,Bool>;
 	
-	public function new(listOfCreatures:List<Creature>,listOfCenters:List<FlxPoint>,attackHexesIds:Map<Int,Bool>) 
+	public function new(listOfCreatures:Map<Int,Creature>,listOfCenters:List<FlxPoint>,attackHexesIds:Map<Int,Bool>) 
 	{
 		this.listOfCenters = listOfCenters;
 		this.listOfCreatures = listOfCreatures;

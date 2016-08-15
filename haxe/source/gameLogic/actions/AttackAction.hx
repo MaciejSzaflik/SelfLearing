@@ -12,6 +12,7 @@ class AttackAction extends Action
 	
 	public function new(attacker:Creature,defender:Creature) 
 	{
+		super();
 		this.attacker = attacker;
 		this.defender = defender;
 	}
@@ -20,6 +21,12 @@ class AttackAction extends Action
 	{
 		var attackPower = attacker.calculateAttack();
 		var isAlive = defender.getHit(attackPower);
+		
+		if (isAlive)
+		{
+			var contrattackPower = defender.calculateAttack();
+			var isAttackerAlive = attacker.getHit(contrattackPower);
+		}
 	}
 	
 	

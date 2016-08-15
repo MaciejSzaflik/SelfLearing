@@ -26,7 +26,6 @@ class CreatureLabel
 	
 	public function setText(textValue:String)
 	{
-		trace(textValue);
 		this.text.text = textValue;
 	}
 	
