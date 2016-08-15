@@ -15,6 +15,7 @@ import utilites.GameConfiguration;
 class Creature
 {
 	public var sprite:CreatureSprite;
+	public var label:CreatureLabel;
 	public var x:Int;
 	public var y:Int;
 	
@@ -30,8 +31,36 @@ class Creature
 	public var attack(get, never):Int;
 	public var attackVariance(get, never):Int;
 	
-	public var stackCounter:Int;
+	private var _stackCounter:Int;
+	public var stackCounter(get, set):Int;
 	
+	public var _idPlayerId:Int;
+	public var idPlayerId(get, set):Int;
+	public var definitionId:Int;
+	
+	private var _definition:CreatureDefinition;
+	public var definition(get, never):CreatureDefinition;
+	
+	function get_stackCounter():Int
+	{
+		return _stackCounter;
+	}
+	function set_stackCounter(value:Int):Int
+	{
+		_stackCounter = value;
+		label.setText(Std.string(value));
+		return value;
+	}
+	
+	function get_idPlayerId():Int
+	{
+		return _idPlayerId;
+	}
+	function set_idPlayerId(value:Int):Int
+	{
+		_idPlayerId = value;
+		return value;
+	}
 	function get_attack():Int
 	{
 		return definition.attackPower;
@@ -77,11 +106,6 @@ class Creature
 		return (attack + Random.int( -attackVariance, attackVariance)) * stackCounter;
 	}
 	
-	public var idPlayerId:Int;
-	public var definitionId:Int;
-	
-	private var _definition:CreatureDefinition;
-	public var definition(get, never):CreatureDefinition;
 	public function get_definition():CreatureDefinition
 	{
 		if (_definition == null)
@@ -94,7 +118,7 @@ class Creature
 	public static function fromDefinition(definition:CreatureDefinition,stackCounter:Int):Creature
 	{
 		var creature = new Creature(null);
-		creature.stackCounter;
+		creature.stackCounter = stackCounter;
 		creature.definitionId = definition.id;
 		var spriteDefinition = GameConfiguration.instance.spriteDefinitions.get(definition.spriteDef);
 		
@@ -107,6 +131,7 @@ class Creature
 		this.x = x;
 		this.y = y;
 		this.sprite = sprite;
+		this.label = SpriteFactory.instance.createNewLabel();
 	}
 	
 	public function getTileId():Int
@@ -124,7 +149,8 @@ class Creature
 	
 	public function setPosition(position:FlxPoint)
 	{
-		sprite.setPosition(position.x - getWidth()*0.5, position.y - getHeight()*0.5);
+		sprite.setPosition(position.x - getWidth() * 0.5, position.y - getHeight() * 0.5);
+		label.setPosition(position.x, sprite.getPosition().y + getHeight());
 	}
 	
 	public function getHeight():Float
@@ -141,6 +167,9 @@ class Creature
 	{	
 		stateToAdd.add(sprite);
 		sprite.setPosition(x, y);
+		
+		label.addToState(stateToAdd);
+		label.setPosition(x, y);
 	}
 	
 }

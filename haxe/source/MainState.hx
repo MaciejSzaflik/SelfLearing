@@ -80,8 +80,8 @@ class MainState extends FlxState
 
 	private function CreateGameContex()
 	{
-		var player1 = new Player(0, CreateDubugCreatureList());
-		var player2 = new Player(1, CreateDubugCreatureList());
+		var player1 = new Player(0, CreateDubugCreatureList(),0xffcc1111);
+		var player2 = new Player(1, CreateDubugCreatureList(),0xff1111ff);
 		GameContext.instance.Init(getHexMap(), [player1, player2]);
 		
 		GameContext.instance.stateMachine.addNewStateChangeListener(function(state:String)

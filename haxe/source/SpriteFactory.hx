@@ -4,8 +4,10 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import game.Creature;
+import game.CreatureLabel;
 import game.CreatureSprite;
 
 class SpriteFactory
@@ -20,6 +22,16 @@ class SpriteFactory
 	private function new() 
 	{
 		
+	}
+	
+	public function createNewLabel():CreatureLabel
+	{
+		var sprite = new FlxSprite();
+		sprite.makeGraphic(25, 13, 0xff999999);
+		var text = new FlxText();
+		text.size = 10;
+		text.setBorderStyle(FlxTextBorderStyle.OUTLINE_FAST, 0xff000000);
+		return new CreatureLabel(text,sprite);
 	}
 	
 	public function createNewLayer(stateToAdd:FlxState, groupToAdd:FlxTypedGroup<FlxSprite>):FlxSprite
