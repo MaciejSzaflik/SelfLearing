@@ -172,4 +172,10 @@ class Creature
 		label.setPosition(x, y);
 	}
 	
+	public function disable()
+	{
+		sprite.kill();
+		label.disable();
+	}
+	
 }

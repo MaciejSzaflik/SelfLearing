@@ -19,14 +19,21 @@ class AttackAction extends Action
 	
 	override public function performAction() 
 	{
-		var attackPower = attacker.calculateAttack();
-		var isAlive = defender.getHit(attackPower);
-		
+		var isAlive = attack(attacker, defender);
 		if (isAlive)
-		{
-			var contrattackPower = defender.calculateAttack();
-			var isAttackerAlive = attacker.getHit(contrattackPower);
-		}
+			attack(defender,attacker);
+	}
+	
+	private function attack(hitter:Creature,gettingHit:Creature):Bool
+	{
+		var attackPower = hitter.calculateAttack();
+		var isAlive = gettingHit.getHit(attackPower);
+		
+		if (!isAlive)
+			GameContext.instance.onCreatureKilled(gettingHit);
+			
+		return isAlive;
+		
 	}
 	
 	

@@ -40,4 +40,10 @@ class CreatureLabel
 		stateToAdd.add(text);
 	}
 	
+	public function disable()
+	{
+		text.kill();
+		background.kill();
+	}
+	
 }

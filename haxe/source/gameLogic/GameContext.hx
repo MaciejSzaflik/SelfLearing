@@ -123,6 +123,24 @@ class GameContext
 		return new PossibleAttacksInfo(attackTargets,attackCenters,attackHexesIds);
 	}
 	
+	public function onCreatureKilled(creature:Creature)
+	{
+		mapOfPlayers.get(creature.idPlayerId).onCreatureKilled(creature);
+		inititativeQueue.removeCreatureFromQueue(creature);
+		creature.disable();
+		map.getGraph().setPassable(creature.getTileId());
+	}
+	
+	private function getSumOfDead()
+	{
+		var numberOfDead = 0;
+		for (player in mapOfPlayers)
+		{
+			numberOfDead += player.numberOfDead;
+		}
+		return numberOfDead;
+	}
+	
 	public function get_currentPlayerIndex():Int
 	{
 		return _currentPlayerIndex;

@@ -38,4 +38,9 @@ class InitiativeQueue
 		return queue.pop();
 	}
 	
+	public function removeCreatureFromQueue(toRemove:Creature)
+	{
+		queue.remove(toRemove);
+	}
+	
 }
