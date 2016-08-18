@@ -26,15 +26,21 @@ class SelectMoveState extends State
 		this.stateName = "Select Move";
 		super(stateMachine);
 		
+		getNextCreature();
+		
+		getMoveRange();
+		getAttackRange();
+	}
+	
+	private function getNextCreature()
+	{
 		selectedCreature = GameContext.instance.getNextCreature();
 		if (selectedCreature == null)
 		{
 			GameContext.instance.inititativeQueue.fillWithPlayers(GameContext.instance.mapOfPlayers);
 			selectedCreature = GameContext.instance.getNextCreature();
 		}
-		
-		getMoveRange();
-		getAttackRange();
+		selectedCreature.moved = false;
 	}
 	
 	private function getMoveRange()
@@ -50,8 +56,13 @@ class SelectMoveState extends State
 	{
 		attacksInfo = GameContext.instance.getCreaturesInAttackRange(selectedCreature);
 		if(attacksInfo.lenght > 0)
-			MainState.getInstance().drawHexesRange(attacksInfo.listOfCenters, 1, 0xaaffaa66);
+			MainState.getInstance().drawHexesRange(attacksInfo.listOfCenters, 1, 0xa0ffaa66);
 		
+		if (!selectedCreature.moved)
+		{
+			var possibleAttackSpaces = GameContext.instance.getCreatureAttackTargets(selectedCreature);
+			MainState.getInstance().drawHexesRange(possibleAttackSpaces, 1, 0x44ccffff);
+		}	
 	}
 	
 	private function colorRange()
@@ -110,11 +121,12 @@ class SelectMoveState extends State
 		MainState.getInstance().getDrawer().clear(2);
 			
 		isAnimationPlaying = true; 
+		selectedCreature.moved = true;
 		var action = new MoveAction(selectedCreature,input.coor,		
 			function() 
 			{		
 				MainState.getInstance().getDrawer().clear(1);
-				moveRangeInfo = null;
+				moveRangeInfo = null;			
 				checkAttackPossiblity();
 				isAnimationPlaying = false;
 			}

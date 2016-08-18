@@ -9,6 +9,7 @@ import game.Creature;
 class Player
 {
 	public var id(default, null):Int;
+	public var playerType:PlayerType;
 	public var color:FlxColor;
 	public var creatures:Array<Creature>;
 	public var deadCreatures:Array<Creature>;

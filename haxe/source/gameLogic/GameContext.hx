@@ -123,6 +123,32 @@ class GameContext
 		return new PossibleAttacksInfo(attackTargets,attackCenters,attackHexesIds);
 	}
 	
+	public function getCreatureAttackTargets(creature:Creature):List<FlxPoint>
+	{
+		var rangeInformation =  map.getRange(creature.getTileId(), creature.range, true);
+		var listOfTileIds = new List<FlxPoint>();
+		for (player in mapOfPlayers)
+		{
+			if (player.id != creature.idPlayerId)
+			{
+				for (playerCreature in player.creatures)
+				{
+						var attackPossiblites = map.getRange(playerCreature.getTileId(), creature.attackRange, false);
+						for (hex in attackPossiblites.hexList)
+						{
+							if (rangeInformation.hexList.exists(hex.getIndex()))
+							{
+								listOfTileIds.push(hex.center);
+							}
+						}
+				}
+			}
+			else
+				continue;
+		}
+		return listOfTileIds;
+	}
+	
 	public function onCreatureKilled(creature:Creature)
 	{
 		mapOfPlayers.get(creature.idPlayerId).onCreatureKilled(creature);
@@ -159,5 +185,4 @@ class GameContext
 			counter++;
 		return counter;
 	}
-	
 }

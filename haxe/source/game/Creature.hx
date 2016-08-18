@@ -41,6 +41,8 @@ class Creature
 	private var _definition:CreatureDefinition;
 	public var definition(get, never):CreatureDefinition;
 	
+	public var moved:Bool = false;
+	
 	function get_stackCounter():Int
 	{
 		return _stackCounter;
