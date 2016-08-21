@@ -1,5 +1,5 @@
 package gameLogic.ai;
-import gameLogic.moves.Move;
+import gameLogic.moves.MoveData;
 
 /**
  * ...
@@ -13,7 +13,7 @@ class ArtificialInteligence
 		
 	}
 	
-	public function generateMove():Move
+	public function generateMove():MoveData
 	{
 		return null;
 	}

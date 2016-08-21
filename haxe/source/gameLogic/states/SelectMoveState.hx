@@ -7,7 +7,7 @@ import gameLogic.StateMachine;
 import gameLogic.actions.AttackAction;
 import gameLogic.actions.MoveAction;
 import gameLogic.moves.ListOfMoves;
-import gameLogic.moves.Move;
+import gameLogic.moves.MoveData;
 import gameLogic.moves.MoveType;
 import haxe.Constraints.Function;
 import utilites.InputType;
@@ -90,15 +90,30 @@ class SelectMoveState extends State
 			handleClick(input);
 	}
 	
-	override function handleMove(move:Move) 
+	override function handleMove(move:MoveData) 
 	{
-		trace(move.type);
 		if (move.type == MoveType.Move)
 		{
 			handleMoveAction(function() {		
 				isAnimationPlaying = false;
 				endState();
 			},move.tileId);
+		}
+		else if (move.type == MoveType.Attack)
+		{
+			var attackAction = new AttackAction(selectedCreature,move.attacked);
+			if (selectedCreature.getTileId() == move.tileId)
+			{
+				attackAction.performAction();
+				endState();
+			}
+			else
+			{
+				handleMoveAction(function() {
+					attackAction.performAction();
+					endState();
+				},move.tileId);
+			}
 		}
 	}
 	

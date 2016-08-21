@@ -3,7 +3,7 @@ import flixel.util.FlxColor;
 import game.Creature;
 import gameLogic.ai.ArtificialInteligence;
 import gameLogic.ai.RandomAI;
-import gameLogic.moves.Move;
+import gameLogic.moves.MoveData;
 
 /**
  * ...
@@ -47,7 +47,7 @@ class Player
 		deadCreatures.push(killed);
 	}
 	
-	public function generateMove():Move
+	public function generateMove():MoveData
 	{
 		if (artificialInt != null && playerType == PlayerType.AI)
 		{

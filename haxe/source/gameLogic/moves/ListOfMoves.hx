@@ -8,27 +8,27 @@ import game.Creature;
  */
 class ListOfMoves
 {
-	public var moves:List<Move>;
-	public var movesByTypes:Map<MoveType,Map<String,Move>>;
+	public var moves:List<MoveData>;
+	public var movesByTypes:Map<MoveType,Map<String,MoveData>>;
 	public var affectedCreatures:Map<Int,Creature>;
 	
 	public function new() 
 	{
-		moves = new List<Move>();
-		movesByTypes = new Map<MoveType,Map<String,Move>>();
+		moves = new List<MoveData>();
+		movesByTypes = new Map<MoveType,Map<String,MoveData>>();
 		affectedCreatures = new Map<Int,Creature>();
 	}
 	
-	public function addMove(moveToAdd:Move)
+	public function addMove(moveToAdd:MoveData)
 	{
 		moves.push(moveToAdd);
 		addToMap(moveToAdd);
 	}
 	
-	private function addToMap(moveToAdd:Move)
+	private function addToMap(moveToAdd:MoveData)
 	{
 		if (!movesByTypes.exists(moveToAdd.type))
-			movesByTypes.set(moveToAdd.type, new Map<String,Move>());
+			movesByTypes.set(moveToAdd.type, new Map<String,MoveData>());
 		
 		movesByTypes.get(moveToAdd.type).set(moveToAdd.getId(), moveToAdd);
 	}

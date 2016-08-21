@@ -2,9 +2,8 @@ package gameLogic;
 import data.CreatureDefinition;
 import flixel.math.FlxPoint;
 import game.Creature;
-import gameLogic.moves.AttackMove;
 import gameLogic.moves.ListOfMoves;
-import gameLogic.moves.MoveMove;
+import gameLogic.moves.MoveData;
 import gameLogic.moves.MoveType;
 import hex.BoardShape;
 import hex.Hex;
@@ -152,7 +151,10 @@ class GameContext
 						for (hex in attackPossiblites)
 						{
 							if (rangeInformation.exists(hex))
-								listOfMoves.addMove(new AttackMove(MoveType.Attack, playerCreature, hex));
+							{
+								var move = MoveData.createAttackMove(MoveType.Attack, hex, playerCreature);
+								listOfMoves.addMove(move);
+							}
 						}
 				}
 			}
@@ -167,7 +169,7 @@ class GameContext
 		var range =  map.getRange(creature.getTileId(), creature.range, true);
 		for (tileId in range)
 		{
-			listOfMoves.addMove(new MoveMove(MoveType.Move, tileId));
+			listOfMoves.addMove(new MoveData(MoveType.Move, tileId));
 			
 		}
 		getCreatureAttackTargets(creature, listOfMoves, range);
