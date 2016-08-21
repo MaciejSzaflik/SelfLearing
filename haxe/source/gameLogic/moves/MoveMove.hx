@@ -6,11 +6,9 @@ package gameLogic.moves;
  */
 class MoveMove extends Move
 {
-	public var tileId:Int;
 	public function new(type:MoveType,tileId:Int) 
 	{
-		super(type);
-		this.tileId = tileId;
+		super(type,tileId);
 	}
 	
 }

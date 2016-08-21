@@ -14,6 +14,9 @@ import utilites.GameConfiguration;
  */
 class Creature
 {
+	public static var creatureCounter:Int = 0;
+	
+	public var id:Int;
 	public var sprite:CreatureSprite;
 	public var label:CreatureLabel;
 	public var x:Int;
@@ -130,6 +133,7 @@ class Creature
 	
 	public function new(sprite:CreatureSprite,x:Int = 0,y:Int = 0)
 	{
+		this.id = creatureCounter++;
 		this.x = x;
 		this.y = y;
 		this.sprite = sprite;

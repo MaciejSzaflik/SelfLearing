@@ -8,12 +8,21 @@ import game.Creature;
 class AttackMove extends Move
 {
 	public var attacked:Creature;
-	public var tileId:Int;
 	
 	public function new(type:MoveType,creature:Creature,tileId:Int) 
 	{
-		super(type);
+		super(type,tileId);
 		this.attacked = creature;
-		this.tileId = tileId;
+	}
+	
+	public var attackedId(get, never):Int;
+	function get_attackedId():Int
+	{
+		return attacked.id;
+	}
+	
+	override public function getId():String 
+	{
+		return tileId+"."+attackedId;
 	}
 }

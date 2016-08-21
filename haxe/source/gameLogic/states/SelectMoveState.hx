@@ -6,7 +6,8 @@ import gameLogic.PossibleAttacksInfo;
 import gameLogic.StateMachine;
 import gameLogic.actions.AttackAction;
 import gameLogic.actions.MoveAction;
-import hex.RangeInformation;
+import gameLogic.moves.ListOfMoves;
+import gameLogic.moves.MoveType;
 import utilites.InputType;
 
 /**
@@ -16,7 +17,7 @@ import utilites.InputType;
 class SelectMoveState extends State
 {
 	private var selectedCreature:Creature;
-	private var moveRangeInfo:RangeInformation;
+	private var moveList:ListOfMoves;
 	private var attacksInfo:PossibleAttacksInfo;
 	
 	private var isAnimationPlaying = false;
@@ -45,7 +46,7 @@ class SelectMoveState extends State
 	
 	private function getMoveRange()
 	{
-		moveRangeInfo = MainState.getInstance().getHexMap().getRange(selectedCreature.getTileId(), selectedCreature.range, true);
+		moveList = GameContext.instance.generateListOfMovesForCreature(selectedCreature);
 		
 		MainState.getInstance().getDrawer().clear(1);
 		colorRange();
@@ -54,20 +55,16 @@ class SelectMoveState extends State
 	
 	private function getAttackRange()
 	{
-		attacksInfo = GameContext.instance.getCreaturesInAttackRange(selectedCreature);
-		if(attacksInfo.lenght > 0)
-			MainState.getInstance().drawHexesRange(attacksInfo.listOfCenters, 1, 0xa0ffaa66);
+		MainState.getInstance().drawHexesRange(moveList.getListOCenters(MoveType.Attack), 1, 0x44ccffff);
 		
-		if (!selectedCreature.moved)
-		{
-			var possibleAttackSpaces = GameContext.instance.getCreatureAttackTargets(selectedCreature);
-			MainState.getInstance().drawHexesRange(possibleAttackSpaces, 1, 0x44ccffff);
-		}	
+		attacksInfo = GameContext.instance.getCreaturesInAttackRange(selectedCreature);
+		MainState.getInstance().drawHexesRange(attacksInfo.listOfCenters, 1, 0xaaffccff);
+
 	}
 	
 	private function colorRange()
 	{
-		MainState.getInstance().drawHexesRange(moveRangeInfo.centers, 1, 0x440033ff);
+		MainState.getInstance().drawHexesRange(moveList.getListOCenters(MoveType.Move), 1, 0x440033ff);
 	}
 	private function colorHexStandingOn()
 	{
@@ -88,7 +85,7 @@ class SelectMoveState extends State
 	private function handleClick(input:Input)
 	{
 		var key = input.coor.toKey();
-		if (moveRangeInfo !=null && moveRangeInfo.hexList.exists(key))
+		if (moveList !=null && moveList.checkIfExist(MoveType.Move,input.getKey()))
 		{
 			handleMoveClick(input);
 		}
@@ -96,7 +93,7 @@ class SelectMoveState extends State
 		{
 			handleAttackClick(key);
 		}
-		else if (moveRangeInfo == null)
+		else if (!moveList.movesByTypes.exists(MoveType.Move))
 			endState();
 	}
 	
@@ -126,7 +123,7 @@ class SelectMoveState extends State
 			function() 
 			{		
 				MainState.getInstance().getDrawer().clear(1);
-				moveRangeInfo = null;			
+				moveList.movesByTypes.remove(MoveType.Move);			
 				checkAttackPossiblity();
 				isAnimationPlaying = false;
 			}
@@ -145,8 +142,8 @@ class SelectMoveState extends State
 	private function handleMove(input:Input) 
 	{
 		MainState.getInstance().getDrawer().clear(2);
-		if (moveRangeInfo == null || 
-			moveRangeInfo.hexList.exists(input.coor.toKey()) || 
+		if (!moveList.movesByTypes.exists(MoveType.Move) || 
+			moveList.checkIfExist(MoveType.Move,input.getKey()) || 
 			attacksInfo.listOfHex.exists(input.coor.toKey()))
 			MainState.getInstance().drawHex(input.hexCenter, 2,0x99ffffff);
 	}

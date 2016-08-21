@@ -13,9 +13,9 @@ class BreadthFirstSearch
 		this.graphObject = graph;
 	}
 	
-	public function findRange(root:Vertex, rangeSize:Int, checkPassable:Bool):List<Int>
+	public function findRange(root:Vertex, rangeSize:Int, checkPassable:Bool):Map<Int,Int>
 	{
-		var range = new List<Int>();
+		var range = new Map<Int,Int>();
 		var nodes = this.graphObject.getVertices();
 		var queue = new List<Vertex>();
 		
@@ -37,7 +37,7 @@ class BreadthFirstSearch
 						if (node.distance <= rangeSize)
 						{
 							queue.add(node);
-							range.add(node.index);
+							range.set(node.index,node.index);
 						}
 					}
 				}

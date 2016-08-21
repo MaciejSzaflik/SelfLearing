@@ -22,4 +22,9 @@ class Input
 		this.hexCenter = hexCenter;
 	}
 	
+	public function getKey():String
+	{
+		return Std.string(coor.toKey());
+	}
+	
 }

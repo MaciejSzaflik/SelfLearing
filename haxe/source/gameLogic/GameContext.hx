@@ -2,6 +2,10 @@ package gameLogic;
 import data.CreatureDefinition;
 import flixel.math.FlxPoint;
 import game.Creature;
+import gameLogic.moves.AttackMove;
+import gameLogic.moves.ListOfMoves;
+import gameLogic.moves.MoveMove;
+import gameLogic.moves.MoveType;
 import hex.BoardShape;
 import hex.Hex;
 import hex.HexCoordinates;
@@ -109,7 +113,7 @@ class GameContext
 			{
 				for (playerCreature in player.creatures)
 				{
-					if (rangeInformation.hexList.exists(playerCreature.getTileId()))
+					if (rangeInformation.exists(playerCreature.getTileId()))
 					{
 						attackTargets.set(playerCreature.getTileId(),playerCreature);
 						attackCenters.push(map.getHexCenterByAxialCor(playerCreature.currentCordinates));
@@ -123,10 +127,8 @@ class GameContext
 		return new PossibleAttacksInfo(attackTargets,attackCenters,attackHexesIds);
 	}
 	
-	public function getCreatureAttackTargets(creature:Creature):List<FlxPoint>
+	private function getCreatureAttackTargets(creature:Creature,listOfMoves:ListOfMoves,rangeInformation:Map<Int,Int>)
 	{
-		var rangeInformation =  map.getRange(creature.getTileId(), creature.range, true);
-		var listOfTileIds = new List<FlxPoint>();
 		for (player in mapOfPlayers)
 		{
 			if (player.id != creature.idPlayerId)
@@ -134,19 +136,30 @@ class GameContext
 				for (playerCreature in player.creatures)
 				{
 						var attackPossiblites = map.getRange(playerCreature.getTileId(), creature.attackRange, false);
-						for (hex in attackPossiblites.hexList)
+						for (hex in attackPossiblites)
 						{
-							if (rangeInformation.hexList.exists(hex.getIndex()))
-							{
-								listOfTileIds.push(hex.center);
-							}
+							if (rangeInformation.exists(hex))
+								listOfMoves.addMove(new AttackMove(MoveType.Attack, playerCreature, hex));
 						}
 				}
 			}
 			else
 				continue;
 		}
-		return listOfTileIds;
+	}
+	
+	public function generateListOfMovesForCreature(creature:Creature):ListOfMoves
+	{
+		var listOfMoves = new ListOfMoves();
+		var range =  map.getRange(creature.getTileId(), creature.range, true);
+		for (tileId in range)
+		{
+			listOfMoves.addMove(new MoveMove(MoveType.Move, tileId));
+			
+		}
+		getCreatureAttackTargets(creature, listOfMoves, range);
+		trace("Count of attack moves: " + listOfMoves.getListOCenters(MoveType.Attack).length);
+		return listOfMoves;
 	}
 	
 	public function onCreatureKilled(creature:Creature)
