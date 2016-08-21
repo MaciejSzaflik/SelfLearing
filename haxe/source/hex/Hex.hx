@@ -19,6 +19,11 @@ class Hex
 		return coor.toKey();
 	}
 	
+	public function getCoor():HexCoordinates
+	{
+		return coor;
+	}
+	
 	public function toString():String
 	{
 		return coor.toString();

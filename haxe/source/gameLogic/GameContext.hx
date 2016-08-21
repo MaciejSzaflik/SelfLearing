@@ -39,6 +39,7 @@ class GameContext
 	public var currentPlayerIndex(get,set):Int;
 	public var inititativeQueue:InitiativeQueue;
 	private var currentPlayer:Player;
+	public var currentCreature:Creature;
 	
 	public var stateMachine:GameStateMachine;
 	
@@ -70,9 +71,21 @@ class GameContext
 		//trace("input context");
 		stateMachine.handleInput(input);
 	}
+	
+	public function typeOfCurrentPlayer():PlayerType
+	{
+		return mapOfPlayers.get(currentCreature.idPlayerId).playerType;
+	}
+	
 	public function getNextCreature():Creature
 	{
-		return inititativeQueue.getNextCreature();
+		currentCreature = inititativeQueue.getNextCreature();
+		if (currentCreature == null)
+		{
+			GameContext.instance.inititativeQueue.fillWithPlayers(GameContext.instance.mapOfPlayers);
+			currentCreature = GameContext.instance.getNextCreature();
+		}
+		return currentCreature;
 	}
 	
 	public function getPositionOnMapOddR(x:Int, y:Int):FlxPoint
@@ -158,7 +171,6 @@ class GameContext
 			
 		}
 		getCreatureAttackTargets(creature, listOfMoves, range);
-		trace("Count of attack moves: " + listOfMoves.getListOCenters(MoveType.Attack).length);
 		return listOfMoves;
 	}
 	

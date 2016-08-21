@@ -18,6 +18,7 @@ import game.StageDescription;
 import gameLogic.GameContext;
 import gameLogic.Input;
 import gameLogic.Player;
+import gameLogic.PlayerType;
 import graph.BreadthFirstSearch;
 import graph.Vertex;
 import hex.HexagonalHexMap;
@@ -34,10 +35,10 @@ using flixel.util.FlxSpriteUtil;
 
 class MainState extends FlxState
 {
-	static private var _instance:MainState;
+	static private var instance:MainState;
 	static public function getInstance() : MainState
 	{
-		return _instance;
+		return instance;
 	}
 	
 	private var btnPlay:FlxButton;
@@ -67,7 +68,7 @@ class MainState extends FlxState
 		super.create();
 		
 		GameConfiguration.init(function(){
-			_instance = this;
+			instance = this;
 			stageDescription = new StageDescription();
 			stageDescription.InitTestStage();
 			drawMap();
@@ -80,8 +81,8 @@ class MainState extends FlxState
 
 	private function CreateGameContex()
 	{
-		var player1 = new Player(0, CreateDubugCreatureList(),0xffcc1111);
-		var player2 = new Player(1, CreateDubugCreatureList(),0xff1111ff);
+		var player1 = new Player(0, CreateDubugCreatureList(),0xffcc1111,PlayerType.Human);
+		var player2 = new Player(1, CreateDubugCreatureList(),0xff1111ff,PlayerType.AI);
 		GameContext.instance.Init(getHexMap(), [player1, player2]);
 		
 		GameContext.instance.stateMachine.addNewStateChangeListener(function(state:String)
@@ -166,7 +167,7 @@ class MainState extends FlxState
 
 	override public function update(elapsed:Float):Void
 	{
-		if (_instance == null)
+		if (instance == null)
 			return;
 			
 		setTextToTextObj(fpsText, Math.floor(1 / elapsed) + ":time");

@@ -1,4 +1,5 @@
 package gameLogic.states;
+import gameLogic.moves.Move;
 
 /**
  * ...
@@ -15,6 +16,11 @@ class State
 	}
 	
 	public function handleInput(input:Input)
+	{
+		
+	}
+	
+	public function handleMove(move:Move)
 	{
 		
 	}

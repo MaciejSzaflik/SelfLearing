@@ -7,7 +7,9 @@ import gameLogic.StateMachine;
 import gameLogic.actions.AttackAction;
 import gameLogic.actions.MoveAction;
 import gameLogic.moves.ListOfMoves;
+import gameLogic.moves.Move;
 import gameLogic.moves.MoveType;
+import haxe.Constraints.Function;
 import utilites.InputType;
 
 /**
@@ -21,6 +23,7 @@ class SelectMoveState extends State
 	private var attacksInfo:PossibleAttacksInfo;
 	
 	private var isAnimationPlaying = false;
+	private var isHuman = false;
 	
 	public function new(stateMachine:StateMachine) 
 	{
@@ -28,20 +31,25 @@ class SelectMoveState extends State
 		super(stateMachine);
 		
 		getNextCreature();
-		
-		getMoveRange();
-		getAttackRange();
+		isHuman = GameContext.instance.typeOfCurrentPlayer() == PlayerType.Human;
+		if(isHuman)
+		{
+			getMoveRange();
+			getAttackRange();
+		}
 	}
 	
 	private function getNextCreature()
 	{
 		selectedCreature = GameContext.instance.getNextCreature();
-		if (selectedCreature == null)
-		{
-			GameContext.instance.inititativeQueue.fillWithPlayers(GameContext.instance.mapOfPlayers);
-			selectedCreature = GameContext.instance.getNextCreature();
-		}
 		selectedCreature.moved = false;
+	}
+	
+	override public function onEnter():Void 
+	{
+		var move = GameContext.instance.mapOfPlayers.get(selectedCreature.idPlayerId).generateMove();
+		if (move != null)
+			handleMove(move);
 	}
 	
 	private function getMoveRange()
@@ -55,11 +63,11 @@ class SelectMoveState extends State
 	
 	private function getAttackRange()
 	{
-		MainState.getInstance().drawHexesRange(moveList.getListOCenters(MoveType.Attack), 1, 0x44ccffff);
+		if(!selectedCreature.moved)
+			MainState.getInstance().drawHexesRange(moveList.getListOCenters(MoveType.Attack), 1, 0x44ccffff);
 		
 		attacksInfo = GameContext.instance.getCreaturesInAttackRange(selectedCreature);
 		MainState.getInstance().drawHexesRange(attacksInfo.listOfCenters, 1, 0xaaffccff);
-
 	}
 	
 	private function colorRange()
@@ -73,13 +81,37 @@ class SelectMoveState extends State
 	
 	override public function handleInput(input:Input) 
 	{
-		if (isAnimationPlaying)
+		if (isAnimationPlaying || !isHuman)
 			return;
 		
 		if (input.type == InputType.move)
-			handleMove(input);
+			handleMouseMove(input);
 		else
 			handleClick(input);
+	}
+	
+	override function handleMove(move:Move) 
+	{
+		trace(move.type);
+		if (move.type == MoveType.Move)
+		{
+			handleMoveAction(function() {		
+				isAnimationPlaying = false;
+				endState();
+			},move.tileId);
+		}
+	}
+	
+	private function handleMoveAction(callBack:Function,whereTile:Int)
+	{
+		isAnimationPlaying = true; 
+		selectedCreature.moved = true;
+		
+		MainState.getInstance().getDrawer().clear(1);
+		MainState.getInstance().getDrawer().clear(2);
+		
+		var action = new MoveAction(selectedCreature,whereTile,callBack);
+		action.performAction();
 	}
 	
 	private function handleClick(input:Input)
@@ -114,21 +146,12 @@ class SelectMoveState extends State
 	
 	private function handleMoveClick(input:Input)
 	{
-		MainState.getInstance().getDrawer().clear(1);
-		MainState.getInstance().getDrawer().clear(2);
-			
-		isAnimationPlaying = true; 
-		selectedCreature.moved = true;
-		var action = new MoveAction(selectedCreature,input.coor,		
-			function() 
-			{		
+		handleMoveAction(function() {		
 				MainState.getInstance().getDrawer().clear(1);
 				moveList.movesByTypes.remove(MoveType.Move);			
 				checkAttackPossiblity();
 				isAnimationPlaying = false;
-			}
-		);
-		action.performAction();
+		},input.coor.toKey());
 	}
 	
 	
@@ -139,7 +162,7 @@ class SelectMoveState extends State
 			endState();
 	}
 	
-	private function handleMove(input:Input) 
+	private function handleMouseMove(input:Input) 
 	{
 		MainState.getInstance().getDrawer().clear(2);
 		if (!moveList.movesByTypes.exists(MoveType.Move) || 

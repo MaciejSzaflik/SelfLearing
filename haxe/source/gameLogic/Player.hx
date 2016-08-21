@@ -1,6 +1,9 @@
 package gameLogic;
 import flixel.util.FlxColor;
 import game.Creature;
+import gameLogic.ai.ArtificialInteligence;
+import gameLogic.ai.RandomAI;
+import gameLogic.moves.Move;
 
 /**
  * ...
@@ -13,8 +16,10 @@ class Player
 	public var color:FlxColor;
 	public var creatures:Array<Creature>;
 	public var deadCreatures:Array<Creature>;
-	public function new(id:Int,creatures:Array<Creature>,color:FlxColor) 
+	public var artificialInt:ArtificialInteligence;
+	public function new(id:Int,creatures:Array<Creature>,color:FlxColor,playerType:PlayerType) 
 	{
+		this.playerType = playerType;
 		this.id = id;
 		this.color = color;
 		this.deadCreatures = new Array<Creature>();
@@ -24,6 +29,13 @@ class Player
 			creature.idPlayerId = id;
 			creature.label.setLabelColor(color);
 		}
+		if (playerType != PlayerType.Human)
+			createAI();
+	}
+	
+	private function createAI()
+	{
+		artificialInt = new RandomAI();
 	}
 	
 	public function onCreatureKilled(killed:Creature)
@@ -33,6 +45,15 @@ class Player
 		
 		creatures.remove(killed);
 		deadCreatures.push(killed);
+	}
+	
+	public function generateMove():Move
+	{
+		if (artificialInt != null && playerType == PlayerType.AI)
+		{
+			return artificialInt.generateMove();
+		}
+		return null;
 	}
 	
 	public var numberOfDead(get, never):Int;

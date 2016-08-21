@@ -12,10 +12,10 @@ import hex.HexCoordinates;
 class MoveAction extends Action
 {
 	private var creatureToMove:Creature;
-	private var moveTo:HexCoordinates;
+	private var moveTo:Int;
 	private var onFinish:Function;
 	
-	public function new(creatureToMove:Creature,moveTo:HexCoordinates,onFinish:Function) 
+	public function new(creatureToMove:Creature,moveTo:Int,onFinish:Function) 
 	{
 		super();
 		this.creatureToMove = creatureToMove;
@@ -26,8 +26,8 @@ class MoveAction extends Action
 	override public function performAction() 
 	{
 		super.performAction();
-		var checkpoints = GameContext.instance.map.getPathCenters(creatureToMove.currentCordinates.toKey(), moveTo.toKey());
-		creatureToMove.setCoodinates(moveTo);
+		var checkpoints = GameContext.instance.map.getPathCenters(creatureToMove.currentCordinates.toKey(), moveTo);
+		creatureToMove.setCoodinates(GameContext.instance.map.getHexByIndex(moveTo).getCoor());
 		
 		MainState.getInstance().drawHexesRange(checkpoints, 1,0x55ffff44);
 		
