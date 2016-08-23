@@ -115,6 +115,10 @@ class SelectMoveState extends State
 				},move.tileId);
 			}
 		}
+		else if (move.type == MoveType.Pass)
+		{
+			endState();
+		}
 	}
 	
 	private function handleMoveAction(callBack:Function,whereTile:Int)
@@ -156,7 +160,16 @@ class SelectMoveState extends State
 	
 	private function endState()
 	{
-		stateMachine.setCurrentState(new SelectMoveState(this.stateMachine));
+		var counterOfPlayersWithCreatures = 0;
+		for (player in GameContext.instance.mapOfPlayers)
+		{
+			if (player.creatures.length != 0)
+				counterOfPlayersWithCreatures++;
+		}
+		if (counterOfPlayersWithCreatures == 1)
+			stateMachine.setCurrentState(new EndState(this.stateMachine));
+		else
+			stateMachine.setCurrentState(new SelectMoveState(this.stateMachine));
 	}
 	
 	private function handleMoveClick(input:Input)

@@ -157,4 +157,9 @@ class HexMap extends BoardMap
 			return new Map<Int,Int>();
 	}
 	
+	public function getManhatanDistance(start:Int,end:Int):Float
+	{
+		return HexCoordinates.getManhatanDistance(getHexByIndex(start).getCoor(), getHexByIndex(end).getCoor());
+	}
+	
 }

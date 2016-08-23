@@ -163,6 +163,11 @@ class GameContext
 		}
 	}
 	
+	public function generateMovesForCurrentCreature():ListOfMoves
+	{
+		return generateListOfMovesForCreature(currentCreature);
+	}
+	
 	public function generateListOfMovesForCreature(creature:Creature):ListOfMoves
 	{
 		var listOfMoves = new ListOfMoves();

@@ -6,17 +6,21 @@ class HexCoordinates
 	public var q:Int;
 	public var r:Int;
 	
-	public function getX():Int
+	public var x(get, null):Int;
+	public var y(get, null):Int;
+	public var z(get, null):Int;
+	
+	function get_x():Int
 	{
 		return q;
 	}
 	
-	public function getY():Int
+	function get_y():Int
 	{
 		return -q - r;
 	}
 	
-	public function getZ():Int
+	function get_z():Int
 	{
 		return r;
 	}
@@ -29,23 +33,28 @@ class HexCoordinates
 	
 	public function getOddRCol():Int
 	{
-		return Math.round(getX() + (getZ() - getZ() & 1) / 2);
+		return Math.round(x + (z - z & 1) / 2);
 	}
 	public function getOddRRow():Int
 	{
-		return getZ();
+		return z;
 	}
 	
-	static public function fromCube(x:Int,z:Int):HexCoordinates
+	static public function fromCube(xValue:Int,zValue:Int):HexCoordinates
 	{
-		return new HexCoordinates(x, z);
+		return new HexCoordinates(xValue, zValue);
 	}
 	
 	static public function fromOddR(row:Int,col:Int):HexCoordinates
 	{
-		var x = Math.round(col - (row - (row & 1)) / 2);
-		var z = row;
-		return new HexCoordinates(x, z);
+		var xValue = Math.round(col - (row - (row & 1)) / 2);
+		var zValue = row;
+		return new HexCoordinates(xValue, zValue);
+	}
+	
+	static public function getManhatanDistance(start:HexCoordinates, end:HexCoordinates):Float
+	{
+		return (Math.abs(start.x - end.x) + Math.abs(start.y - end.y) + Math.abs(start.z - end.z)) / 2;
 	}
 	
 	public function toString():String
@@ -55,10 +64,10 @@ class HexCoordinates
 	
 	public function toKey():Int
 	{
-		var x = q < 0 ? q + 5000 : q;
-		var y = r < 0 ? r + 5000 : r;
+		var xValue = q < 0 ? q + 5000 : q;
+		var yValue = r < 0 ? r + 5000 : r;
 		
-		return Math.floor(((x + y + 1) * (x + y)) / 2) + y; 
+		return Math.floor(((xValue + yValue + 1) * (xValue + yValue)) / 2) + yValue; 
 	}
 	
 }

@@ -8,13 +8,13 @@ import game.Creature;
  */
 class ListOfMoves
 {
-	public var moves:List<MoveData>;
+	public var moves:Array<MoveData>;
 	public var movesByTypes:Map<MoveType,Map<String,MoveData>>;
 	public var affectedCreatures:Map<Int,Creature>;
 	
 	public function new() 
 	{
-		moves = new List<MoveData>();
+		moves = new Array<MoveData>();
 		movesByTypes = new Map<MoveType,Map<String,MoveData>>();
 		affectedCreatures = new Map<Int,Creature>();
 	}
@@ -51,6 +51,5 @@ class ListOfMoves
 		
 		return centers;
 	}
-	
 	
 }

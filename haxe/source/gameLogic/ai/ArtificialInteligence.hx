@@ -1,5 +1,6 @@
 package gameLogic.ai;
 import gameLogic.moves.MoveData;
+import gameLogic.moves.MoveType;
 
 /**
  * ...
@@ -15,7 +16,7 @@ class ArtificialInteligence
 	
 	public function generateMove():MoveData
 	{
-		return null;
+		return new MoveData(MoveType.Pass, -1);
 	}
 	
 }

@@ -2,7 +2,9 @@ package gameLogic;
 import flixel.util.FlxColor;
 import game.Creature;
 import gameLogic.ai.ArtificialInteligence;
+import gameLogic.ai.BestMove;
 import gameLogic.ai.RandomAI;
+import gameLogic.ai.evaluation.KillTheWeakest;
 import gameLogic.moves.MoveData;
 
 /**
@@ -35,7 +37,12 @@ class Player
 	
 	private function createAI()
 	{
-		artificialInt = new RandomAI();
+		artificialInt = new BestMove(new KillTheWeakest(false));
+	}
+	
+	public function setAI(AI:ArtificialInteligence)
+	{
+		artificialInt = AI;
 	}
 	
 	public function onCreatureKilled(killed:Creature)

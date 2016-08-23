@@ -1,5 +1,6 @@
 package gameLogic.ai;
 import gameLogic.moves.MoveData;
+import gameLogic.moves.MoveType;
 
 /**
  * ...
@@ -16,8 +17,11 @@ class RandomAI extends ArtificialInteligence
 	
 	override public function generateMove():MoveData 
 	{
-		var listOfMoves = GameContext.instance.generateListOfMovesForCreature(GameContext.instance.currentCreature);
-		return Random.fromIterable(listOfMoves.moves);
+		var listOfMoves = GameContext.instance.generateMovesForCurrentCreature();
+		if(listOfMoves.moves.length > 0)
+			return Random.fromIterable(listOfMoves.moves);
+		else
+			return new MoveData(MoveType.Pass, -1);
 	}
 	
 }
