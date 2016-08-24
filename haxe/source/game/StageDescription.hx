@@ -23,7 +23,7 @@ class StageDescription
 	{
 		mapRows = 15;
 		mapCols = 14;
-		mapHexSize = 40;
+		mapHexSize = 50;
 	}
 	
 }

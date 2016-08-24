@@ -13,6 +13,9 @@ class SpriteDefinition
 	public var height:Int;
 	public var widght:Int;
 	
+	public var anchorX:Float;
+	public var anchorY:Float;
+	
 	public var animationList:List<Int>;
 	
 	public static function createEmpty():SpriteDefinition
@@ -27,6 +30,8 @@ class SpriteDefinition
 		this.animated = animated;
 		this.height = height;
 		this.widght = widght;
+		this.anchorX = 0.5;
+		this.anchorY = 0.5;
 		
 		this.animationList = animationList;
 	}

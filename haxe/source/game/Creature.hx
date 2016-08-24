@@ -155,7 +155,7 @@ class Creature
 	
 	public function setPosition(position:FlxPoint)
 	{
-		sprite.setPosition(position.x - getWidth() * 0.5, position.y - getHeight() * 0.5);
+		sprite.setPosition(position.x, position.y);
 		label.setPosition(position.x, sprite.getPosition().y + getHeight());
 	}
 	
