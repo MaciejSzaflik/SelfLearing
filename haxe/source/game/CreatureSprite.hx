@@ -30,7 +30,9 @@ class CreatureSprite extends FlxSprite
 	
 	override public function setPosition(X:Float = 0, Y:Float = 0):Void 
 	{
-		super.setPosition(X - width*spriteDef.anchorX, Y - height*spriteDef.anchorY);
+		super.setPosition(
+			X - width * (flipX?1 - spriteDef.anchorX:spriteDef.anchorX),
+			Y - height*spriteDef.anchorY);
 	}
 	
 }

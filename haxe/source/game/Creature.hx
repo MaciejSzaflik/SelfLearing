@@ -159,6 +159,11 @@ class Creature
 		label.setPosition(position.x, sprite.getPosition().y + getHeight());
 	}
 	
+	public function flipSprite(flip)
+	{
+		sprite.flipX = flip;
+	}
+	
 	public function getHeight():Float
 	{
 		return sprite.height;

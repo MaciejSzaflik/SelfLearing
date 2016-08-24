@@ -19,17 +19,20 @@ class Player
 	public var creatures:Array<Creature>;
 	public var deadCreatures:Array<Creature>;
 	public var artificialInt:ArtificialInteligence;
-	public function new(id:Int,creatures:Array<Creature>,color:FlxColor,playerType:PlayerType) 
+	public var reversedSprites:Bool;
+	public function new(id:Int,creatures:Array<Creature>,color:FlxColor,playerType:PlayerType,reversedSprites:Bool) 
 	{
 		this.playerType = playerType;
 		this.id = id;
 		this.color = color;
 		this.deadCreatures = new Array<Creature>();
 		this.creatures = creatures;
+		this.reversedSprites = reversedSprites;
 		for (creature in creatures)
 		{
 			creature.idPlayerId = id;
 			creature.label.setLabelColor(color);
+			creature.flipSprite(reversedSprites);
 		}
 		if (playerType != PlayerType.Human)
 			createAI();

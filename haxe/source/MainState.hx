@@ -84,9 +84,9 @@ class MainState extends FlxState
 
 	private function CreateGameContex()
 	{
-		var player1 = new Player(0, CreateDubugCreatureList(), 0xffcc1111, PlayerType.AI);
+		var player1 = new Player(0, CreateDubugCreatureList(), 0xffcc1111, PlayerType.AI,true);
 		player1.setAI(new RandomAI());
-		var player2 = new Player(1, CreateDubugCreatureList(), 0xff1111ff, PlayerType.AI);
+		var player2 = new Player(1, CreateDubugCreatureList(), 0xff1111ff, PlayerType.AI,false);
 		player2.setAI(new BestMove(new KillTheWeakest(false)));
 		
 		GameContext.instance.Init(getHexMap(), [player1, player2]);
