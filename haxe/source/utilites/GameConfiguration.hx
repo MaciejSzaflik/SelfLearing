@@ -81,6 +81,7 @@ class GameConfiguration
 			var spriteDef = SpriteDefinition.createEmpty();
 			JsonSerializer.fillObjectWithDynamic(spriteDef, sprite);
 			spriteDefinitions.set(spriteDef.id, spriteDef);
+			trace(spriteDef.animationList);
 		}
 	}
 	

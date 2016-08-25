@@ -106,6 +106,11 @@ class Creature
 		return true;
 	}
 	
+	public function startAnimation()
+	{
+		sprite.animation.play("idle");
+	}
+	
 	public function calculateAttack():Int
 	{
 		return (attack + Random.int( -attackVariance, attackVariance)) * stackCounter;
@@ -127,7 +132,7 @@ class Creature
 		creature.definitionId = definition.id;
 		var spriteDefinition = GameConfiguration.instance.spriteDefinitions.get(definition.spriteDef);
 		
-		creature.sprite =SpriteFactory.instance.createNewCreature(spriteDefinition);
+		creature.sprite = SpriteFactory.instance.createNewCreature(spriteDefinition);
 		return creature;
 	}
 	

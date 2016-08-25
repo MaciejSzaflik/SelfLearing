@@ -33,6 +33,7 @@ class Player
 			creature.idPlayerId = id;
 			creature.label.setLabelColor(color);
 			creature.flipSprite(reversedSprites);
+			creature.startAnimation();
 		}
 		if (playerType != PlayerType.Human)
 			createAI();

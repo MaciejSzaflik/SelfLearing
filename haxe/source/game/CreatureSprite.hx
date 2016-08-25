@@ -20,10 +20,10 @@ class CreatureSprite extends FlxSprite
 		this.loadGraphic(spriteDef.graphicName, spriteDef.animated, spriteDef.widght, spriteDef.height);
 		if (spriteDef.animationList == null)
 			return; 
-			
-		for (animation in spriteDef.animationList)
+		
+		for (value in spriteDef.animationList)
 		{
-			var animationDef = GameConfiguration.instance.frameAnimations.get(animation);
+			var animationDef = GameConfiguration.instance.frameAnimations.get(value);
 			this.animation.add(animationDef.name, animationDef.frameOrder, animationDef.framesPerSecond, animationDef.looped);
 		}
 	}

@@ -16,14 +16,14 @@ class SpriteDefinition
 	public var anchorX:Float;
 	public var anchorY:Float;
 	
-	public var animationList:List<Int>;
+	public var animationList:Array<Int>;
 	
 	public static function createEmpty():SpriteDefinition
 	{
 		return new SpriteDefinition(-1,"");
 	}
 	
-	public function new(id:Int,graphicName:String,animated:Bool = false,height:Int = 10,widght:Int = 10,animationList:List<Int> = null) 
+	public function new(id:Int,graphicName:String,animated:Bool = false,height:Int = 10,widght:Int = 10,animationList:Array<Int> = null) 
 	{
 		this.id = id;
 		this.graphicName = graphicName;
