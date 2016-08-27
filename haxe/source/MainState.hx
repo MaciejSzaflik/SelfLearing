@@ -84,10 +84,10 @@ class MainState extends FlxState
 
 	private function CreateGameContex()
 	{
-		var player1 = new Player(0, CreateDubugCreatureList(), 0xffcc1111, PlayerType.AI,true);
-		player1.setAI(new RandomAI());
-		var player2 = new Player(1, CreateDubugCreatureList(), 0xff1111ff, PlayerType.AI,false);
-		player2.setAI(new BestMove(new KillTheWeakest(false)));
+		var player1 = new Player(0, CreateDubugCreatureList(), 0xffcc1111, PlayerType.Human,true);
+		//player1.setAI(new RandomAI());
+		var player2 = new Player(1, CreateDubugCreatureList(), 0xff1111ff, PlayerType.Human,false);
+		//player2.setAI(new BestMove(new KillTheWeakest(false)));
 		
 		GameContext.instance.Init(getHexMap(), [player1, player2]);
 		
@@ -101,11 +101,12 @@ class MainState extends FlxState
 	
 	private function CreateDubugCreatureList():Array<Creature>
 	{
-		var creatureDefinition = GameConfiguration.instance.creatures.get(0);
+		
 		var creatureList = new Array<Creature>();
 		var i = 0;
 		while (i < 8)
 		{
+			var creatureDefinition = GameConfiguration.instance.creatures.get(Random.int(0,1));
 			var creature = Creature.fromDefinition(creatureDefinition,10);
 			creatureList.push(creature);
 			creature.addCreatureToState(this);

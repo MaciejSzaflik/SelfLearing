@@ -20,12 +20,18 @@ class CreatureDefinition
 	public var name:String;
 	public var spriteDef:Int;
 	
+	public var isRanger:Bool;
+	public var contrattactsNumber:Int;
+	
 	public static function createEmpty():CreatureDefinition
 	{
-		return new CreatureDefinition( -1, -1, -1, -1, -1, -1, -1, -1, "", -1);
+		return new CreatureDefinition( -1, -1, -1, -1, -1, -1, -1, -1, "", -1,-1,false);
 	}
 	
-	public function new(id:Int,attackPower:Int,attackRandom:Int,initiative:Int,health:Int,actionPoints:Int,attackRange:Int,attackPointCost:Int,name:String,spriteDef:Int) 
+	public function new(id:Int, attackPower:Int,
+	attackRandom:Int, initiative:Int, health:Int, actionPoints:Int,
+	attackRange:Int, attackPointCost:Int, name:String, spriteDef:Int,
+	contrattactsNumber:Int,isRanger:Bool) 
 	{
 		this.id = id;
 		this.attackPower = attackPower;
@@ -38,6 +44,9 @@ class CreatureDefinition
 		
 		this.name = name;
 		this.spriteDef = spriteDef;
+		
+		this.contrattactsNumber = contrattactsNumber;
+		this.isRanger = isRanger;
 	}
 	
 	public function toString():String

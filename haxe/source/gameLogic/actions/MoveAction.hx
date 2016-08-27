@@ -34,7 +34,7 @@ class MoveAction extends Action
 		var moveAnimation = new MoveBetweenPoints(
 			creatureToMove,
 			checkpoints
-			,0.01 * checkpoints.length,
+			,0.018 * checkpoints.length,
 			onFinish);
 			
 		Tweener.instance.addAnimation(moveAnimation);

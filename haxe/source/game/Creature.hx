@@ -4,6 +4,7 @@ import data.SpriteDefinition;
 import flixel.FlxState;
 import flixel.math.FlxPoint;
 import gameLogic.GameContext;
+import gameLogic.PossibleAttacksInfo;
 import hex.HexCoordinates;
 import source.SpriteFactory;
 import utilites.GameConfiguration;
@@ -21,6 +22,10 @@ class Creature
 	public var label:CreatureLabel;
 	public var x:Int;
 	public var y:Int;
+	
+	public var canContrattack(get, never):Bool;
+	public var contrattackCountter:Int;
+	public var currentActionPoints:Int;
 	
 	public var currentCordinates:HexCoordinates;
 	
@@ -92,7 +97,13 @@ class Creature
 	}
 	function get_attackRange():Int
 	{
-		return definition.attackRange;
+		if ((definition.isRanger && getEnemyNeighbours().lenght>0) || (definition.isRanger && moved))
+			return 1;
+		return  definition.attackRange;
+	}
+	function get_canContrattack():Bool
+	{
+		return contrattackCountter >= definition.contrattactsNumber;
 	}
 		
 	public function getHit(hitPower:Int):Bool
@@ -113,7 +124,18 @@ class Creature
 	
 	public function calculateAttack():Int
 	{
-		return (attack + Random.int( -attackVariance, attackVariance)) * stackCounter;
+		var basicValue = (attack + Random.int( -attackVariance, attackVariance)) * stackCounter;
+		if (definition.isRanger)
+		{
+			if(getEnemyNeighbours().lenght > 0)
+				basicValue = Math.ceil(basicValue*0.5);
+		}
+		return basicValue;
+	}
+	
+	public function getEnemyNeighbours():PossibleAttacksInfo
+	{
+		return GameContext.instance.getEnemiesInRange(getTileId(), 1, idPlayerId);
 	}
 	
 	public function get_definition():CreatureDefinition

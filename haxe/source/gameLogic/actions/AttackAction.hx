@@ -1,5 +1,6 @@
 package gameLogic.actions;
 import game.Creature;
+import hex.HexCoordinates;
 
 /**
  * ...
@@ -20,8 +21,12 @@ class AttackAction extends Action
 	override public function performAction() 
 	{
 		var isAlive = attack(attacker, defender);
-		if (isAlive)
-			attack(defender,attacker);
+		var distance = HexCoordinates.getManhatanDistance(attacker.currentCordinates, defender.currentCordinates);
+		if (isAlive && distance == 1 && defender.canContrattack)
+		{
+			attack(defender, attacker);
+			defender.contrattackCountter++;
+		}
 	}
 	
 	private function attack(hitter:Creature,gettingHit:Creature):Bool

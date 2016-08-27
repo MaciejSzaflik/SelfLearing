@@ -35,7 +35,17 @@ class InitiativeQueue
 	
 	public function getNextCreature():Creature
 	{
-		return queue.pop();
+		return onPop(queue.pop());
+	}
+	
+	public function onPop(creature:Creature):Creature
+	{
+		if (creature == null)
+			return null;
+		creature.currentActionPoints = creature.range;
+		creature.contrattackCountter = 0;
+		creature.moved = false;
+		return creature;
 	}
 	
 	public function removeCreatureFromQueue(toRemove:Creature)

@@ -42,7 +42,6 @@ class SelectMoveState extends State
 	private function getNextCreature()
 	{
 		selectedCreature = GameContext.instance.getNextCreature();
-		selectedCreature.moved = false;
 	}
 	
 	override public function onEnter():Void 
@@ -67,7 +66,7 @@ class SelectMoveState extends State
 			MainState.getInstance().drawHexesRange(moveList.getListOCenters(MoveType.Attack), 1, 0x44ccffff);
 		
 		attacksInfo = GameContext.instance.getCreaturesInAttackRange(selectedCreature);
-		MainState.getInstance().drawHexesRange(attacksInfo.listOfCenters, 1, 0xaaffccff);
+		MainState.getInstance().drawHexesRange(attacksInfo.listOfCenters, 1, 0xaaee1111);
 	}
 	
 	private function colorRange()
