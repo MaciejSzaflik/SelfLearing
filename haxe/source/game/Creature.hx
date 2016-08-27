@@ -38,6 +38,7 @@ class Creature
 	public var unitHealth(get, never):Int;
 	public var attack(get, never):Int;
 	public var attackVariance(get, never):Int;
+	public var isRanger(get, never):Bool;
 	
 	private var _stackCounter:Int;
 	public var stackCounter(get, set):Int;
@@ -104,6 +105,10 @@ class Creature
 	function get_canContrattack():Bool
 	{
 		return contrattackCountter >= definition.contrattactsNumber;
+	}
+	function get_isRanger():Bool
+	{
+		return definition.isRanger;
 	}
 		
 	public function getHit(hitPower:Int):Bool

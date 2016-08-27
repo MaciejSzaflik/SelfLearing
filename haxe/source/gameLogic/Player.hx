@@ -46,6 +46,7 @@ class Player
 	
 	public function setAI(AI:ArtificialInteligence)
 	{
+		playerType = PlayerType.AI;
 		artificialInt = AI;
 	}
 	

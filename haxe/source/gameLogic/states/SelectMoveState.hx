@@ -29,7 +29,7 @@ class SelectMoveState extends State
 	{
 		this.stateName = "Select Move";
 		super(stateMachine);
-		
+		trace("--------------------------------------");
 		getNextCreature();
 		isHuman = GameContext.instance.typeOfCurrentPlayer() == PlayerType.Human;
 		if(isHuman)

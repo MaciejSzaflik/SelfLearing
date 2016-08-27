@@ -31,12 +31,14 @@ class AttackAction extends Action
 	
 	private function attack(hitter:Creature,gettingHit:Creature):Bool
 	{
+		
 		var attackPower = hitter.calculateAttack();
 		var isAlive = gettingHit.getHit(attackPower);
 		
 		if (!isAlive)
 			GameContext.instance.onCreatureKilled(gettingHit);
-			
+		
+		trace(hitter.definition.name + " attacked " + gettingHit.definition.name + " for " + attackPower);
 		return isAlive;
 		
 	}

@@ -146,13 +146,15 @@ class GameContext
 	
 	private function getCreatureAttackTargets(creature:Creature,listOfMoves:ListOfMoves,rangeInformation:Map<Int,Int>)
 	{
+		var creatureEffectiveRange = creature.isRanger?1:creature.attackRange;
 		for (player in mapOfPlayers)
 		{
 			if (player.id != creature.idPlayerId)
 			{
 				for (playerCreature in player.creatures)
 				{
-						var attackPossiblites = map.getRange(playerCreature.getTileId(), creature.attackRange, false);
+					
+						var attackPossiblites = map.getRange(playerCreature.getTileId(), creatureEffectiveRange, false);
 						for (hex in attackPossiblites)
 						{
 							if (rangeInformation.exists(hex))
@@ -165,6 +167,15 @@ class GameContext
 			}
 			else
 				continue;
+		}
+		if (creature.isRanger)
+		{
+			var attackPosbilites = getCreaturesInAttackRange(creature);
+			for (enemyCreature in attackPosbilites.listOfCreatures)
+			{
+				var move = MoveData.createAttackMove(MoveType.Attack, creature.getTileId(), enemyCreature);
+				listOfMoves.addMove(move);
+			}
 		}
 	}
 	

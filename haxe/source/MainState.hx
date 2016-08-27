@@ -87,7 +87,7 @@ class MainState extends FlxState
 		var player1 = new Player(0, CreateDubugCreatureList(), 0xffcc1111, PlayerType.Human,true);
 		//player1.setAI(new RandomAI());
 		var player2 = new Player(1, CreateDubugCreatureList(), 0xff1111ff, PlayerType.Human,false);
-		//player2.setAI(new BestMove(new KillTheWeakest(false)));
+		player2.setAI(new BestMove(new KillTheWeakest(false)));
 		
 		GameContext.instance.Init(getHexMap(), [player1, player2]);
 		
