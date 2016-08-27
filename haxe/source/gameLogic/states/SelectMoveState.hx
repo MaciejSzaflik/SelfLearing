@@ -100,17 +100,13 @@ class SelectMoveState extends State
 		}
 		else if (move.type == MoveType.Attack)
 		{
-			var attackAction = new AttackAction(selectedCreature,move.attacked);
+			var attackAction = new AttackAction(selectedCreature, move.attacked, function(){endState();});
 			if (selectedCreature.getTileId() == move.tileId)
-			{
 				attackAction.performAction();
-				endState();
-			}
 			else
 			{
 				handleMoveAction(function() {
 					attackAction.performAction();
-					endState();
 				},move.tileId);
 			}
 		}
@@ -151,10 +147,13 @@ class SelectMoveState extends State
 	{
 		if (attacksInfo.listOfCreatures.exists(key))
 		{
-			var attackAction = new AttackAction(selectedCreature, attacksInfo.listOfCreatures.get(key));
+			var attackAction = new AttackAction(selectedCreature, attacksInfo.listOfCreatures.get(key), function()
+			{
+				endState();
+			});
 			attackAction.performAction();
 		}
-		endState();
+
 	}
 	
 	private function endState()

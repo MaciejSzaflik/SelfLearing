@@ -113,12 +113,12 @@ class Creature
 		
 	public function getHit(hitPower:Int):Bool
 	{
-		var currentHealth = totalHealth - hitPower;
-		if (currentHealth <= 0)
+		var newHealth = totalHealth - hitPower;
+		if (newHealth <= 0)
 			return false;
 		
-		stackCounter = Math.floor(currentHealth / unitHealth);
-		currentHealth = currentHealth - stackCounter * unitHealth;
+		stackCounter = Math.ceil(newHealth / unitHealth);
+		currentHealth = newHealth - stackCounter * unitHealth;
 		return true;
 	}
 	

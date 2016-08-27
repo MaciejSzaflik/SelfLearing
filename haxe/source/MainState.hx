@@ -101,7 +101,6 @@ class MainState extends FlxState
 	
 	private function CreateDubugCreatureList():Array<Creature>
 	{
-		
 		var creatureList = new Array<Creature>();
 		var i = 0;
 		while (i < 8)
