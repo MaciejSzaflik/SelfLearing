@@ -45,6 +45,8 @@ class AttackAction extends Action
 		if (!isAlive)
 			GameContext.instance.onCreatureKilled(gettingHit);
 		
+		trace(hitter.definition.name + " attacked " + gettingHit.definition.name + " for " + attackPower);
+		trace("Hitpoints left: " + gettingHit.stackCounter + " " + gettingHit.totalHealth);
 		return isAlive;
 	}
 	

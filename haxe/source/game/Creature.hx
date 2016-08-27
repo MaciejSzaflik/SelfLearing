@@ -129,7 +129,7 @@ class Creature
 	
 	public function calculateAttack():Int
 	{
-		var basicValue = (attack + Random.int( -attackVariance, attackVariance)) * stackCounter;
+		var basicValue = (attack * stackCounter) + Random.int(-attackVariance*stackCounter, attackVariance*stackCounter);
 		if (definition.isRanger)
 		{
 			if(getEnemyNeighbours().lenght > 0)
