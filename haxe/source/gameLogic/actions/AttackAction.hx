@@ -1,4 +1,7 @@
 package gameLogic.actions;
+import animation.MoveBetweenPoints;
+import animation.Tweener;
+import flixel.math.FlxPoint;
 import game.Creature;
 import haxe.Constraints.Function;
 import hex.HexCoordinates;
@@ -9,6 +12,7 @@ import hex.HexCoordinates;
  */
 class AttackAction extends Action
 {
+	private var useAnimation:Bool;
 	private var attacker:Creature;
 	private var defender:Creature;
 	private var onFinish:Function;
@@ -19,22 +23,30 @@ class AttackAction extends Action
 		this.attacker = attacker;
 		this.defender = defender;
 		this.onFinish = onFinish;
+		useAnimation = true;
 	}
 	
 	override public function performAction() 
-	{
-		var angle = attacker.sprite.getPosition();
-		
-		var isAlive = attack(attacker, defender);
-		var distance = HexCoordinates.getManhatanDistance(attacker.currentCordinates, defender.currentCordinates);
-		if (isAlive && distance == 1 && defender.canContrattack)
+	{	
+		doSimpleAttackAnimation(attacker, defender, -1, null);
+		doSimpleAttackAnimation(defender, attacker, 1, function()
 		{
-			attack(defender, attacker);
-			defender.contrattackCountter++;
-		}
-		
-		if (onFinish != null)
-			onFinish();
+			var isAlive = attack(attacker, defender);
+			var distance = HexCoordinates.getManhatanDistance(attacker.currentCordinates, defender.currentCordinates);
+			if (isAlive && distance == 1 && defender.canContrattack)
+			{
+				doSimpleAttackAnimation(defender, attacker, -1, null);
+				doSimpleAttackAnimation(attacker, defender, 1, function()
+				{				
+					attack(defender, attacker);
+					defender.contrattackCountter++;
+					if (onFinish != null)
+						onFinish();
+				});
+			}
+			else if (onFinish != null)
+				onFinish();
+		});
 	}
 	
 	private function attack(hitter:Creature,gettingHit:Creature):Bool
@@ -50,9 +62,27 @@ class AttackAction extends Action
 		return isAlive;
 	}
 	
-	private function doSimpleAttackAnimation()
+	private function doSimpleAttackAnimation(mover:Creature,director:Creature,direction:Int,afterAnimation:Function)
 	{
+		var v = new FlxPoint(mover.position.x - director.position.x, mover.position.y - director.position.y);
+		var l = 1 / Math.sqrt(v.x * v.x + v.y * v.y);
+		var normalized = new FlxPoint(v.x * l, v.y * l);
 		
+		var copyPos = new FlxPoint();
+		copyPos.copyFrom(mover.position);
+		
+		var midpoint = copyPos.addPoint(normalized.scale(direction*15));
+		var listPoints = new List<FlxPoint>();
+		listPoints.add(mover.position);
+		listPoints.add(midpoint);
+		listPoints.add(mover.position);
+		
+		var bumpAnimation = new MoveBetweenPoints(mover, listPoints, 0.04, function(){
+			if (afterAnimation != null)
+				afterAnimation();
+		});
+		
+		Tweener.instance.addAnimation(bumpAnimation);
 	}
 	
 	

@@ -52,6 +52,12 @@ class Creature
 	
 	public var moved:Bool = false;
 	
+	public var position(get, never):FlxPoint;
+	
+	function get_position():FlxPoint
+	{
+		return GameContext.instance.map.getHexCenter(currentCordinates.toKey());
+	}	
 	function get_stackCounter():Int
 	{
 		return _stackCounter;
@@ -104,7 +110,8 @@ class Creature
 	}
 	function get_canContrattack():Bool
 	{
-		return contrattackCountter >= definition.contrattactsNumber;
+		trace(contrattackCountter + " " + definition.contrattactsNumber);
+		return contrattackCountter < definition.contrattactsNumber;
 	}
 	function get_isRanger():Bool
 	{
@@ -151,6 +158,7 @@ class Creature
 		}
 		return _definition;
 	}
+	
 	
 	public static function fromDefinition(definition:CreatureDefinition,stackCounter:Int):Creature
 	{

@@ -39,5 +39,4 @@ class MoveAction extends Action
 			
 		Tweener.instance.addAnimation(moveAnimation);
 	}
-	
 }

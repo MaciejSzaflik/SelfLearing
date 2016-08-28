@@ -105,7 +105,7 @@ class MainState extends FlxState
 		var i = 0;
 		while (i < 8)
 		{
-			var creatureDefinition = GameConfiguration.instance.creatures.get(Random.int(0,1));
+			var creatureDefinition = GameConfiguration.instance.creatures.get(Random.int(0,0));
 			var creature = Creature.fromDefinition(creatureDefinition,10);
 			creatureList.push(creature);
 			creature.addCreatureToState(this);
