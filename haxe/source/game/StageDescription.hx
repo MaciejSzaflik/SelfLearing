@@ -22,7 +22,7 @@ class StageDescription
 	public function InitTestStage()
 	{
 		mapRows = 15;
-		mapCols = 14;
+		mapCols = 16;
 		mapHexSize = 50;
 	}
 	

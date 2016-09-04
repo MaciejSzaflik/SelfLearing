@@ -33,6 +33,9 @@ class AttackAction extends Action
 		{
 			var isAlive = attack(attacker, defender);
 			var distance = HexCoordinates.getManhatanDistance(attacker.currentCordinates, defender.currentCordinates);
+			
+			trace(distance + " " + defender.canContrattack + " " + isAlive);
+			
 			if (isAlive && distance == 1 && defender.canContrattack)
 			{
 				doSimpleAttackAnimation(defender, attacker, -1, null);

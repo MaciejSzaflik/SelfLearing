@@ -191,10 +191,12 @@ class SelectMoveState extends State
 	private function handleMouseMove(input:Input) 
 	{
 		MainState.getInstance().getDrawer().clear(2);
-		if (!moveList.movesByTypes.exists(MoveType.Move) || 
+		MainState.getInstance().drawHex(input.hexCenter, 2, 0x99ffffff);
+		MainState.getInstance().drawCircle(input.rawPosition, 2,0x99ffffff);
+		/*if (!moveList.movesByTypes.exists(MoveType.Move) || 
 			moveList.checkIfExist(MoveType.Move,input.getKey()) || 
 			attacksInfo.listOfHex.exists(input.coor.toKey()))
-			MainState.getInstance().drawHex(input.hexCenter, 2,0x99ffffff);
+			*/
 	}
 	
 	

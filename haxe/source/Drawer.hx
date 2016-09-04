@@ -40,6 +40,12 @@ class Drawer
 		this.layers.members[layer].drawLine(begin.x, begin.y, end.x, end.y,lineStyle);
 	}
 	
+	public function drawCircle(center:FlxPoint, radius:Float, fillColor:FlxColor, layer:Int) : Void
+	{
+		var lineStyle = { color: fillColor, thickness: 1.0 };
+		this.layers.members[layer].drawCircle(center.x,center.y,radius,lineStyle);
+	}
+	
 	public function drawHex(center:FlxPoint, radius:Float, hexTopping:HexTopping, fillColor:FlxColor, layer:Int) : Void
 	{
 		this.layers.members[layer].drawPolygon(HexUtilites.getHexPoints(center, radius, hexTopping),fillColor);

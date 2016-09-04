@@ -82,9 +82,10 @@ class HexMap extends BoardMap
 	public function positionToHex(rawPosition:FlxPoint):HexCoordinates
 	{
 		var position = new FlxPoint(rawPosition.x - mapCenter.x, -(rawPosition.y - mapCenter.y));
-		var q =  (position.x*Math.sqrt(3)/3 - position.y/3)/hexSize*2;
+		var q =  ((position.x*Math.sqrt(3))/3 - position.y/3)/hexSize*2;
 		var r =  (position.y * (2/3))/hexSize*2;
-		return HexUtilites.cubeRand(q,-q-r,r);	
+		
+		return HexUtilites.cubeRand(q,-q-r,r);
 	}
 	
 	public function hexToPosition(coor:HexCoordinates):FlxPoint

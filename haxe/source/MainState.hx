@@ -7,6 +7,9 @@ import data.SpriteDefinition;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.addons.ui.FlxUI;
+import flixel.addons.ui.FlxUI9SliceSprite;
+import flixel.addons.ui.FlxUIState;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
@@ -26,6 +29,7 @@ import graph.BreadthFirstSearch;
 import graph.Vertex;
 import hex.HexagonalHexMap;
 import hex.RectangleHexMap;
+import openfl.events.Event;
 import source.Drawer;
 import hex.HexMap;
 import hex.HexTopping;
@@ -36,7 +40,7 @@ import utilites.JsonSerializer;
 
 using flixel.util.FlxSpriteUtil;
 
-class MainState extends FlxState
+class MainState extends FlxUIState
 {
 	static private var instance:MainState;
 	static public function getInstance() : MainState
@@ -68,6 +72,7 @@ class MainState extends FlxState
 
 	override public function create():Void
 	{
+		_xml_id = "battle_state";
 		super.create();
 		
 		GameConfiguration.init(function(){
@@ -79,7 +84,14 @@ class MainState extends FlxState
 			drawDebugGraph();
 			CreateGameContex();
 		});
-		
+		setUpUI();	
+	}
+	
+	private function setUpUI()
+	{
+		var uiRightPanel:FlxUI = cast _ui.getAsset("right_panel");
+		var uiQueue:FlxUI9SliceSprite = cast _ui.getAsset("queue_panel");
+		uiQueue.resize(72, Math.floor(uiRightPanel.height/64)*64 + 8);
 	}
 
 	private function CreateGameContex()
@@ -105,7 +117,7 @@ class MainState extends FlxState
 		var i = 0;
 		while (i < 8)
 		{
-			var creatureDefinition = GameConfiguration.instance.creatures.get(Random.int(0,0));
+			var creatureDefinition = GameConfiguration.instance.creatures.get(Random.int(0,1));
 			var creature = Creature.fromDefinition(creatureDefinition,10);
 			creatureList.push(creature);
 			creature.addCreatureToState(this);
@@ -135,11 +147,11 @@ class MainState extends FlxState
 		var mapWidth = stageDescription.mapCols * stageDescription.mapHexSize;
 		var mapHeight = stageDescription.mapRows * stageDescription.mapHexSize*0.75;
 		
-		var startPoisitionX = (1 - (mapWidth / FlxG.width))/2;
-		var startPoisitionY = 1 - ((1- (mapHeight / FlxG.height))/2);
-		
+		var startPoisitionX = (1 - (mapWidth / FlxG.width))*0.2;
+		var startPoisitionY = 1 - ((1- (mapHeight / FlxG.height))*0.75);
+		var mapCenter = new FlxPoint(FlxG.width * startPoisitionX, FlxG.height * startPoisitionY);
 		this.hexMap = new RectangleHexMap(
-			new FlxPoint(FlxG.width * startPoisitionX, FlxG.height * startPoisitionY),
+			mapCenter,
 			stageDescription.mapHexSize,
 			stageDescription.mapCols,
 			stageDescription.mapRows);
@@ -163,6 +175,10 @@ class MainState extends FlxState
 	public function drawHex(position:FlxPoint,layer:Int,color:FlxColor)
 	{
 		drawer.drawHex(position, getHexMap().hexSize, HexTopping.Pointy, color, layer); 
+	}
+	public function drawCircle(position:FlxPoint,layer:Int,color:FlxColor)
+	{
+		drawer.drawCircle(position,5, color, layer); 
 	}
 	
 	private function drawDebugGraph():Void
@@ -208,5 +224,23 @@ class MainState extends FlxState
 		var center = getHexMap().getHexCenterByAxialCor(coor);
 		
 		return new Input(type, center, mousePoint, coor);
+	}
+	
+	private override function reloadUI(?e:Event):Void
+	{
+		super.reloadUI(e);
+	}
+	
+	public override function getRequest(id:String, sender:Dynamic, data:Dynamic, ?params:Array<Dynamic>):Dynamic
+	{
+		return null;
+	}	
+	
+	public override function getEvent(id:String, sender:Dynamic, data:Dynamic, ?params:Array<Dynamic>):Void
+	{
+		if (params != null)
+		{
+			trace(params);
+		}
 	}
 }
