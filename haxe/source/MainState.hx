@@ -81,7 +81,8 @@ class MainState extends FlxUIState
 	{
 		var uiRightPanel:FlxUI = cast _ui.getAsset("right_panel");
 		var uiQueue:FlxUI9SliceSprite = cast _ui.getAsset("queue_panel");
-		portraitQueue = new PortraitsQueue(GameContext.instance.inititativeQueue, uiQueue, uiRightPanel.height, 64);
+		var uiPortrait:FlxUI9SliceSprite = cast _ui.getAsset("portrait_panel");
+		portraitQueue = new PortraitsQueue(GameContext.instance.inititativeQueue, uiQueue,uiPortrait, uiRightPanel.height, 64);
 		
 		
 	}

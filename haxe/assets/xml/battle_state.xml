@@ -12,8 +12,9 @@
 
 <chrome name="right_panel" x="85%" y="0" width="15%" height="90%" src="ui/frame" slice9="2,2,4,4">
 </chrome>
-	
-<chrome name="queue_panel"  x="right_panel.left+5" y="right_panel.top+5" width="128" height="256" src="ui/frame_big" slice9="4,4,8,8" active="true">
+<chrome name="portrait_panel"  x="right_panel.center-68" y="right_panel.top+5" width="136" height="136" src="ui/frame_big" slice9="4,4,8,8" active="true">
+</chrome>
+<chrome name="queue_panel"  x="right_panel.center-32" y="portrait_panel.bottom+5" width="64" height="256" src="ui/frame_big" slice9="4,4,8,8" active="true">
 </chrome>
 	
 	

@@ -23,10 +23,14 @@ class SpriteFactory
 	{
 	}
 	
+	public function getPortraitPath(creatureName:String):String
+	{
+		return "assets/images/" + creatureName + "_portrait.png";
+	}
 	public function createNewPortrait(creatureName:String):FlxSprite
 	{
 		var sprite = new FlxSprite(100,100);
-		sprite.loadGraphic("assets/images/"+creatureName+"_portrait.png", false, 64, 64, false);
+		sprite.loadGraphic(getPortraitPath(creatureName), false, 64, 64, false);
 		return sprite;
 	}
 	
