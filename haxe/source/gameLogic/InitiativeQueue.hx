@@ -1,5 +1,6 @@
 package gameLogic;
 import game.Creature;
+import haxe.Constraints.Function;
 import haxe.ds.ListSort;
 
 /**
@@ -8,11 +9,17 @@ import haxe.ds.ListSort;
  */
 class InitiativeQueue
 {
-	private var queue:Array<Creature>;
+	public var queue:Array<Creature>;
+	private var fillListeners:List<Function>;
+	private var popListeners:List<Function>;
+	private var killListeners:List<Function>;
 	
 	public function new() 
 	{
 		queue = new Array<Creature>();
+		fillListeners = new List<Function>();
+		popListeners = new List<Function>();
+		killListeners = new List<Function>();
 	}
 	
 	public function fillWithPlayers(players:Map<Int,Player>)
@@ -31,11 +38,20 @@ class InitiativeQueue
 			else
 				return x.initiative - y.initiative;
 		});		
+		informOnFill();
 	}
 	
 	public function getNextCreature():Creature
 	{
 		return onPop(queue.pop());
+	}
+	
+	public function getInOrder(index:Int):Creature
+	{
+		if (queue.length > index)
+			return queue[queue.length - index - 1];
+		else
+			return null;
 	}
 	
 	public function onPop(creature:Creature):Creature
@@ -45,12 +61,44 @@ class InitiativeQueue
 		creature.currentActionPoints = creature.range;
 		creature.contrattackCountter = 0;
 		creature.moved = false;
+		informOnPop(creature);
 		return creature;
 	}
 	
 	public function removeCreatureFromQueue(toRemove:Creature)
 	{
 		queue.remove(toRemove);
+		informOnKill(toRemove);
 	}
+	
+	public function addFillListener(listener:Function)
+	{
+		fillListeners.add(listener);
+	}
+	public function addPopListener(listener:Function)
+	{
+		popListeners.add(listener);
+	}
+	public function addKillListener(listener:Function)
+	{
+		killListeners.add(listener);
+	}
+	
+	public function informOnKill(killed:Creature)
+	{
+		for (listener in killListeners)
+			listener(killed);
+	}
+	public function informOnPop(poped:Creature)
+	{
+		for (listener in popListeners)
+			listener(poped);
+	}
+	public function informOnFill()
+	{
+		for (listener in fillListeners)
+			listener();
+	}
+	
 	
 }

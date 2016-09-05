@@ -1,42 +1,31 @@
 package;
 
-import animation.MoveBetweenPoints;
 import animation.Tweener;
-import data.FrameAnimationDef;
-import data.SpriteDefinition;
 import flixel.FlxG;
-import flixel.FlxSprite;
-import flixel.FlxState;
 import flixel.addons.ui.FlxUI;
 import flixel.addons.ui.FlxUI9SliceSprite;
 import flixel.addons.ui.FlxUIState;
+import flixel.math.FlxPoint;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
-import flixel.math.FlxPoint;
-import flixel.FlxBasic;
 import game.Creature;
-import data.CreatureDefinition;
 import game.StageDescription;
 import gameLogic.GameContext;
 import gameLogic.Input;
 import gameLogic.Player;
 import gameLogic.PlayerType;
 import gameLogic.ai.BestMove;
-import gameLogic.ai.RandomAI;
 import gameLogic.ai.evaluation.KillTheWeakest;
-import graph.BreadthFirstSearch;
-import graph.Vertex;
-import hex.HexagonalHexMap;
+import hex.HexMap;
+import hex.HexTopping;
 import hex.RectangleHexMap;
 import openfl.events.Event;
 import source.Drawer;
-import hex.HexMap;
-import hex.HexTopping;
 import source.SpriteFactory;
+import ui.PortraitsQueue;
 import utilites.GameConfiguration;
 import utilites.InputType;
-import utilites.JsonSerializer;
 
 using flixel.util.FlxSpriteUtil;
 
@@ -56,6 +45,8 @@ class MainState extends FlxUIState
 	private var fpsText:FlxText;
 	private var debugText:FlxText;
 	private var currentStateText:FlxText;
+	
+	private var portraitQueue:PortraitsQueue;
 	
 	public function getHexMap() : HexMap
 	{
@@ -83,18 +74,16 @@ class MainState extends FlxUIState
 			addText();
 			drawDebugGraph();
 			CreateGameContex();
-		});
-		setUpUI();	
+		});	
 	}
 	
-	private function setUpUI()
+	private function CreateUIQueue()
 	{
 		var uiRightPanel:FlxUI = cast _ui.getAsset("right_panel");
 		var uiQueue:FlxUI9SliceSprite = cast _ui.getAsset("queue_panel");
-		uiQueue.resize(64, Math.floor(uiRightPanel.height / 64) * 64 + 8);
-		var portrait = SpriteFactory.instance.createNewPortrait("Archer");
-		portrait.setPosition(uiQueue.getPosition().x - 4,uiQueue.getPosition().y + 4);
-		add(portrait);
+		portraitQueue = new PortraitsQueue(GameContext.instance.inititativeQueue, uiQueue, uiRightPanel.height, 64);
+		
+		
 	}
 
 	private function CreateGameContex()
@@ -105,7 +94,7 @@ class MainState extends FlxUIState
 		player2.setAI(new BestMove(new KillTheWeakest(false)));
 		
 		GameContext.instance.Init(getHexMap(), [player1, player2]);
-		
+		CreateUIQueue();
 		GameContext.instance.stateMachine.addNewStateChangeListener(function(state:String)
 		{
 			currentStateText.text = state;

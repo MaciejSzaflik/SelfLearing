@@ -53,6 +53,7 @@ class Creature
 	public var moved:Bool = false;
 	
 	public var position(get, never):FlxPoint;
+	public var name(get, never):String;
 	
 	function get_position():FlxPoint
 	{
@@ -117,7 +118,11 @@ class Creature
 	{
 		return definition.isRanger;
 	}
-		
+	function get_name():String
+	{
+		return definition.name;
+	}
+	
 	public function getHit(hitPower:Int):Bool
 	{
 		var newHealth = totalHealth - hitPower;
