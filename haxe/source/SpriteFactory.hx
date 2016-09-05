@@ -21,7 +21,13 @@ class SpriteFactory
     }
 	private function new() 
 	{
-		
+	}
+	
+	public function createNewPortrait(creatureName:String):FlxSprite
+	{
+		var sprite = new FlxSprite(100,100);
+		sprite.loadGraphic("assets/images/"+creatureName+"_portrait.png", false, 64, 64, false);
+		return sprite;
 	}
 	
 	public function createNewLabel():CreatureLabel

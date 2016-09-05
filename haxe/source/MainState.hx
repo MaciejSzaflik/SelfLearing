@@ -91,7 +91,10 @@ class MainState extends FlxUIState
 	{
 		var uiRightPanel:FlxUI = cast _ui.getAsset("right_panel");
 		var uiQueue:FlxUI9SliceSprite = cast _ui.getAsset("queue_panel");
-		uiQueue.resize(72, Math.floor(uiRightPanel.height/64)*64 + 8);
+		uiQueue.resize(64, Math.floor(uiRightPanel.height / 64) * 64 + 8);
+		var portrait = SpriteFactory.instance.createNewPortrait("Archer");
+		portrait.setPosition(uiQueue.getPosition().x - 4,uiQueue.getPosition().y + 4);
+		add(portrait);
 	}
 
 	private function CreateGameContex()
