@@ -1,4 +1,6 @@
 package hex;
+import flixel.FlxG;
+import flixel.FlxSprite;
 import flixel.math.FlxPoint;
 import graph.BreadthFirstSearch;
 import graph.DjikstraPath;
@@ -163,4 +165,17 @@ class HexMap extends BoardMap
 		return HexCoordinates.getManhatanDistance(getHexByIndex(start).getCoor(), getHexByIndex(end).getCoor());
 	}
 	
+	public function createBackground()
+	{
+		var backgroundSprite = new FlxSprite(0, 0);
+		var sprite = new FlxSprite(0, 0);
+		backgroundSprite.makeGraphic(FlxG.width, FlxG.height,0x00000000);
+		for (hex in hexes)
+		{	
+			sprite.loadGraphic("assets/images/hex_basic_" + Random.int(0, 3) +".png", false, Std.int(hexSize) - 1, Std.int(hexSize) - 1);
+			backgroundSprite.stamp(sprite, Std.int(hex.center.x - hexSize / 2), Std.int(hex.center.y - hexSize/2));
+		}
+		sprite.destroy();
+		MainState.getInstance().add(backgroundSprite);
+	}
 }

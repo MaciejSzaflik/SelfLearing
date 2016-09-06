@@ -72,7 +72,6 @@ class MainState extends FlxUIState
 			stageDescription.InitTestStage();
 			drawMap();
 			addText();
-			drawDebugGraph();
 			CreateGameContex();
 		});	
 	}
@@ -90,7 +89,7 @@ class MainState extends FlxUIState
 	private function CreateGameContex()
 	{
 		var player1 = new Player(0, CreateDubugCreatureList(), 0xffcc1111, PlayerType.Human,true);
-		//player1.setAI(new RandomAI());
+		player1.setAI(new BestMove(new KillTheWeakest(false)));
 		var player2 = new Player(1, CreateDubugCreatureList(), 0xff1111ff, PlayerType.Human,false);
 		player2.setAI(new BestMove(new KillTheWeakest(false)));
 		
@@ -157,7 +156,8 @@ class MainState extends FlxUIState
 	}
 	private function drawMap():Void
 	{
-		getDrawer().drawHexMap(getHexMap(),0xFFFFFFFF,0x00000000,0);
+		getHexMap().createBackground();
+		getDrawer().drawHexMap(getHexMap(),0xffAAAA77,0x00000000,0);
 	}
 	
 	public function drawHexesRange(range:List<FlxPoint>,layer:Int,color:FlxColor)

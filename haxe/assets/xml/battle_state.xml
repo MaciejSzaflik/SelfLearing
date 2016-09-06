@@ -6,7 +6,7 @@
 	<anchor x="right" y="top" x-flush="right" y-flush="top"/> 
 </chrome>
 	
-<chrome name="bottom_panel"  x="0" y="90%" width="100%" height="10%" src="ui/frame" slice9="2,2,4,4">
+<chrome name="bottom_panel"  x="0" y="92%" width="100%" height="8%" src="ui/frame" slice9="2,2,4,4">
 </chrome>
 
 
