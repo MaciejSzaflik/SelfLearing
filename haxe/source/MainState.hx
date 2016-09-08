@@ -4,7 +4,9 @@ import animation.Tweener;
 import flixel.FlxG;
 import flixel.addons.ui.FlxUI;
 import flixel.addons.ui.FlxUI9SliceSprite;
+import flixel.addons.ui.FlxUIButton;
 import flixel.addons.ui.FlxUIState;
+import flixel.addons.ui.FlxUITypedButton;
 import flixel.math.FlxPoint;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
@@ -89,7 +91,6 @@ class MainState extends FlxUIState
 	private function CreateGameContex()
 	{
 		var player1 = new Player(0, CreateDubugCreatureList(), 0xffcc1111, PlayerType.Human,true);
-		player1.setAI(new BestMove(new KillTheWeakest(false)));
 		var player2 = new Player(1, CreateDubugCreatureList(), 0xff1111ff, PlayerType.Human,false);
 		player2.setAI(new BestMove(new KillTheWeakest(false)));
 		
@@ -224,16 +225,17 @@ class MainState extends FlxUIState
 		super.reloadUI(e);
 	}
 	
-	public override function getRequest(id:String, sender:Dynamic, data:Dynamic, ?params:Array<Dynamic>):Dynamic
+	public override function getRequest(name:String, sender:Dynamic, data:Dynamic, ?params:Array<Dynamic>):Dynamic
 	{
 		return null;
 	}	
 	
-	public override function getEvent(id:String, sender:Dynamic, data:Dynamic, ?params:Array<Dynamic>):Void
+	public override function getEvent(name:String, sender:Dynamic, data:Dynamic, ?params:Array<Dynamic>):Void
 	{
 		if (params != null)
 		{
-			trace(params);
+			if(name == FlxUITypedButton.CLICK_EVENT)
+				GameContext.instance.stateMachine.handleButtonInput(params.toString());
 		}
 	}
 }

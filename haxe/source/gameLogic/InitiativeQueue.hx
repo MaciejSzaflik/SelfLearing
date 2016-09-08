@@ -46,6 +46,12 @@ class InitiativeQueue
 		return onPop(queue.pop());
 	}
 	
+	public function putCreatureOnQueueBottom(creature:Creature)
+	{
+		queue.insert(0, creature);
+		informOnFill();
+	}
+	
 	public function getInOrder(index:Int):Creature
 	{
 		if (queue.length > index)
@@ -61,6 +67,7 @@ class InitiativeQueue
 		creature.currentActionPoints = creature.range;
 		creature.contrattackCountter = 0;
 		creature.moved = false;
+		creature.defending = false;
 		informOnPop(creature);
 		return creature;
 	}

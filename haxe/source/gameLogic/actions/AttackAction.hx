@@ -15,7 +15,6 @@ class AttackAction extends Action
 	private var useAnimation:Bool;
 	private var attacker:Creature;
 	private var defender:Creature;
-	private var onFinish:Function;
 	
 	public function new(attacker:Creature,defender:Creature,onFinish:Function) 
 	{
@@ -33,8 +32,6 @@ class AttackAction extends Action
 		{
 			var isAlive = attack(attacker, defender);
 			var distance = HexCoordinates.getManhatanDistance(attacker.currentCordinates, defender.currentCordinates);
-			
-			trace(distance + " " + defender.canContrattack + " " + isAlive);
 			
 			if (isAlive && distance == 1 && defender.canContrattack)
 			{

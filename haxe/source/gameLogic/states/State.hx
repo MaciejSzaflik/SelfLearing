@@ -20,6 +20,11 @@ class State
 		
 	}
 	
+	public function handleButtonClick(buttonName:String)
+	{
+		
+	}
+	
 	public function handleMove(move:MoveData)
 	{
 		

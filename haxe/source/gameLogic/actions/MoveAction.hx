@@ -13,7 +13,6 @@ class MoveAction extends Action
 {
 	private var creatureToMove:Creature;
 	private var moveTo:Int;
-	private var onFinish:Function;
 	
 	public function new(creatureToMove:Creature,moveTo:Int,onFinish:Function) 
 	{

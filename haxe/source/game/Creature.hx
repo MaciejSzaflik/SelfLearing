@@ -26,6 +26,8 @@ class Creature
 	public var canContrattack(get, never):Bool;
 	public var contrattackCountter:Int;
 	public var currentActionPoints:Int;
+	public var defending:Bool;
+	public var waited:Bool;
 	
 	public var currentCordinates:HexCoordinates;
 	
@@ -125,7 +127,7 @@ class Creature
 	
 	public function getHit(hitPower:Int):Bool
 	{
-		var newHealth = totalHealth - hitPower;
+		var newHealth = totalHealth - (defending?Math.ceil(hitPower*0.5):hitPower);
 		if (newHealth <= 0)
 			return false;
 		

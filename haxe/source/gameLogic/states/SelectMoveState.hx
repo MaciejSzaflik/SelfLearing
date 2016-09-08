@@ -5,7 +5,9 @@ import gameLogic.Input;
 import gameLogic.PossibleAttacksInfo;
 import gameLogic.StateMachine;
 import gameLogic.actions.AttackAction;
+import gameLogic.actions.DefendAction;
 import gameLogic.actions.MoveAction;
+import gameLogic.actions.WaitAction;
 import gameLogic.moves.ListOfMoves;
 import gameLogic.moves.MoveData;
 import gameLogic.moves.MoveType;
@@ -89,6 +91,17 @@ class SelectMoveState extends State
 			handleClick(input);
 	}
 	
+	override public function handleButtonClick(buttonName:String) 
+	{
+		if (isAnimationPlaying || !isHuman)
+			return;
+			
+		if (buttonName == "wait")
+			handleMove(new MoveData(MoveType.Wait, -1));
+		else if (buttonName == "defend")
+			handleMove(new MoveData(MoveType.Defend, -1));
+	}
+	
 	override function handleMove(move:MoveData) 
 	{
 		if (move.type == MoveType.Move)
@@ -111,9 +124,11 @@ class SelectMoveState extends State
 			}
 		}
 		else if (move.type == MoveType.Pass)
-		{
 			endState();
-		}
+		else if (move.type == MoveType.Defend)
+			handleDefendAction(endState);
+		else if (move.type == MoveType.Wait)
+			handleWaitAction(endState);
 	}
 	
 	private function handleMoveAction(callBack:Function,whereTile:Int)
@@ -121,10 +136,36 @@ class SelectMoveState extends State
 		isAnimationPlaying = true; 
 		selectedCreature.moved = true;
 		
-		MainState.getInstance().getDrawer().clear(1);
-		MainState.getInstance().getDrawer().clear(2);
+		clearAll();
 		
 		var action = new MoveAction(selectedCreature,whereTile,callBack);
+		action.performAction();
+	}
+	
+	private function handleDefendAction(callBack:Function)
+	{
+		clearAll();
+		var action = new DefendAction(selectedCreature, callBack);
+		action.performAction();
+	}
+	
+	private function handleWaitAction(callBack:Function)
+	{
+		clearAll();
+		var action = new WaitAction(selectedCreature, callBack);
+		action.performAction();
+	}
+	
+	private function clearAll()
+	{
+		MainState.getInstance().getDrawer().clear(1);
+		MainState.getInstance().getDrawer().clear(2);
+	}
+	
+	private function handle(callBack:Function)
+	{
+		clearAll();
+		var action = new DefendAction(selectedCreature, callBack);
 		action.performAction();
 	}
 	
@@ -166,6 +207,8 @@ class SelectMoveState extends State
 		}
 		if (counterOfPlayersWithCreatures == 1)
 			stateMachine.setCurrentState(new EndState(this.stateMachine));
+		else if (GameContext.instance.getSizeOfQueue() == 0)
+			stateMachine.setCurrentState(new StartRound(this.stateMachine));
 		else
 			stateMachine.setCurrentState(new SelectMoveState(this.stateMachine));
 	}

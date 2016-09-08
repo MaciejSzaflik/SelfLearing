@@ -51,6 +51,12 @@ class StateMachine
 		}
 	}
 	
+	public function handleButtonInput(buttonData:String)
+	{
+		if(currentState!=null)
+			currentState.handleButtonClick(buttonData);
+	}
+	
 	public function handleInput(input:Input):Void
 	{
 		if(currentState!=null)

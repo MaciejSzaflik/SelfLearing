@@ -79,12 +79,12 @@ class GameContext
 	public function getNextCreature():Creature
 	{
 		currentCreature = inititativeQueue.getNextCreature();
-		if (currentCreature == null)
-		{
-			GameContext.instance.inititativeQueue.fillWithPlayers(GameContext.instance.mapOfPlayers);
-			currentCreature = GameContext.instance.getNextCreature();
-		}
 		return currentCreature;
+	}
+	
+	public function getSizeOfQueue():Int
+	{
+		return inititativeQueue.queue.length;
 	}
 	
 	public function getPositionOnMapOddR(x:Int, y:Int):FlxPoint
