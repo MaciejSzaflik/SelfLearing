@@ -138,7 +138,8 @@ class Creature
 	
 	public function startAnimation()
 	{
-		sprite.animation.play("idle");
+		if(sprite.animation.getByName("idle") != null)
+			sprite.animation.play("idle");
 	}
 	
 	public function calculateAttack():Int

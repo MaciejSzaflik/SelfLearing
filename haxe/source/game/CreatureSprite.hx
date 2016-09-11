@@ -16,7 +16,7 @@ class CreatureSprite extends FlxSprite
 	{
 		if (spriteDef == null)
 			return;
-			
+
 		this.loadGraphic(spriteDef.graphicName, spriteDef.animated, spriteDef.widght, spriteDef.height);
 		if (spriteDef.animationList == null)
 			return; 
