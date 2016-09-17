@@ -2,6 +2,9 @@ package utilites;
 import data.FrameAnimationDef;
 import data.SpriteDefinition;
 import data.CreatureDefinition;
+import gameLogic.abilites.Ability;
+import data.AbilityDefinition;
+import gameLogic.abilites.AbilityType;
 import haxe.Constraints.Function;
 import haxe.Http;
 import haxe.Json;
@@ -15,6 +18,7 @@ class GameConfiguration
 	public var creatures:Map<Int,CreatureDefinition>;
 	public var frameAnimations:Map<Int,FrameAnimationDef>;
 	public var spriteDefinitions:Map<Int,SpriteDefinition>;
+	public var abilitesDefinitions:Map<Int,AbilityDefinition>;
 	
 	@:isVar static public var instance(get,set) : GameConfiguration;
 	static function get_instance() : GameConfiguration
@@ -31,7 +35,8 @@ class GameConfiguration
 	{
 		creatures = new Map<Int,CreatureDefinition>();
 		frameAnimations = new Map<Int,FrameAnimationDef>();
-		spriteDefinitions= new Map<Int,SpriteDefinition>();
+		spriteDefinitions = new Map<Int,SpriteDefinition>();
+		abilitesDefinitions = new Map<Int,AbilityDefinition>();
 		
 		var loadConfigurationRequest = new Http("https://api.github.com/gists/6477e19437bc24fc24ebc1879b6087a4");
 		loadConfigurationRequest.request(false);
@@ -51,7 +56,23 @@ class GameConfiguration
 		parseCreatures(parsedContent[0].creatures);
 		parseFrameAnimations(parsedContent[0].creatureAnimations);
 		parseSpriteDefinitions(parsedContent[0].creatureSprites);
+		parseAbilites(parsedContent[0].abilites);
 		
+		var abilityDef = new AbilityDefinition();
+		abilityDef.id = 1;
+		abilityDef.abilityType = AbilityType.Heal;
+		
+		trace(JsonSerializer.serialize(abilityDef));
+	}
+	
+	private function parseAbilites(data:Array<Dynamic>)
+	{
+		for (ability in data)
+		{
+			var abilityDefinition = new AbilityDefinition();
+			JsonSerializer.fillObjectWithDynamic(abilitesDefinitions, ability);
+			abilitesDefinitions.set(abilityDefinition.id,abilityDefinition);
+		}
 	}
 	
 	private function parseCreatures(data:Array<Dynamic>)

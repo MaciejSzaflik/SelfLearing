@@ -140,8 +140,8 @@ class MainState extends FlxUIState
 		var mapWidth = stageDescription.mapCols * stageDescription.mapHexSize;
 		var mapHeight = stageDescription.mapRows * stageDescription.mapHexSize*0.75;
 		
-		var startPoisitionX = (1 - (mapWidth / FlxG.width))*0.2;
-		var startPoisitionY = 1 - ((1- (mapHeight / FlxG.height))*0.75);
+		var startPoisitionX =  (mapWidth / FlxG.width)*0.28;
+		var startPoisitionY = 1 - ((1- (mapHeight / FlxG.height))*0.82);
 		var mapCenter = new FlxPoint(FlxG.width * startPoisitionX, FlxG.height * startPoisitionY);
 		this.hexMap = new RectangleHexMap(
 			mapCenter,
@@ -158,7 +158,7 @@ class MainState extends FlxUIState
 	private function drawMap():Void
 	{
 		getHexMap().createBackground();
-		getDrawer().drawHexMap(getHexMap(),0xffAAAA77,0x00000000,0);
+		getDrawer().drawHexMap(getHexMap(), 0xffAAAA77, 0x00000000, 0);
 	}
 	
 	public function drawHexesRange(range:List<FlxPoint>,layer:Int,color:FlxColor)

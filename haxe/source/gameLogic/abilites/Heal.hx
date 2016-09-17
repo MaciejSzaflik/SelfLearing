@@ -1,5 +1,7 @@
 package gameLogic.abilites;
 import game.Creature;
+import gameLogic.GameContext;
+import gameLogic.PossibleAttacksInfo;
 
 /**
  * ...
@@ -13,12 +15,13 @@ class Heal extends Ability
 	public function new(performer:Creature) 
 	{
 		super(performer);
-		
 	}
 	
 	override public function perform() 
 	{
-		
+		var healthToAdd = Math.min(this.target.lostHitPoints, power);
+		target.recalculateStackSize(target.currentHealth + healthToAdd);
+		target.lostHitPoints -= healthToAdd;
 	}
 	
 	public function selectTarget(target:Creature)
@@ -26,9 +29,9 @@ class Heal extends Ability
 		this.target = target;
 	}
 	
-	override public function getTargets():Array<Int> 
+	override public function getTargets():PossibleAttacksInfo 
 	{
-		return super.getTargets();
+		return GameContext.instance.getCreaturesInRange(performer.getTileId(), this.range, performer.idPlayerId);
 	}
 	
 }

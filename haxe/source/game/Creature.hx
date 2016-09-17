@@ -5,6 +5,8 @@ import flixel.FlxState;
 import flixel.math.FlxPoint;
 import gameLogic.GameContext;
 import gameLogic.PossibleAttacksInfo;
+import gameLogic.abilites.Ability;
+import gameLogic.abilites.AbilityFactory;
 import hex.HexCoordinates;
 import source.SpriteFactory;
 import utilites.GameConfiguration;
@@ -53,6 +55,7 @@ class Creature
 	public var definition(get, never):CreatureDefinition;
 	
 	public var moved:Bool = false;
+	public var lostHitPoints = 0;
 	
 	public var position(get, never):FlxPoint;
 	public var name(get, never):String;
@@ -131,15 +134,28 @@ class Creature
 		if (newHealth <= 0)
 			return false;
 		
+		lostHitPoints += hitPower;	
+		recalculateStackSize(newHealth);
+		return true;
+	}
+	
+	public function recalculateStackSize(newHealth:Int)
+	{
 		stackCounter = Math.ceil(newHealth / unitHealth);
 		currentHealth = newHealth - stackCounter * unitHealth;
-		return true;
 	}
 	
 	public function startAnimation()
 	{
 		if(sprite.animation.getByName("idle") != null)
 			sprite.animation.play("idle");
+	}
+	
+	public function getActiviableAbility():Ability
+	{
+		if (definition.abilities != null && definition.abilities.length > 0)
+			return  AbilityFactory.instance.getAbility(definition.abilities[0]);
+		return null;
 	}
 	
 	public function calculateAttack():Int

@@ -23,10 +23,14 @@ class CreatureDefinition
 	public var isRanger:Bool;
 	public var contrattactsNumber:Int;
 	
+	public var abilities:Array<Int>;
+	
 	public static function createEmpty():CreatureDefinition
 	{
 		return new CreatureDefinition( -1, -1, -1, -1, -1, -1, -1, -1, "", -1,-1,false);
 	}
+	
+	//public var 
 	
 	public function new(id:Int, attackPower:Int,
 	attackRandom:Int, initiative:Int, health:Int, actionPoints:Int,

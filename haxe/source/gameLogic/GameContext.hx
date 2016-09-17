@@ -113,7 +113,7 @@ class GameContext
 		stateMachine.init();
 	}
 	
-	public function getEnemiesInRange(rangeCenter:Int, rangeSize:Int, playerId:Int)
+	public function getCreaturesInRange(rangeCenter:Int, rangeSize:Int, playerId:Int, checkPlayer:Bool = false):PossibleAttacksInfo
 	{
 		var rangeInformation = map.getRange(rangeCenter, rangeSize, false);
 		var attackTargets = new Map<Int,Creature>();
@@ -121,7 +121,7 @@ class GameContext
 		var attackHexesIds = new Map<Int,Bool>();
 		for (player in mapOfPlayers)
 		{
-			if (player.id != playerId)
+			if (!checkPlayer || player.id != playerId)
 			{
 				for (playerCreature in player.creatures)
 				{
@@ -137,6 +137,10 @@ class GameContext
 				continue;
 		}
 		return new PossibleAttacksInfo(attackTargets,attackCenters,attackHexesIds);
+	}
+	public function getEnemiesInRange(rangeCenter:Int, rangeSize:Int, playerId:Int):PossibleAttacksInfo
+	{
+		return getCreaturesInRange(rangeCenter, rangeSize, playerId, true);
 	}
 	
 	public function getCreaturesInAttackRange(creature:Creature):PossibleAttacksInfo

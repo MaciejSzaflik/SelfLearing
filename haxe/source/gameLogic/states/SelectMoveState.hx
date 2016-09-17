@@ -100,6 +100,14 @@ class SelectMoveState extends State
 			handleMove(new MoveData(MoveType.Wait, -1));
 		else if (buttonName == "defend")
 			handleMove(new MoveData(MoveType.Defend, -1));
+		else if (buttonName == "ability")
+			handleAbilitySelected();
+			
+	}
+	
+	function handleAbilitySelected()
+	{
+		trace("abilit");
 	}
 	
 	override function handleMove(move:MoveData) 
