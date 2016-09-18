@@ -39,6 +39,15 @@ class Player
 			createAI();
 	}
 	
+	public function addCreatureToPlayer(creature:Creature)
+	{
+		creature.idPlayerId = id;
+		creature.label.setLabelColor(color);
+		creature.flipSprite(reversedSprites);
+		creature.startAnimation();
+	}
+	
+	
 	private function createAI()
 	{
 		artificialInt = new BestMove(new KillTheWeakest(false));

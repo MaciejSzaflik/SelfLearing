@@ -19,9 +19,17 @@ class Heal extends Ability
 	
 	override public function perform() 
 	{
+		if (target == null)
+			return;
 		var healthToAdd = Std.int(Math.min(this.target.lostHitPoints, power));
 		target.recalculateStackSize(target.currentHealth + healthToAdd);
 		target.lostHitPoints -= healthToAdd;
+	}
+	
+	
+	override public function setTarget(tileId:Int) 
+	{
+		
 	}
 	
 	public function selectTarget(target:Creature)

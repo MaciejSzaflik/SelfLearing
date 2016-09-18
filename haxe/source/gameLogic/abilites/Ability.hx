@@ -22,6 +22,11 @@ class Ability
 		
 	}
 	
+	public function setTarget(tileId:Int)
+	{
+	
+	}
+	
 	public function getTargets():PossibleAttacksInfo
 	{
 		return null;
