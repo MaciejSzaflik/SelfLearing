@@ -7,5 +7,5 @@ package gameLogic.abilites;
 abstract AbilityType(Int)
 {
 	var Heal = 0;
-	var Spawn = 1;
+	var Summon = 1;
 }

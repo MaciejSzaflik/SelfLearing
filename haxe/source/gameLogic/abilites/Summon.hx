@@ -1,6 +1,7 @@
 package gameLogic.abilites;
 
 import game.Creature;
+import gameLogic.PossibleAttacksInfo;
 
 /**
  * ...
@@ -19,7 +20,7 @@ class Summon extends Ability
 		
 	}
 	
-	override public function getTargets():Array<Int> 
+	override public function getTargets():PossibleAttacksInfo
 	{
 		return super.getTargets();
 	}

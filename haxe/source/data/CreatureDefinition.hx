@@ -8,6 +8,8 @@ class CreatureDefinition
 {
 	public var id:Int;
 	
+	public var level:Int;
+	
 	public var initiative:Int;
 	public var health:Int;
 	public var actionPoints:Int;
@@ -23,7 +25,7 @@ class CreatureDefinition
 	public var isRanger:Bool;
 	public var contrattactsNumber:Int;
 	
-	public var abilities:Array<Int>;
+	public var abilites:Array<Int>;
 	
 	public static function createEmpty():CreatureDefinition
 	{

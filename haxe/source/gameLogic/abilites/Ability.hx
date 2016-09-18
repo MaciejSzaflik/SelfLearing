@@ -22,7 +22,7 @@ class Ability
 		
 	}
 	
-	public function getTargets():Array<Int>
+	public function getTargets():PossibleAttacksInfo
 	{
 		return null;
 	}

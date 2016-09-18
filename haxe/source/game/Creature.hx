@@ -153,8 +153,9 @@ class Creature
 	
 	public function getActiviableAbility():Ability
 	{
-		if (definition.abilities != null && definition.abilities.length > 0)
-			return  AbilityFactory.instance.getAbility(definition.abilities[0]);
+		trace(definition.abilites);
+		if (definition.abilites != null && definition.abilites.length > 0)
+			return  AbilityFactory.instance.getAbility(this,definition.abilites[0]);
 		return null;
 	}
 	

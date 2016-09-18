@@ -20,7 +20,7 @@ class StartRound extends State
 		trace("Start Round");
 		GameContext.instance.inititativeQueue.fillWithPlayers(GameContext.instance.mapOfPlayers);
 		resertOnTurnEffects();
-		stateMachine.setCurrentState(new SelectMoveState(this.stateMachine));
+		stateMachine.setCurrentState(new SelectMoveState(this.stateMachine,GameContext.instance.getNextCreature()));
 	}
 	
 	private function resertOnTurnEffects()

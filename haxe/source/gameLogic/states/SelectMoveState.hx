@@ -27,12 +27,12 @@ class SelectMoveState extends State
 	private var isAnimationPlaying = false;
 	private var isHuman = false;
 	
-	public function new(stateMachine:StateMachine) 
+	public function new(stateMachine:StateMachine,creature:Creature) 
 	{
 		this.stateName = "Select Move";
 		super(stateMachine);
 		trace("--------------------------------------");
-		getNextCreature();
+		selectedCreature = creature;
 		isHuman = GameContext.instance.typeOfCurrentPlayer() == PlayerType.Human;
 		if(isHuman)
 		{
@@ -40,12 +40,7 @@ class SelectMoveState extends State
 			getAttackRange();
 		}
 	}
-	
-	private function getNextCreature()
-	{
-		selectedCreature = GameContext.instance.getNextCreature();
-	}
-	
+
 	override public function onEnter():Void 
 	{
 		var move = GameContext.instance.mapOfPlayers.get(selectedCreature.idPlayerId).generateMove();
@@ -107,7 +102,11 @@ class SelectMoveState extends State
 	
 	function handleAbilitySelected()
 	{
-		trace("abilit");
+		var ability = selectedCreature.getActiviableAbility();
+		if (ability == null)
+			trace("This creature don't have abiliy");
+		else
+			stateMachine.setCurrentState(new SelectAbilityTarget(this.stateMachine,selectedCreature,ability));
 	}
 	
 	override function handleMove(move:MoveData) 
@@ -218,7 +217,7 @@ class SelectMoveState extends State
 		else if (GameContext.instance.getSizeOfQueue() == 0)
 			stateMachine.setCurrentState(new StartRound(this.stateMachine));
 		else
-			stateMachine.setCurrentState(new SelectMoveState(this.stateMachine));
+			stateMachine.setCurrentState(new SelectMoveState(this.stateMachine,GameContext.instance.getNextCreature()));
 	}
 	
 	private function handleMoveClick(input:Input)

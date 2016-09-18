@@ -57,22 +57,20 @@ class GameConfiguration
 		parseFrameAnimations(parsedContent[0].creatureAnimations);
 		parseSpriteDefinitions(parsedContent[0].creatureSprites);
 		parseAbilites(parsedContent[0].abilites);
-		
-		var abilityDef = new AbilityDefinition();
-		abilityDef.id = 1;
-		abilityDef.abilityType = AbilityType.Heal;
-		
-		trace(JsonSerializer.serialize(abilityDef));
 	}
 	
 	private function parseAbilites(data:Array<Dynamic>)
 	{
 		for (ability in data)
 		{
-			var abilityDefinition = new AbilityDefinition();
-			JsonSerializer.fillObjectWithDynamic(abilitesDefinitions, ability);
+			var abilityDefinition = AbilityDefinition.createEmpty();
+			abilityDefinition.params = ability.params;
+			abilityDefinition.id = ability.id;
+			abilityDefinition.abilityType = ability.abilityType;
+
 			abilitesDefinitions.set(abilityDefinition.id,abilityDefinition);
 		}
+		trace(abilitesDefinitions);
 	}
 	
 	private function parseCreatures(data:Array<Dynamic>)
