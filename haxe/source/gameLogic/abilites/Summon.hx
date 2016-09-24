@@ -42,12 +42,18 @@ class Summon extends Ability
 	
 	override public function perform() 
 	{
-		trace("summon!");
 		var creatureDefinition = GameConfiguration.instance.creatures.get(creatureId);
-		var creature = Creature.fromDefinition(creatureDefinition,power);
+		var summonPower = Math.max(1,Math.ceil((power * performer.stackCounter * performer.level) / creatureDefinition.health));
+		var creature = Creature.fromDefinition(creatureDefinition,Math.ceil(summonPower));
 		creature.addCreatureToState(MainState.getInstance());
-		creature.sprite.
+		
+		var hex = GameContext.instance.map.getHexByIndex(tileId);
+		var point = hex.center;
+		
 		GameContext.instance.mapOfPlayers.get(performer.idPlayerId).addCreatureToPlayer(creature);
+		
+		creature.setPosition(point);
+		creature.setCoodinates(hex.getCoor());
 	}
 	
 }

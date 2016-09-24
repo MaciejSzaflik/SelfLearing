@@ -59,6 +59,7 @@ class Creature
 	
 	public var position(get, never):FlxPoint;
 	public var name(get, never):String;
+	public var level(get, never):Int;
 	
 	function get_position():FlxPoint
 	{
@@ -116,7 +117,6 @@ class Creature
 	}
 	function get_canContrattack():Bool
 	{
-		trace(contrattackCountter + " " + definition.contrattactsNumber);
 		return contrattackCountter < definition.contrattactsNumber;
 	}
 	function get_isRanger():Bool
@@ -153,7 +153,6 @@ class Creature
 	
 	public function getActiviableAbility():Ability
 	{
-		trace(definition.abilites);
 		if (definition.abilites != null && definition.abilites.length > 0)
 			return  AbilityFactory.instance.getAbility(this,definition.abilites[0]);
 		return null;
@@ -237,6 +236,11 @@ class Creature
 	public function getWidth():Float
 	{
 		return sprite.width;
+	}
+	
+	public function get_level():Int
+	{
+		return definition.level;
 	}
 	
 	public function addCreatureToState(stateToAdd:FlxState)

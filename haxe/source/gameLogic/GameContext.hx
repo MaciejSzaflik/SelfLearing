@@ -17,19 +17,20 @@ import source.BoardMap;
  */
 class GameContext
 {
-	@:isVar static public var instance(get,set) : GameContext;
+	static public var instance(get, set) : GameContext;
+	static private var _instance : GameContext;
 	static function get_instance() : GameContext
 	{
-		if (instance == null)
+		if (_instance == null)
 		{
-			instance = new GameContext();
+			_instance = new GameContext();
 		}
-		return instance;
+		return _instance;
 	}
 	
 	static function set_instance(contex:GameContext)
 	{
-		return instance = contex;
+		return _instance = contex;
 	}
 	
 	public var map:HexMap;
@@ -58,6 +59,7 @@ class GameContext
 	
 	public function setHexImpassable(hex:hex.HexCoordinates)
 	{
+		trace("seting hex imapassable");
 		map.setHexImpassable(hex);
 	}
 	public function setHexPassable(hex:hex.HexCoordinates)

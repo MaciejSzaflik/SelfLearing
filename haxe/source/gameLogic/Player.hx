@@ -26,15 +26,12 @@ class Player
 		this.id = id;
 		this.color = color;
 		this.deadCreatures = new Array<Creature>();
-		this.creatures = creatures;
+		this.creatures = new Array<Creature>();
 		this.reversedSprites = reversedSprites;
+		
 		for (creature in creatures)
-		{
-			creature.idPlayerId = id;
-			creature.label.setLabelColor(color);
-			creature.flipSprite(reversedSprites);
-			creature.startAnimation();
-		}
+			addCreatureToPlayer(creature);
+			
 		if (playerType != PlayerType.Human)
 			createAI();
 	}
@@ -45,8 +42,8 @@ class Player
 		creature.label.setLabelColor(color);
 		creature.flipSprite(reversedSprites);
 		creature.startAnimation();
+		creatures.push(creature);
 	}
-	
 	
 	private function createAI()
 	{

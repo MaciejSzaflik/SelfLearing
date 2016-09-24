@@ -56,6 +56,7 @@ class SelectAbilityTarget extends State
 	{
 		if (rangeOfHexes.listOfHex.exists(input.coor.toKey()))
 		{
+			ability.setTarget(input.coor.toKey());
 			ability.perform();
 			endState();
 		}
