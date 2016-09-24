@@ -51,6 +51,8 @@ class Creature
 	public var idPlayerId(get, set):Int;
 	public var definitionId:Int;
 	
+	public var summoned:Bool;
+	
 	private var _definition:CreatureDefinition;
 	public var definition(get, never):CreatureDefinition;
 	
@@ -211,10 +213,8 @@ class Creature
 	
 	public function setCoodinates(coor:HexCoordinates)
 	{
-		if (currentCordinates != null)
-			GameContext.instance.setHexPassable(currentCordinates);
+		GameContext.instance.changeCreatureHex(currentCordinates, coor, this);
 		currentCordinates = coor;
-		GameContext.instance.setHexImpassable(currentCordinates);
 	}
 	
 	public function setPosition(position:FlxPoint)

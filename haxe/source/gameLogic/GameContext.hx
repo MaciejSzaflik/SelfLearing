@@ -35,16 +35,18 @@ class GameContext
 	
 	public var map:HexMap;
 	public var mapOfPlayers:Map<Int,Player>;
-	private var _currentPlayerIndex:Int;
-	public var currentPlayerIndex(get,set):Int;
+	public var currentPlayerIndex(get, set):Int;
+	public var tileToCreature:Map<Int,Creature>;
 	public var inititativeQueue:InitiativeQueue;
-	private var currentPlayer:Player;
 	public var currentCreature:Creature;
-	
 	public var stateMachine:GameStateMachine;
+	
+	private var currentPlayer:Player;
+	private var _currentPlayerIndex:Int;
 	
 	public function new() 
 	{
+		tileToCreature = new Map<Int,Creature>();
 	}
 	
 	public function mapHeight():Int
@@ -57,9 +59,20 @@ class GameContext
 		return map.width;
 	}
 	
+	public function changeCreatureHex(previousHex:HexCoordinates, currentHex:HexCoordinates, creature:Creature)
+	{
+		trace("changeCreatureHex: " + previousHex== null);
+		if (previousHex != null)
+		{
+			setHexPassable(previousHex);
+			tileToCreature.remove(previousHex.toKey());
+		}
+		setHexImpassable(currentHex);
+		tileToCreature.set(currentHex.toKey(), creature);
+	}
+	
 	public function setHexImpassable(hex:hex.HexCoordinates)
 	{
-		trace("seting hex imapassable");
 		map.setHexImpassable(hex);
 	}
 	public function setHexPassable(hex:hex.HexCoordinates)

@@ -46,7 +46,7 @@ class Summon extends Ability
 		var summonPower = Math.max(1,Math.ceil((power * performer.stackCounter * performer.level) / creatureDefinition.health));
 		var creature = Creature.fromDefinition(creatureDefinition,Math.ceil(summonPower));
 		creature.addCreatureToState(MainState.getInstance());
-		
+		creature.summoned = true;
 		var hex = GameContext.instance.map.getHexByIndex(tileId);
 		var point = hex.center;
 		

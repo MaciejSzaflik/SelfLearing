@@ -70,7 +70,6 @@ class GameConfiguration
 
 			abilitesDefinitions.set(abilityDefinition.id,abilityDefinition);
 		}
-		trace(abilitesDefinitions);
 	}
 	
 	private function parseCreatures(data:Array<Dynamic>)
@@ -100,7 +99,6 @@ class GameConfiguration
 			var spriteDef = SpriteDefinition.createEmpty();
 			JsonSerializer.fillObjectWithDynamic(spriteDef, sprite);
 			spriteDefinitions.set(spriteDef.id, spriteDef);
-			trace(spriteDef.animationList);
 		}
 	}
 	

@@ -21,20 +21,16 @@ class Heal extends Ability
 	{
 		if (target == null)
 			return;
-		var healthToAdd = Std.int(Math.min(this.target.lostHitPoints, power));
-		target.recalculateStackSize(target.currentHealth + healthToAdd);
+		
+		var healthToAdd = Std.int(Math.min(this.target.lostHitPoints, power*performer.stackCounter*performer.level));
+		target.recalculateStackSize(target.totalHealth + healthToAdd);
 		target.lostHitPoints -= healthToAdd;
 	}
 	
-	
 	override public function setTarget(tileId:Int) 
 	{
-		
-	}
-	
-	public function selectTarget(target:Creature)
-	{
-		this.target = target;
+		if(GameContext.instance.tileToCreature.exists(tileId))
+			target = GameContext.instance.tileToCreature.get(tileId);
 	}
 	
 	override public function getTargets():PossibleAttacksInfo 
