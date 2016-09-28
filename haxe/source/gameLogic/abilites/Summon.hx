@@ -19,7 +19,6 @@ class Summon extends Ability
 	public function new(performer:Creature) 
 	{
 		super(performer);
-		
 	}
 	
 	override public function setTarget(tileId:Int) 
