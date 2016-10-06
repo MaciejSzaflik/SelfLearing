@@ -23,12 +23,10 @@ class AbilityFactory
 	
 	public function getAbility(creature:Creature, id:Int):Ability
 	{
-		trace(id + " " + creature.name + " "+ GameConfiguration.instance.abilitesDefinitions.exists(id));
 		if (!GameConfiguration.instance.abilitesDefinitions.exists(id))
 			return null;
 		
 		var definition = GameConfiguration.instance.abilitesDefinitions.get(id);
-		trace(definition);
 		switch(definition.abilityType)
 		{
 			case AbilityType.Heal:

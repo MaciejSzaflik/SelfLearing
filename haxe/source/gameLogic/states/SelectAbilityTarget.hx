@@ -7,6 +7,7 @@ import gameLogic.Input;
 import gameLogic.PossibleAttacksInfo;
 import gameLogic.StateMachine;
 import gameLogic.abilites.Ability;
+import gameLogic.actions.AbilityAction;
 import utilites.InputType;
 
 /**
@@ -57,7 +58,7 @@ class SelectAbilityTarget extends State
 		if (rangeOfHexes.listOfHex.exists(input.coor.toKey()))
 		{
 			ability.setTarget(input.coor.toKey());
-			ability.perform();
+			(new AbilityAction(ability)).performAction();
 			endState();
 		}
 	}

@@ -16,6 +16,11 @@ class Action
 	
 	public function performAction()
 	{
+		GameContext.instance.actionLog.addAbilityTooLog(this);
+	}
+	
+	public function performLogic()
+	{
 		
 	}
 	

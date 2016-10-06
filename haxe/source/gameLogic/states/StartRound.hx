@@ -17,7 +17,6 @@ class StartRound extends State
 	
 	override public function onEnter():Void 
 	{
-		trace("Start Round");
 		GameContext.instance.inititativeQueue.fillWithPlayers(GameContext.instance.mapOfPlayers);
 		resertOnTurnEffects();
 		stateMachine.setCurrentState(new SelectMoveState(this.stateMachine,GameContext.instance.getNextCreature()));

@@ -27,6 +27,7 @@ class AttackAction extends Action
 	
 	override public function performAction() 
 	{	
+		super.performAction();
 		doSimpleAttackAnimation(attacker, defender, -1, null);
 		doSimpleAttackAnimation(defender, attacker, 1, function()
 		{
@@ -57,8 +58,6 @@ class AttackAction extends Action
 		if (!isAlive)
 			GameContext.instance.onCreatureKilled(gettingHit);
 		
-		trace(hitter.definition.name + " attacked " + gettingHit.definition.name + " for " + attackPower);
-		trace("Hitpoints left: " + gettingHit.stackCounter + " " + gettingHit.totalHealth);
 		return isAlive;
 	}
 	

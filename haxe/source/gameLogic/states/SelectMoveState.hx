@@ -31,7 +31,6 @@ class SelectMoveState extends State
 	{
 		this.stateName = "Select Move";
 		super(stateMachine);
-		trace("--------------------------------------");
 		selectedCreature = creature;
 		isHuman = GameContext.instance.typeOfCurrentPlayer() == PlayerType.Human;
 		if(isHuman)
@@ -103,9 +102,7 @@ class SelectMoveState extends State
 	function handleAbilitySelected()
 	{
 		var ability = selectedCreature.getActiviableAbility();
-		if (ability == null)
-			trace("This creature don't have abiliy");
-		else
+		if (ability != null)
 			stateMachine.setCurrentState(new SelectAbilityTarget(this.stateMachine,selectedCreature,ability));
 	}
 	

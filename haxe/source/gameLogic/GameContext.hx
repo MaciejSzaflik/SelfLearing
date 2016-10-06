@@ -2,6 +2,7 @@ package gameLogic;
 import data.CreatureDefinition;
 import flixel.math.FlxPoint;
 import game.Creature;
+import gameLogic.AbilityLog.ActionLog;
 import gameLogic.moves.ListOfMoves;
 import gameLogic.moves.MoveData;
 import gameLogic.moves.MoveType;
@@ -40,6 +41,7 @@ class GameContext
 	public var inititativeQueue:InitiativeQueue;
 	public var currentCreature:Creature;
 	public var stateMachine:GameStateMachine;
+	public var actionLog:ActionLog;
 	
 	private var currentPlayer:Player;
 	private var _currentPlayerIndex:Int;
@@ -47,6 +49,7 @@ class GameContext
 	public function new() 
 	{
 		tileToCreature = new Map<Int,Creature>();
+		actionLog = new ActionLog();
 	}
 	
 	public function mapHeight():Int
@@ -61,7 +64,6 @@ class GameContext
 	
 	public function changeCreatureHex(previousHex:HexCoordinates, currentHex:HexCoordinates, creature:Creature)
 	{
-		trace("changeCreatureHex: " + previousHex== null);
 		if (previousHex != null)
 		{
 			setHexPassable(previousHex);
@@ -82,7 +84,6 @@ class GameContext
 	
 	public function handleInput(input:Input)
 	{
-		//trace("input context");
 		stateMachine.handleInput(input);
 	}
 	

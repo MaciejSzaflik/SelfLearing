@@ -131,10 +131,6 @@ class HexMap extends BoardMap
 				listOfPoints.add(hexes.get(edge.left).center);
 				listOfPoints.add(hexes.get(edge.right).center);
 			}
-			else
-			{
-				trace("Invalid edge: "+edge.toString());
-			}
 			
 		}
 		return listOfPoints;
