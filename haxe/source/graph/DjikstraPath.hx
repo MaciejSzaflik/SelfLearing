@@ -57,15 +57,13 @@ class DjikstraPath implements Pathfinder
 		var path = new Array<Int>();
 		path.push(start);
 		var current = start;
-		while (current != end || current == null)
+		while (current != end)
 		{
 			if (predecessors.exists(current))
 			{
 				current = predecessors.get(current);
 				path.push(current);
 			}
-			else
-				current = null;
 		}	
 		path.reverse();
 		return path;

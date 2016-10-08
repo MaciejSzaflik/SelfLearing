@@ -8,7 +8,6 @@ import graph.Graph;
 import graph.Pathfinder;
 import graph.Vertex;
 import hex.Hex;
-import js.html.rtc.IdentityAssertion;
 import source.BoardMap;
 
 class HexMap extends BoardMap

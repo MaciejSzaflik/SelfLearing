@@ -29,6 +29,6 @@ class WaitAction extends Action
 	
 	override public function resetAction()
 	{
-		
+		GameContext.instance.inititativeQueue.removeCreatureFromQueue(performer);
 	}
 }

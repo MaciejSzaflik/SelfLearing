@@ -3,6 +3,7 @@ import animation.MoveBetweenPoints;
 import animation.Tweener;
 import flixel.math.FlxPoint;
 import game.Creature;
+import gameLogic.actions.AttackInfo;
 import haxe.Constraints.Function;
 import hex.HexCoordinates;
 
@@ -15,25 +16,54 @@ class AttackAction extends Action
 	private var useAnimation:Bool;
 	private var defender:Creature;
 	
-	public function new(attacker:Creature,defender:Creature,onFinish:Function) 
+	private var attackerAttack:AttackInfo;
+	private var defenderAttack:AttackInfo;
+	private var creatureAlreadyMoved:Bool;
+	
+	public function new(attacker:Creature,defender:Creature,onFinish:Function,withAnimation:Bool = false) 
 	{
 		super();
 		this.performer = attacker;
 		this.defender = defender;
 		this.onFinish = onFinish;
-		useAnimation = true;
+		useAnimation = withAnimation;
+		creatureAlreadyMoved = attacker.moved;
 	}
 	
 	override public function performAction() 
 	{	
 		super.performAction();
+		if (useAnimation)
+			actionWithAnimation();
+		else
+			actionWithoutAnimation();
+	}
+	
+	private function actionWithoutAnimation()
+	{
+		attackerAttack = attack(performer, defender);
+		var distance = HexCoordinates.getManhatanDistance(performer.currentCordinates, defender.currentCordinates);
+		
+		if (attackerAttack.isAlive && distance == 1 && defender.canContrattack)
+		{
+			defenderAttack = attack(defender, performer);
+			defender.contrattackCountter++;
+			if (onFinish != null)
+				onFinish();
+		}
+		if (onFinish != null)
+			onFinish();
+	}
+	
+	private function actionWithAnimation()
+	{
 		doSimpleAttackAnimation(performer, defender, -1, null);
 		doSimpleAttackAnimation(defender, performer, 1, function()
 		{
-			var isAlive = attack(performer, defender);
+			attackerAttack = attack(performer, defender);
 			var distance = HexCoordinates.getManhatanDistance(performer.currentCordinates, defender.currentCordinates);
 			
-			if (isAlive && distance == 1 && defender.canContrattack)
+			if (attackerAttack.isAlive && distance == 1 && defender.canContrattack)
 			{
 				doSimpleAttackAnimation(defender, performer, -1, null);
 				doSimpleAttackAnimation(performer, defender, 1, function()
@@ -49,7 +79,7 @@ class AttackAction extends Action
 		});
 	}
 	
-	private function attack(hitter:Creature,gettingHit:Creature):Bool
+	private function attack(hitter:Creature,gettingHit:Creature):AttackInfo
 	{
 		var attackPower = hitter.calculateAttack();
 		var isAlive = gettingHit.getHit(attackPower);
@@ -57,7 +87,7 @@ class AttackAction extends Action
 		if (!isAlive)
 			GameContext.instance.onCreatureKilled(gettingHit);
 		
-		return isAlive;
+		return new AttackInfo(isAlive,attackPower);
 	}
 	
 	private function doSimpleAttackAnimation(mover:Creature,director:Creature,direction:Int,afterAnimation:Function)
