@@ -13,13 +13,12 @@ import hex.HexCoordinates;
 class AttackAction extends Action
 {
 	private var useAnimation:Bool;
-	private var attacker:Creature;
 	private var defender:Creature;
 	
 	public function new(attacker:Creature,defender:Creature,onFinish:Function) 
 	{
 		super();
-		this.attacker = attacker;
+		this.performer = attacker;
 		this.defender = defender;
 		this.onFinish = onFinish;
 		useAnimation = true;
@@ -28,18 +27,18 @@ class AttackAction extends Action
 	override public function performAction() 
 	{	
 		super.performAction();
-		doSimpleAttackAnimation(attacker, defender, -1, null);
-		doSimpleAttackAnimation(defender, attacker, 1, function()
+		doSimpleAttackAnimation(performer, defender, -1, null);
+		doSimpleAttackAnimation(defender, performer, 1, function()
 		{
-			var isAlive = attack(attacker, defender);
-			var distance = HexCoordinates.getManhatanDistance(attacker.currentCordinates, defender.currentCordinates);
+			var isAlive = attack(performer, defender);
+			var distance = HexCoordinates.getManhatanDistance(performer.currentCordinates, defender.currentCordinates);
 			
 			if (isAlive && distance == 1 && defender.canContrattack)
 			{
-				doSimpleAttackAnimation(defender, attacker, -1, null);
-				doSimpleAttackAnimation(attacker, defender, 1, function()
+				doSimpleAttackAnimation(defender, performer, -1, null);
+				doSimpleAttackAnimation(performer, defender, 1, function()
 				{				
-					attack(defender, attacker);
+					attack(defender, performer);
 					defender.contrattackCountter++;
 					if (onFinish != null)
 						onFinish();
@@ -82,6 +81,11 @@ class AttackAction extends Action
 		});
 		
 		Tweener.instance.addAnimation(bumpAnimation);
+	}
+	
+	override public function resetAction() 
+	{
+		super.resetAction();
 	}
 	
 	

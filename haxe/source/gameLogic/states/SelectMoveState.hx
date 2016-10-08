@@ -31,6 +31,7 @@ class SelectMoveState extends State
 	{
 		this.stateName = "Select Move";
 		super(stateMachine);
+		clearAll();
 		selectedCreature = creature;
 		isHuman = GameContext.instance.typeOfCurrentPlayer() == PlayerType.Human;
 		if(isHuman)
@@ -96,7 +97,6 @@ class SelectMoveState extends State
 			handleMove(new MoveData(MoveType.Defend, -1));
 		else if (buttonName == "ability")
 			handleAbilitySelected();
-			
 	}
 	
 	function handleAbilitySelected()

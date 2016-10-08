@@ -93,7 +93,7 @@ class MainState extends FlxUIState
 		var player1 = new Player(0, CreateDubugCreatureList(), 0xffcc1111, PlayerType.Human,true);
 		var player2 = new Player(1, CreateDubugCreatureList(), 0xff1111ff, PlayerType.Human,false);
 		//player2.setAI(new BestMove(new KillTheWeakest(false)));
-		player1.setAI(new BestMove(new KillTheWeakest(true)));
+		//player1.setAI(new BestMove(new KillTheWeakest(true)));
 		GameContext.instance.Init(getHexMap(), [player1, player2]);
 		CreateUIQueue();
 		GameContext.instance.stateMachine.addNewStateChangeListener(function(state:String)
@@ -234,8 +234,27 @@ class MainState extends FlxUIState
 	{
 		if (params != null)
 		{
-			if(name == FlxUITypedButton.CLICK_EVENT)
-				GameContext.instance.stateMachine.handleButtonInput(params.toString());
+			if (name == FlxUITypedButton.CLICK_EVENT)
+			{
+				if(!isButtonMainInterface(params.toString()))
+					GameContext.instance.stateMachine.handleButtonInput(params.toString());
+				else
+					handleButtonClick(params.toString());
+			}
 		}
+	}
+	
+	private static var mainInterfaceButtons:Array<String> = ["back", "forward"];
+	private function isButtonMainInterface(buttonName:String):Bool
+	{
+		return mainInterfaceButtons.indexOf(buttonName) != -1;
+	}
+	
+	private function handleButtonClick(buttonName:String)
+	{
+		if (buttonName == "back")
+			GameContext.instance.undoNextAction();
+		else if (buttonName == "forward")
+			GameContext.instance.redoNextAction();
 	}
 }

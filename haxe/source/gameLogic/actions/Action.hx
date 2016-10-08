@@ -1,4 +1,5 @@
 package gameLogic.actions;
+import game.Creature;
 import haxe.Constraints.Function;
 
 /**
@@ -7,6 +8,7 @@ import haxe.Constraints.Function;
  */
 class Action
 {
+	public var performer:Creature;
 	private var onFinish:Function;
 	
 	public function new() 
@@ -23,5 +25,11 @@ class Action
 	{
 		
 	}
+	
+	public function resetAction()
+	{
+		
+	}
+	
 	
 }

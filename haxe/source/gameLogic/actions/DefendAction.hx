@@ -8,20 +8,23 @@ import haxe.Constraints.Function;
  */
 class DefendAction extends Action
 {
-	var defending:Creature;
-	
 	public function new(defending:Creature,onFinish:Function) 
 	{
 		super();
-		this.defending = defending;
+		this.performer = defending;
 		this.onFinish = onFinish;
 	}
 	
 	override public function performAction() 
 	{
 		super.performAction();
-		this.defending.defending = true;
+		this.performer.defending = true;
 		if (onFinish != null)
 			onFinish();
+	}
+	
+	override public function resetAction() 
+	{
+		this.performer.defending = false;
 	}
 }

@@ -27,6 +27,11 @@ class Ability
 	
 	}
 	
+	public function getPerformer():Creature
+	{
+		return performer;
+	}
+	
 	public function getTargets():PossibleAttacksInfo
 	{
 		return null;

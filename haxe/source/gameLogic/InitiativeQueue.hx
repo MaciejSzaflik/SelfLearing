@@ -52,6 +52,11 @@ class InitiativeQueue
 		informOnFill();
 	}
 	
+	public function putCreatureOnTop(creature:Creature)
+	{
+		queue.push(creature);
+	}
+	
 	public function getInOrder(index:Int):Creature
 	{
 		if (queue.length > index)

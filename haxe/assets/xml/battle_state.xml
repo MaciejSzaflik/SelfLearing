@@ -18,7 +18,7 @@
 </chrome>
 	
 	
-<button x="right_panel.left + 10" y="bottom_panel.center-10" id="defend_btn" label="Defend">
+<button x="right_panel.left+10" y="bottom_panel.center-10" id="defend_btn" label="Defend">
 		<param type="string" value="defend"/>
 </button>
 <button x="defend_btn.left+100" y="bottom_panel.center-10" id="wait_btn" label="Wait">
@@ -27,5 +27,16 @@
 <button x="wait_btn.left+100" y="bottom_panel.center-10" id="ability_btn" label="Ability">
 		<param type="string" value="ability"/>
 </button>
+
+<button x="main_panel.right-50"  width="40" y="bottom_panel.center-10" id="forward_btn" label="F">
+		<param type="string" value="forward"/>
+</button>	
+	
+<button x="forward_btn.left-60" width="40"  y="bottom_panel.center-10" id="back_btn" label="B">
+		<param type="string" value="back"/>
+</button>
+
+
+	
 	
 </data>

@@ -8,24 +8,27 @@ import haxe.Constraints.Function;
  */
 class WaitAction extends Action
 {
-	var waiter:Creature;
-	
 	public function new(waiter:Creature,onFinish:Function) 
 	{
 		super();
-		this.waiter = waiter;
+		this.performer = waiter;
 		this.onFinish = onFinish;
 	}
 	
 	override public function performAction() 
 	{
 		super.performAction();
-		if (!waiter.waited)
+		if (!performer.waited)
 		{
-			waiter.waited = true;
-			GameContext.instance.inititativeQueue.putCreatureOnQueueBottom(waiter);	
+			performer.waited = true;
+			GameContext.instance.inititativeQueue.putCreatureOnQueueBottom(performer);	
 		}
 		if (onFinish != null)
 				onFinish();
-	}	
+	}
+	
+	override public function resetAction()
+	{
+		
+	}
 }

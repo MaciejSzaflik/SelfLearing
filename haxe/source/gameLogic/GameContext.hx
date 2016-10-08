@@ -2,10 +2,11 @@ package gameLogic;
 import data.CreatureDefinition;
 import flixel.math.FlxPoint;
 import game.Creature;
-import gameLogic.AbilityLog.ActionLog;
+import gameLogic.ActionLog;
 import gameLogic.moves.ListOfMoves;
 import gameLogic.moves.MoveData;
 import gameLogic.moves.MoveType;
+import gameLogic.states.SelectMoveState;
 import hex.BoardShape;
 import hex.Hex;
 import hex.HexCoordinates;
@@ -252,5 +253,38 @@ class GameContext
 		for (player in mapOfPlayers)
 			counter++;
 		return counter;
+	}
+	
+	
+	public function undoNextAction()
+	{
+		
+		var backedAction = actionLog.goBack();
+		if (backedAction == null)
+			return;
+		
+		inititativeQueue.putCreatureOnTop(currentCreature);	
+			
+		resetCreaturesPositions();
+		inititativeQueue.putCreatureOnTop(backedAction.performer);
+		currentCreature = backedAction.performer;
+		stateMachine.setCurrentState(new SelectMoveState(stateMachine, inititativeQueue.getNextCreature()));
+		inititativeQueue.informOnFill();
+	}
+	public function redoNextAction()
+	{
+		//not yet
+	}
+	
+	public function resetCreaturesPositions()
+	{
+		for (player in mapOfPlayers)
+		{
+			for (playerCreature in player.creatures)
+			{
+				playerCreature.setPosition(map.getHexCenterByAxialCor(playerCreature.currentCordinates));
+				playerCreature.recalculateStackSize(playerCreature.totalHealth);
+			}
+		}
 	}
 }
