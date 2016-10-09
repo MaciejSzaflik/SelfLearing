@@ -22,7 +22,7 @@ class InitiativeQueue
 		killListeners = new List<Function>();
 	}
 	
-	public function fillWithPlayers(players:Map<Int,Player>)
+	public function fillWithPlayers(players:Map<Int,GamePlayer>)
 	{
 		for (player in players)
 		{
@@ -57,6 +57,11 @@ class InitiativeQueue
 		queue.push(creature);
 	}
 	
+	public function putCreatureOnIndex(creature:Creature,index:Int)
+	{
+		queue.insert(index,creature);
+	}
+	
 	public function getInOrder(index:Int):Creature
 	{
 		if (queue.length > index)
@@ -77,10 +82,12 @@ class InitiativeQueue
 		return creature;
 	}
 	
-	public function removeCreatureFromQueue(toRemove:Creature)
+	public function removeCreatureFromQueue(toRemove:Creature):Int
 	{
+		var index = queue.indexOf(toRemove);
 		queue.remove(toRemove);
 		informOnKill(toRemove);
+		return index;
 	}
 	
 	public function addFillListener(listener:Function)

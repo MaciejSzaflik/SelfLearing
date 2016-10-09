@@ -40,10 +40,18 @@ class CreatureLabel
 		stateToAdd.add(text);
 	}
 	
-	public function disable()
+	public function enable(enable:Bool)
 	{
-		text.kill();
-		background.kill();
+		if (enable)
+		{
+			text.reset(text.getPosition().x,text.getPosition().y);
+			background.reset(background.getPosition().x,background.getPosition().y);
+		}
+		else
+		{
+			text.kill();
+			background.kill();
+		}
 	}
 	
 }

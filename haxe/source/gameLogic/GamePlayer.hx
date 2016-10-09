@@ -11,7 +11,7 @@ import gameLogic.moves.MoveData;
  * ...
  * @author ...
  */
-class Player
+class GamePlayer
 {
 	public var id(default, null):Int;
 	public var playerType:PlayerType;
@@ -63,6 +63,12 @@ class Player
 		
 		creatures.remove(killed);
 		deadCreatures.push(killed);
+	}
+	
+	public function onCreatureResurected(res:Creature)
+	{
+		deadCreatures.remove(res);
+		creatures.push(res);
 	}
 	
 	public function generateMove():MoveData

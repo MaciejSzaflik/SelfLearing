@@ -132,11 +132,15 @@ class Creature
 	
 	public function getHit(hitPower:Int):Bool
 	{
-		var newHealth = totalHealth - (defending?Math.ceil(hitPower*0.5):hitPower);
+		var newHealth = totalHealth - (defending?Math.ceil(hitPower * 0.5):hitPower);
+		lostHitPoints += hitPower;
 		if (newHealth <= 0)
+		{
+			currentHealth = 0;
+			stackCounter = 0;
 			return false;
+		}
 		
-		lostHitPoints += hitPower;	
 		recalculateStackSize(newHealth);
 		return true;
 	}
@@ -252,10 +256,13 @@ class Creature
 		label.setPosition(x, y);
 	}
 	
-	public function disable()
+	public function enable(enable:Bool)
 	{
-		sprite.kill();
-		label.disable();
+		label.enable(enable);
+		if (enable)
+			sprite.reset(this.position.x, this.position.y);
+		else
+			sprite.kill();
 	}
 	
 }

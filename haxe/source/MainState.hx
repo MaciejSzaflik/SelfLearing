@@ -15,7 +15,7 @@ import game.Creature;
 import game.StageDescription;
 import gameLogic.GameContext;
 import gameLogic.Input;
-import gameLogic.Player;
+import gameLogic.GamePlayer;
 import gameLogic.PlayerType;
 import gameLogic.ai.BestMove;
 import gameLogic.ai.evaluation.KillTheWeakest;
@@ -90,8 +90,8 @@ class MainState extends FlxUIState
 
 	private function CreateGameContex()
 	{
-		var player1 = new Player(0, CreateDubugCreatureList(), 0xffcc1111, PlayerType.Human,true);
-		var player2 = new Player(1, CreateDubugCreatureList(), 0xff1111ff, PlayerType.Human,false);
+		var player1 = new GamePlayer(0, CreateDubugCreatureList(), 0xffcc1111, PlayerType.Human,true);
+		var player2 = new GamePlayer(1, CreateDubugCreatureList(), 0xff1111ff, PlayerType.Human,false);
 		//player2.setAI(new BestMove(new KillTheWeakest(false)));
 		//player1.setAI(new BestMove(new KillTheWeakest(true)));
 		GameContext.instance.Init(getHexMap(), [player1, player2]);
@@ -108,10 +108,10 @@ class MainState extends FlxUIState
 	{
 		var creatureList = new Array<Creature>();
 		var i = 0;
-		while (i < 8)
+		while (i < 3)
 		{
-			var creatureDefinition = GameConfiguration.instance.creatures.get(Random.int(0,3));
-			var creature = Creature.fromDefinition(creatureDefinition,Random.int(9,14));
+			var creatureDefinition = GameConfiguration.instance.creatures.get(0,3);
+			var creature = Creature.fromDefinition(creatureDefinition,Random.int(3,4));
 			creatureList.push(creature);
 			creature.addCreatureToState(this);
 			i++;

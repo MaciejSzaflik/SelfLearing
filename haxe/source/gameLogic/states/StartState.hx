@@ -1,7 +1,7 @@
 package gameLogic.states;
 
 import gameLogic.GameStateMachine;
-import gameLogic.Player;
+import gameLogic.GamePlayer;
 import gameLogic.StateMachine;
 import hex.HexCoordinates;
 

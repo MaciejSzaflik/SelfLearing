@@ -36,7 +36,7 @@ class GameContext
 	}
 	
 	public var map:HexMap;
-	public var mapOfPlayers:Map<Int,Player>;
+	public var mapOfPlayers:Map<Int,GamePlayer>;
 	public var currentPlayerIndex(get, set):Int;
 	public var tileToCreature:Map<Int,Creature>;
 	public var inititativeQueue:InitiativeQueue;
@@ -44,7 +44,7 @@ class GameContext
 	public var stateMachine:GameStateMachine;
 	public var actionLog:ActionLog;
 	
-	private var currentPlayer:Player;
+	private var currentPlayer:GamePlayer;
 	private var _currentPlayerIndex:Int;
 	
 	public function new() 
@@ -114,10 +114,10 @@ class GameContext
 		return this.map.getHexCenterByAxialCor(coor);
 	}
 	
-	public function Init(map:HexMap, listOfPlayers:Array<Player>)
+	public function Init(map:HexMap, listOfPlayers:Array<GamePlayer>)
 	{
 		this.map = map;
-		this.mapOfPlayers = new Map<Int,Player>();
+		this.mapOfPlayers = new Map<Int,GamePlayer>();
 		for (player in listOfPlayers)
 			mapOfPlayers.set(player.id, player);
 		
@@ -218,12 +218,20 @@ class GameContext
 		return listOfMoves;
 	}
 	
-	public function onCreatureKilled(creature:Creature)
+	public function onCreatureKilled(creature:Creature):Int
 	{
 		mapOfPlayers.get(creature.idPlayerId).onCreatureKilled(creature);
-		inititativeQueue.removeCreatureFromQueue(creature);
-		creature.disable();
+		creature.enable(false);
 		map.getGraph().setPassable(creature.getTileId());
+		return inititativeQueue.removeCreatureFromQueue(creature);
+	}
+	
+	public function resurectCreature(creature:Creature, positionInQueue:Int)
+	{
+		mapOfPlayers.get(creature.idPlayerId).onCreatureResurected(creature);
+		inititativeQueue.putCreatureOnIndex(creature,positionInQueue);
+		creature.enable(true);
+		map.getGraph().setImpassable(creature.getTileId());
 	}
 	
 	private function getSumOfDead()

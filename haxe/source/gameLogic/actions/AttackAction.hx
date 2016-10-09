@@ -81,13 +81,14 @@ class AttackAction extends Action
 	
 	private function attack(hitter:Creature,gettingHit:Creature):AttackInfo
 	{
-		var attackPower = hitter.calculateAttack();
+		
+		var attackPower = Std.int(Math.min(gettingHit.totalHealth, hitter.calculateAttack()));
 		var isAlive = gettingHit.getHit(attackPower);
-		
+		var inQueue = -1;
 		if (!isAlive)
-			GameContext.instance.onCreatureKilled(gettingHit);
+			inQueue = GameContext.instance.onCreatureKilled(gettingHit);
 		
-		return new AttackInfo(isAlive,attackPower);
+		return new AttackInfo(isAlive,attackPower,inQueue);
 	}
 	
 	private function doSimpleAttackAnimation(mover:Creature,director:Creature,direction:Int,afterAnimation:Function)
@@ -116,6 +117,21 @@ class AttackAction extends Action
 	override public function resetAction() 
 	{
 		super.resetAction();
+		defender.recalculateStackSize(defender.totalHealth + attackerAttack.attackPower);
+		defender.lostHitPoints -= attackerAttack.attackPower;
+			if (defenderAttack != null)
+		{
+			defender.contrattackCountter--;
+			performer.recalculateStackSize(performer.currentHealth + defenderAttack.attackPower);
+			performer.lostHitPoints -= defenderAttack.attackPower;
+			
+			if (!defenderAttack.isAlive)
+				GameContext.instance.resurectCreature(performer,defenderAttack.placeInQueue);
+		}
+		
+		if (!attackerAttack.isAlive)
+			GameContext.instance.resurectCreature(defender, attackerAttack.placeInQueue);
+		
 	}
 	
 	
