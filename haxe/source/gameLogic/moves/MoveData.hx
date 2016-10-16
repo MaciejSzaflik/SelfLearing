@@ -9,10 +9,12 @@ class MoveData
 {
 	public var type:MoveType;
 	public var tileId:Int;
-	public var attacked:Creature;
+	public var performer:Creature;
+	public var affected:Creature;
 	
 	public function new(type:MoveType,tileId:Int) 
 	{
+		//this.performer = performer;
 		this.type = type;
 		this.tileId = tileId;
 	}
@@ -20,7 +22,7 @@ class MoveData
 	static public function createAttackMove(type:MoveType,tileId:Int,creature:Creature):MoveData
 	{
 		var move = new MoveData(type, tileId);
-		move.attacked = creature;
+		move.affected = creature;
 		return move;
 	}
 	

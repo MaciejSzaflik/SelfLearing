@@ -51,5 +51,4 @@ class ListOfMoves
 		
 		return centers;
 	}
-	
 }

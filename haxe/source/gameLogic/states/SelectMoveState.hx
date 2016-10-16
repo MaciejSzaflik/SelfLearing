@@ -117,7 +117,7 @@ class SelectMoveState extends State
 		}
 		else if (move.type == MoveType.Attack)
 		{
-			var attackAction = new AttackAction(selectedCreature, move.attacked, function(){endState();});
+			var attackAction = new AttackAction(selectedCreature, move.affected, function(){endState();});
 			if (selectedCreature.getTileId() == move.tileId)
 				attackAction.performAction();
 			else

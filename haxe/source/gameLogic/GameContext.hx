@@ -3,6 +3,8 @@ import data.CreatureDefinition;
 import flixel.math.FlxPoint;
 import game.Creature;
 import gameLogic.ActionLog;
+import gameLogic.actions.Action;
+import gameLogic.ai.tree.TreeVertex;
 import gameLogic.moves.ListOfMoves;
 import gameLogic.moves.MoveData;
 import gameLogic.moves.MoveType;
@@ -199,6 +201,17 @@ class GameContext
 			}
 		}
 	}
+	
+	
+	public function generateMoveTree(depth:Int)
+	{
+		var moves:ListOfMoves = generateListOfMovesForCreature(this.currentCreature);
+		var moveTree = new TreeVertex<MoveData>();
+		moveTree.initializeChildren(moves.moves);
+		trace(moveTree.treeToString());
+		//moveTree.getByIndex(0);
+	}
+	
 	
 	public function generateMovesForCurrentCreature():ListOfMoves
 	{

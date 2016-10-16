@@ -34,7 +34,7 @@ class KillTheWeakest implements EvaluationMethod
 			var currentRanking = Math.floor(currentDistance - afterMoveDistance);
 			if (move.type == MoveType.Attack)
 			{
-				if (opponentCreatures[0].id == move.attacked.id)
+				if (opponentCreatures[0].id == move.affected.id)
 					currentRanking = 1000 - currentRanking;
 				else
 					currentRanking = 1 - currentRanking;
