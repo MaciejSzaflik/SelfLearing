@@ -21,7 +21,7 @@ class RandomAI extends ArtificialInteligence
 		if(listOfMoves.moves.length > 0)
 			return Random.fromIterable(listOfMoves.moves);
 		else
-			return new MoveData(MoveType.Pass, -1);
+			return new MoveData(null,MoveType.Pass, -1);
 	}
 	
 }

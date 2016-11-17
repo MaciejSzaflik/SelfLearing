@@ -16,7 +16,7 @@ class ArtificialInteligence
 	
 	public function generateMove():MoveData
 	{
-		return new MoveData(MoveType.Pass, -1);
+		return new MoveData(null,MoveType.Pass, -1);
 	}
 	
 }

@@ -92,9 +92,9 @@ class SelectMoveState extends State
 			return;
 			
 		if (buttonName == "wait")
-			handleMove(new MoveData(MoveType.Wait, -1));
+			handleMove(new MoveData(selectedCreature,MoveType.Wait, -1));
 		else if (buttonName == "defend")
-			handleMove(new MoveData(MoveType.Defend, -1));
+			handleMove(new MoveData(selectedCreature,MoveType.Defend, -1));
 		else if (buttonName == "ability")
 			handleAbilitySelected();
 	}

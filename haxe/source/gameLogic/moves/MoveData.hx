@@ -11,17 +11,18 @@ class MoveData
 	public var tileId:Int;
 	public var performer:Creature;
 	public var affected:Creature;
+	public var abilityId:Int;
 	
-	public function new(type:MoveType,tileId:Int) 
+	public function new(performer:Creature,type:MoveType,tileId:Int) 
 	{
-		//this.performer = performer;
+		this.performer = performer;
 		this.type = type;
 		this.tileId = tileId;
 	}
 	
-	static public function createAttackMove(type:MoveType,tileId:Int,creature:Creature):MoveData
+	static public function createAttackMove(performer:Creature,type:MoveType,tileId:Int,creature:Creature):MoveData
 	{
-		var move = new MoveData(type, tileId);
+		var move = new MoveData(performer,type, tileId);
 		move.affected = creature;
 		return move;
 	}

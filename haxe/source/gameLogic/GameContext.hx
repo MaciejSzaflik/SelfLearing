@@ -182,7 +182,7 @@ class GameContext
 						{
 							if (rangeInformation.exists(hex))
 							{
-								var move = MoveData.createAttackMove(MoveType.Attack, hex, playerCreature);
+								var move = MoveData.createAttackMove(creature, MoveType.Attack, hex, playerCreature);
 								listOfMoves.addMove(move);
 							}
 						}
@@ -196,7 +196,7 @@ class GameContext
 			var attackPosbilites = getCreaturesInAttackRange(creature);
 			for (enemyCreature in attackPosbilites.listOfCreatures)
 			{
-				var move = MoveData.createAttackMove(MoveType.Attack, creature.getTileId(), enemyCreature);
+				var move = MoveData.createAttackMove(creature, MoveType.Attack, creature.getTileId(), enemyCreature);
 				listOfMoves.addMove(move);
 			}
 		}
@@ -224,7 +224,7 @@ class GameContext
 		var range =  map.getRange(creature.getTileId(), creature.range, true);
 		for (tileId in range)
 		{
-			listOfMoves.addMove(new MoveData(MoveType.Move, tileId));
+			listOfMoves.addMove(new MoveData(creature,MoveType.Move, tileId));
 			
 		}
 		getCreatureAttackTargets(creature, listOfMoves, range);

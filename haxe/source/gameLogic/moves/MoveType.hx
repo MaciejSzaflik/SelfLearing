@@ -7,6 +7,7 @@ enum MoveType
 {
 	Move;
 	Attack;
+	Ability;
 	Defend;
 	Wait;
 	Pass;
