@@ -22,7 +22,6 @@ class ActionLog
 			currentActionIndex = 0;
 		}
 		actionLog.insert(0,action);
-		trace(actionLog.length);
 	}
 	
 	public function goBack():Action

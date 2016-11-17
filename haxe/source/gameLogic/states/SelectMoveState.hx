@@ -4,6 +4,7 @@ import game.Creature;
 import gameLogic.Input;
 import gameLogic.PossibleAttacksInfo;
 import gameLogic.StateMachine;
+import gameLogic.actions.ActionFactory;
 import gameLogic.actions.AttackAction;
 import gameLogic.actions.DefendAction;
 import gameLogic.actions.MoveAction;
@@ -110,56 +111,48 @@ class SelectMoveState extends State
 	{
 		if (move.type == MoveType.Move)
 		{
-			handleMoveAction(function() {		
+			handleMoveAction(move,function() {		
 				isAnimationPlaying = false;
 				endState();
-			},move.tileId);
+			});
 		}
 		else if (move.type == MoveType.Attack)
 		{
-			var attackAction = new AttackAction(selectedCreature, move.affected, function(){endState();});
+			var attackAction = ActionFactory.actionFromMoveData(move,function(){endState();});
 			if (selectedCreature.getTileId() == move.tileId)
 				attackAction.performAction();
 			else
 			{
-				handleMoveAction(function() {
+				handleMoveAction(new MoveData(selectedCreature,MoveType.Move,move.tileId),function() {
 					attackAction.performAction();
-				},move.tileId);
+				});
 			}
 		}
 		else if (move.type == MoveType.Pass)
 			endState();
 		else if (move.type == MoveType.Defend)
-			handleDefendAction(endState);
+			handleAction(move,endState);
 		else if (move.type == MoveType.Wait)
-			handleWaitAction(endState);
+			handleAction(move,endState);
 	}
 	
-	private function handleMoveAction(callBack:Function,whereTile:Int)
+	private function handleMoveAction(moveData:MoveData,callBack:Function)
 	{
 		isAnimationPlaying = true; 
 		selectedCreature.moved = true;
 		
 		clearAll();
-		
-		var action = new MoveAction(selectedCreature,whereTile,callBack);
+		var action = ActionFactory.actionFromMoveData(moveData, callBack);
 		action.performAction();
 	}
 	
-	private function handleDefendAction(callBack:Function)
+	private function handleAction(move:MoveData,callBack:Function)
 	{
 		clearAll();
-		var action = new DefendAction(selectedCreature, callBack);
+		var action = ActionFactory.actionFromMoveData(move, callBack);
 		action.performAction();
 	}
-	
-	private function handleWaitAction(callBack:Function)
-	{
-		clearAll();
-		var action = new WaitAction(selectedCreature, callBack);
-		action.performAction();
-	}
-	
+
 	private function clearAll()
 	{
 		MainState.getInstance().getDrawer().clear(1);
@@ -192,10 +185,9 @@ class SelectMoveState extends State
 	{
 		if (attacksInfo.listOfCreatures.exists(key))
 		{
-			var attackAction = new AttackAction(selectedCreature, attacksInfo.listOfCreatures.get(key), function()
-			{
-				endState();
-			});
+			var moveData = new MoveData(selectedCreature, MoveType.Attack, key);
+			moveData.affected = attacksInfo.listOfCreatures.get(key);
+			var attackAction = ActionFactory.actionFromMoveData(moveData,function(){endState();});
 			attackAction.performAction();
 		}
 
@@ -219,12 +211,12 @@ class SelectMoveState extends State
 	
 	private function handleMoveClick(input:Input)
 	{
-		handleMoveAction(function() {		
+		handleMoveAction(new MoveData(selectedCreature,MoveType.Move,input.coor.toKey()), function() {		
 				MainState.getInstance().getDrawer().clear(1);
 				moveList.movesByTypes.remove(MoveType.Move);			
 				checkAttackPossiblity();
 				isAnimationPlaying = false;
-		},input.coor.toKey());
+		});
 	}
 	
 	

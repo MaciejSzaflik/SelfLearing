@@ -2,6 +2,7 @@ package gameLogic.actions;
 import gameLogic.abilites.AbilityFactory;
 import gameLogic.moves.MoveData;
 import gameLogic.moves.MoveType;
+import haxe.Constraints.Function;
 
 /**
  * ...
@@ -10,44 +11,45 @@ import gameLogic.moves.MoveType;
 class ActionFactory
 {
 
-	public static function actionFromMoveData(moveData:MoveData):Action
+	public static function actionFromMoveData(moveData:MoveData,callback:Function,animation:Bool = false):Action
 	{
+		var toReturn:Action = null;
 		switch(moveData.type)
 		{
 			case MoveType.Move:
-				return createMoveAction(moveData);
+				toReturn = createMoveAction(moveData,callback);
 			case MoveType.Attack:
-				return createAttackAction(moveData);
+				toReturn = createAttackAction(moveData,callback,animation);
 			case MoveType.Ability:
-				return createAbilityAction(moveData);
+				toReturn = createAbilityAction(moveData);
 			case MoveType.Defend:
-				return createDefendAbility(moveData);
+				toReturn = createDefendAction(moveData,callback);
 			case MoveType.Wait:
-				return createWaitAction(moveData);
+				toReturn = createWaitAction(moveData,callback);
 			case MoveType.Pass:
-				return createPassAction(moveData);
+				toReturn = createPassAction(moveData);
 		}
-		return null;
+		return toReturn;
 	}
-	private static function createMoveAction(moveData:MoveData):MoveAction
+	private static function createMoveAction(moveData:MoveData,callback:Function):MoveAction
 	{
-		return new MoveAction(moveData.performer, moveData.tileId, null);
+		return new MoveAction(moveData.performer, moveData.tileId, callback);
 	}
-	private static function createAttackAction(moveData:MoveData):AttackAction
+	private static function createAttackAction(moveData:MoveData,callback:Function,animation:Bool):AttackAction
 	{
-		return new AttackAction(moveData.performer, moveData.affected);
+		return new AttackAction(moveData.performer, moveData.affected,callback,animation);
 	}
 	private static function createAbilityAction(moveData:MoveData):AbilityAction
 	{
-		return new AbilityAction(AbilityFactory.instance.getAbility(moveData.abilityId, moveData.abilityId));
+		return new AbilityAction(AbilityFactory.instance.getAbility(moveData.performer, moveData.abilityId));
 	}
-	private static function createDefendAction(moveData:MoveData):DefendAction
+	private static function createDefendAction(moveData:MoveData,callback:Function):DefendAction
 	{
-		return new DefendAction(moveData.performer, null);
+		return new DefendAction(moveData.performer, callback);
 	}
-	private static function createWaitAction(moveData:MoveData):DefendAction
+	private static function createWaitAction(moveData:MoveData,callback:Function):WaitAction
 	{
-		return new WaitAction(moveData.performer, null);
+		return new WaitAction(moveData.performer,callback);
 	}
 	private static function createPassAction(moveData:MoveData):Action
 	{
