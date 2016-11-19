@@ -221,6 +221,11 @@ class Creature
 		currentCordinates = coor;
 	}
 	
+	public function redrawPosition()
+	{
+		setPosition(GameContext.instance.map.getHexCenter(getTileId()));
+	}
+	
 	public function setPosition(position:FlxPoint)
 	{
 		sprite.setPosition(position.x, position.y);

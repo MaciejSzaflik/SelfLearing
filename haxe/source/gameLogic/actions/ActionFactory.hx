@@ -10,14 +10,13 @@ import haxe.Constraints.Function;
  */
 class ActionFactory
 {
-
 	public static function actionFromMoveData(moveData:MoveData,callback:Function,animation:Bool = false):Action
 	{
 		var toReturn:Action = null;
 		switch(moveData.type)
 		{
 			case MoveType.Move:
-				toReturn = createMoveAction(moveData,callback);
+				toReturn = createMoveAction(moveData,callback,animation);
 			case MoveType.Attack:
 				toReturn = createAttackAction(moveData,callback,animation);
 			case MoveType.Ability:
@@ -31,9 +30,9 @@ class ActionFactory
 		}
 		return toReturn;
 	}
-	private static function createMoveAction(moveData:MoveData,callback:Function):MoveAction
+	private static function createMoveAction(moveData:MoveData,callback:Function,animation:Bool):MoveAction
 	{
-		return new MoveAction(moveData.performer, moveData.tileId, callback);
+		return new MoveAction(moveData.performer, moveData.tileId, callback, animation);
 	}
 	private static function createAttackAction(moveData:MoveData,callback:Function,animation:Bool):AttackAction
 	{

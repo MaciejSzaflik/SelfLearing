@@ -13,22 +13,35 @@ class MoveAction extends Action
 {
 	private var moveTo:Int;
 	private var moveFrom:Int;
+	private var withAnimation:Bool;
 	
-	public function new(creatureToMove:Creature,moveTo:Int,onFinish:Function) 
+	public function new(creatureToMove:Creature,moveTo:Int,onFinish:Function,withAnimation:Bool = false) 
 	{
 		super();
 		this.performer = creatureToMove;
 		this.moveTo = moveTo;
 		this.moveFrom = creatureToMove.currentCordinates.toKey();
 		this.onFinish = onFinish;
+		this.withAnimation = withAnimation;
 	}
 	
 	override public function performAction() 
 	{
 		super.performAction();
-		var checkpoints = GameContext.instance.map.getPathCenters(performer.currentCordinates.toKey(), moveTo);
-		performer.setCoodinates(GameContext.instance.map.getHexByIndex(moveTo).getCoor());
 		
+		var from = performer.currentCordinates.toKey();
+		
+		if (!withAnimation)
+		{
+			performer.setCoodinates(GameContext.instance.map.getHexByIndex(moveTo).getCoor());
+			if (onFinish!=null)
+				onFinish();
+			return;
+		}
+		
+		var checkpoints = GameContext.instance.map.getPathCenters(from, moveTo);
+		performer.setCoodinates(GameContext.instance.map.getHexByIndex(moveTo).getCoor());
+
 		MainState.getInstance().drawHexesRange(checkpoints, 1,0x55ffff44);
 		
 		var moveAnimation = new MoveBetweenPoints(

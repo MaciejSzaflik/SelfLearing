@@ -73,7 +73,7 @@ class SelectMoveState extends State
 	}
 	private function colorHexStandingOn()
 	{
-		MainState.getInstance().drawHex(MainState.getInstance().getHexMap().getHexCenterByAxialCor(selectedCreature.currentCordinates),1,0x99ff0000);
+		MainState.getInstance().drawHex(MainState.getInstance().getHexMap().getHexCenterByAxialCor(selectedCreature.currentCordinates),1,0xa0ff00a0);
 	}
 	
 	override public function handleInput(input:Input) 
@@ -118,7 +118,7 @@ class SelectMoveState extends State
 		}
 		else if (move.type == MoveType.Attack)
 		{
-			var attackAction = ActionFactory.actionFromMoveData(move,function(){endState();});
+			var attackAction = ActionFactory.actionFromMoveData(move,function(){endState();},true);
 			if (selectedCreature.getTileId() == move.tileId)
 				attackAction.performAction();
 			else
@@ -142,14 +142,14 @@ class SelectMoveState extends State
 		selectedCreature.moved = true;
 		
 		clearAll();
-		var action = ActionFactory.actionFromMoveData(moveData, callBack);
+		var action = ActionFactory.actionFromMoveData(moveData, callBack,true);
 		action.performAction();
 	}
 	
 	private function handleAction(move:MoveData,callBack:Function)
 	{
 		clearAll();
-		var action = ActionFactory.actionFromMoveData(move, callBack);
+		var action = ActionFactory.actionFromMoveData(move, callBack,true);
 		action.performAction();
 	}
 
@@ -187,7 +187,7 @@ class SelectMoveState extends State
 		{
 			var moveData = new MoveData(selectedCreature, MoveType.Attack, key);
 			moveData.affected = attacksInfo.listOfCreatures.get(key);
-			var attackAction = ActionFactory.actionFromMoveData(moveData,function(){endState();});
+			var attackAction = ActionFactory.actionFromMoveData(moveData,function(){endState();},true);
 			attackAction.performAction();
 		}
 
@@ -195,6 +195,7 @@ class SelectMoveState extends State
 	
 	private function endState()
 	{
+		selectedCreature.redrawPosition();
 		var counterOfPlayersWithCreatures = 0;
 		for (player in GameContext.instance.mapOfPlayers)
 		{
