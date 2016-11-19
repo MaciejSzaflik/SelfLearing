@@ -14,7 +14,6 @@ class TotalHp implements EvaluationMethod
 		
 	}
 	
-	
 	/* INTERFACE gameLogic.ai.evaluation.EvaluationMethod */
 	
 	public function evaluateMoves(listOfMoves:ListOfMoves):EvaluationResult 

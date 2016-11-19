@@ -8,6 +8,7 @@ import gameLogic.PossibleAttacksInfo;
 import gameLogic.StateMachine;
 import gameLogic.abilites.Ability;
 import gameLogic.actions.AbilityAction;
+import ui.ColorTable;
 import utilites.InputType;
 
 /**
@@ -42,7 +43,7 @@ class SelectAbilityTarget extends State
 	
 	private function colorRange(points:List<FlxPoint>)
 	{
-		MainState.getInstance().drawHexesRange(points, 1, 0x4433aa33);
+		MainState.getInstance().drawHexesRange(points, 1, ColorTable.ABILITY_COLOR);
 	}
 	
 	override public function handleInput(input:Input) 

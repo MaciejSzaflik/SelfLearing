@@ -13,6 +13,7 @@ import gameLogic.moves.ListOfMoves;
 import gameLogic.moves.MoveData;
 import gameLogic.moves.MoveType;
 import haxe.Constraints.Function;
+import ui.ColorTable;
 import utilites.InputType;
 
 /**
@@ -61,19 +62,19 @@ class SelectMoveState extends State
 	private function getAttackRange()
 	{
 		if(!selectedCreature.moved)
-			MainState.getInstance().drawHexesRange(moveList.getListOCenters(MoveType.Attack), 1, 0x44ccffff);
+			MainState.getInstance().drawHexesRange(moveList.getListOCenters(MoveType.Attack), 1, ColorTable.MOVE_RANGE_COLOR);
 		
 		attacksInfo = GameContext.instance.getCreaturesInAttackRange(selectedCreature);
-		MainState.getInstance().drawHexesRange(attacksInfo.listOfCenters, 1, 0xaaee1111);
+		MainState.getInstance().drawHexesRange(attacksInfo.listOfCenters, 1, ColorTable.ATTACK_POSSIBLE_COLOR);
 	}
 	
 	private function colorRange()
 	{
-		MainState.getInstance().drawHexesRange(moveList.getListOCenters(MoveType.Move), 1, 0x440033ff);
+		MainState.getInstance().drawHexesRange(moveList.getListOCenters(MoveType.Move), 1, ColorTable.MOVE_RANGE_COLOR);
 	}
 	private function colorHexStandingOn()
 	{
-		MainState.getInstance().drawHex(MainState.getInstance().getHexMap().getHexCenterByAxialCor(selectedCreature.currentCordinates),1,0xa0ff00a0);
+		MainState.getInstance().drawHex(MainState.getInstance().getHexMap().getHexCenterByAxialCor(selectedCreature.currentCordinates),1,ColorTable.SELF_COLOR);
 	}
 	
 	override public function handleInput(input:Input) 
@@ -232,11 +233,11 @@ class SelectMoveState extends State
 	{
 		MainState.getInstance().getDrawer().clear(2);
 		
-		MainState.getInstance().drawCircle(input.rawPosition, 2,0x99ffffff);
+		MainState.getInstance().drawCircle(input.rawPosition, 2, ColorTable.POINTER_COLOR);
 		if (!moveList.movesByTypes.exists(MoveType.Move) || 
 			moveList.checkIfExist(MoveType.Move,input.getKey()) || 
 			attacksInfo.listOfHex.exists(input.coor.toKey()))
-			MainState.getInstance().drawHex(input.hexCenter, 2, 0x99ffffff);
+			MainState.getInstance().drawHex(input.hexCenter, 2, ColorTable.POINTER_COLOR);
 	}
 	
 	

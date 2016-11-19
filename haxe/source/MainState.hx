@@ -18,6 +18,7 @@ import gameLogic.Input;
 import gameLogic.GamePlayer;
 import gameLogic.PlayerType;
 import gameLogic.ai.BestMove;
+import gameLogic.ai.MinMax;
 import gameLogic.ai.evaluation.KillTheWeakest;
 import hex.HexMap;
 import hex.HexTopping;
@@ -25,6 +26,7 @@ import hex.RectangleHexMap;
 import openfl.events.Event;
 import source.Drawer;
 import source.SpriteFactory;
+import ui.ColorTable;
 import ui.PortraitsQueue;
 import utilites.GameConfiguration;
 import utilites.InputType;
@@ -90,9 +92,9 @@ class MainState extends FlxUIState
 
 	private function CreateGameContex()
 	{
-		var player1 = new GamePlayer(0, CreateDubugCreatureList(), 0xffcc1111, PlayerType.Human,true);
-		var player2 = new GamePlayer(1, CreateDubugCreatureList(), 0xff1111ff, PlayerType.Human,false);
-		player2.setAI(new BestMove(new KillTheWeakest(false)));
+		var player1 = new GamePlayer(0, CreateDubugCreatureList(), ColorTable.PLAYER1_COLOR, PlayerType.Human,true);
+		var player2 = new GamePlayer(1, CreateDubugCreatureList(), ColorTable.PLAYER2_COLOR, PlayerType.Human,false);
+		//player2.setAI(new BestMove(new KillTheWeakest(false)));
 		//player1.setAI(new BestMove(new KillTheWeakest(true)));
 		GameContext.instance.Init(getHexMap(), [player1, player2]);
 		CreateUIQueue();
@@ -255,6 +257,9 @@ class MainState extends FlxUIState
 		if (buttonName == "back")
 			GameContext.instance.undoNextAction();
 		else if (buttonName == "forward")
-			GameContext.instance.generateMoveTree(3);
+		{
+			var minMax = new MinMax(5,null);
+			minMax.generateMove();
+		}
 	}
 }
