@@ -11,26 +11,25 @@ class TreeVertex<T>
 	public var id:Int;
 	public var value:T;
 	public var parent:TreeVertex<T>;
-	public var children:Array<TreeVertex<T>>;
+	public var children:Map<Int,TreeVertex<T>>;
 	public function new(parent:TreeVertex<T> = null,value:T = null) 
 	{
 		this.id = idGenerator++;
 		this.value = value;
 		this.parent = parent;
+		this.children = new Map<Int,TreeVertex<T>>();
 	}
 	
-/*	public function getByIndex(index:Int):TreeVertex
+	public function getByIndex(index:Int):TreeVertex<T>
 	{
-		return children[index];
-	}*/
+		return children.get(index);
+	}
 	
-	public function initializeChildren(array:Array<T>)
+	public function addChild(child:T): Int
 	{
-		this.children = new Array<TreeVertex<T>>();
-		for (element in array)
-		{
-			this.children.push(new TreeVertex<T>(this, element));
-		}
+		var newChild = new TreeVertex<T>(this, child);
+		children.set(newChild.id, newChild);
+		return newChild.id;
 	}
 	
 	public function treeToString():String

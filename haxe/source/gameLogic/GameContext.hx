@@ -202,17 +202,6 @@ class GameContext
 		}
 	}
 	
-	
-	public function generateMoveTree(depth:Int)
-	{
-		var moves:ListOfMoves = generateListOfMovesForCreature(this.currentCreature);
-		var moveTree = new TreeVertex<MoveData>();
-		moveTree.initializeChildren(moves.moves);
-		trace(moveTree.treeToString());
-		//moveTree.getByIndex(0);
-	}
-	
-	
 	public function generateMovesForCurrentCreature():ListOfMoves
 	{
 		return generateListOfMovesForCreature(currentCreature);
@@ -279,14 +268,13 @@ class GameContext
 	
 	public function undoNextAction()
 	{
-		
 		var backedAction = actionLog.goBack();
 		if (backedAction == null)
 			return;
 		
 		inititativeQueue.putCreatureOnTop(currentCreature);	
 			
-		resetCreaturesPositions();
+		//resetCreaturesPositions();
 		inititativeQueue.putCreatureOnTop(backedAction.performer);
 		currentCreature = backedAction.performer;
 		stateMachine.setCurrentState(new SelectMoveState(stateMachine, inititativeQueue.getNextCreature()));

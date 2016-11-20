@@ -20,6 +20,7 @@ import gameLogic.PlayerType;
 import gameLogic.ai.BestMove;
 import gameLogic.ai.MinMax;
 import gameLogic.ai.evaluation.KillTheWeakest;
+import haxe.Timer;
 import hex.HexMap;
 import hex.HexTopping;
 import hex.RectangleHexMap;
@@ -187,8 +188,9 @@ class MainState extends FlxUIState
 	{
 		if (instance == null)
 			return;
-			
-		setTextToTextObj(fpsText, Math.floor(1 / elapsed) + ":time");
+		
+		setTextToTextObj(fpsText, Math.floor(1.0 / FlxG.elapsed) + ":time");
+		
 		Tweener.instance.update(elapsed);
 		onMouse();
 		
@@ -258,7 +260,7 @@ class MainState extends FlxUIState
 			GameContext.instance.undoNextAction();
 		else if (buttonName == "forward")
 		{
-			var minMax = new MinMax(5,null);
+			var minMax = new MinMax(3,null);
 			minMax.generateMove();
 		}
 	}
