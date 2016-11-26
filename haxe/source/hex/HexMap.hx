@@ -147,10 +147,23 @@ class HexMap extends BoardMap
 		return centers;
 	}
 	
+	public function getNeighbors(index):Map<Int,Int>
+	{
+		var toReturn = new Map<Int, Int>();
+		for (value in graphConnections.getConnected(index))
+			toReturn.set(value, value);
+		return toReturn;
+	}
+	
 	public function getRange(index:Int,rangeSize:Int,checkPassble:Bool):Map<Int,Int>
 	{
 		if (hexes.exists(index))
-			return bfs.findRange(new Vertex(index), rangeSize, checkPassble);
+		{
+			if (rangeSize == 1)
+				return getNeighbors(index);
+			else
+				return bfs.findRange(new Vertex(index), rangeSize, checkPassble);
+		}
 		else
 			return new Map<Int,Int>();
 	}

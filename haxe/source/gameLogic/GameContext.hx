@@ -132,6 +132,29 @@ class GameContext
 		stateMachine.init();
 	}
 	
+	
+	public function getEnemyCreatures(playerId):PossibleAttacksInfo
+	{
+		var attackTargets = new Map<Int,Creature>();
+		var attackCenters = new List<FlxPoint>();
+		var attackHexesIds = new Map<Int,Bool>();
+		for (player in mapOfPlayers)
+		{
+			if (player.id != playerId)
+			{
+				for (playerCreature in player.creatures)
+				{
+						attackTargets.set(playerCreature.getTileId(),playerCreature);
+						attackCenters.push(map.getHexCenterByAxialCor(playerCreature.currentCordinates));
+						attackHexesIds.set(playerCreature.getTileId(), true);
+				}
+			}
+			else
+				continue;
+		}
+		return new PossibleAttacksInfo(attackTargets,attackCenters,attackHexesIds);
+	}
+	
 	public function getCreaturesInRange(rangeCenter:Int, rangeSize:Int, playerId:Int, checkPlayer:Bool = false):PossibleAttacksInfo
 	{
 		var rangeInformation = map.getRange(rangeCenter, rangeSize, false);
@@ -164,6 +187,8 @@ class GameContext
 	
 	public function getCreaturesInAttackRange(creature:Creature):PossibleAttacksInfo
 	{
+		if (creature.isRanger && !creature.moved)
+			return getEnemyCreatures(creature.idPlayerId);
 		return getEnemiesInRange(creature.getTileId(), creature.attackRange, creature.idPlayerId);
 	}
 	
@@ -175,9 +200,8 @@ class GameContext
 			if (player.id != creature.idPlayerId)
 			{
 				for (playerCreature in player.creatures)
-				{
-					
-						var attackPossiblites = map.getRange(playerCreature.getTileId(), creatureEffectiveRange, false);
+				{	
+						var attackPossiblites = map.getRange(playerCreature.getTileId(), 1, false);
 						for (hex in attackPossiblites)
 						{
 							if (rangeInformation.exists(hex))
@@ -193,11 +217,17 @@ class GameContext
 		}
 		if (creature.isRanger)
 		{
-			var attackPosbilites = getCreaturesInAttackRange(creature);
-			for (enemyCreature in attackPosbilites.listOfCreatures)
+			for (player in mapOfPlayers)
 			{
-				var move = MoveData.createAttackMove(creature, MoveType.Attack, creature.getTileId(), enemyCreature);
-				listOfMoves.addMove(move);
+				if (player.id != creature.idPlayerId)
+				{
+					for (playerCreature in player.creatures)
+					{
+						var move = MoveData.createAttackMove(creature, MoveType.Attack, creature.getTileId(), playerCreature);
+						listOfMoves.addMove(move);
+						
+					}
+				}
 			}
 		}
 	}
