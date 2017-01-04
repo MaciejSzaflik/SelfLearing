@@ -23,6 +23,13 @@ class Graph
 		addSingleConnection(second, first);
 	}
 	
+	public function GetNumberOfConnections(index:Int):Int
+	{
+	   var ret = 0; 
+	   for (_ in adjacencyList.get(index).keys()) ret++; 
+	   return ret; 
+	}
+	
 	private function addSingleConnection(first:Int, second:Int)
 	{
 		if (adjacencyList.exists(first))
@@ -31,6 +38,13 @@ class Graph
 		}
 		else
 			adjacencyList.set(first, [second => true]);
+	}
+	
+	public function removeVertex(toRemove:Int)
+	{
+		adjacencyList.remove(toRemove);
+		for (pair in adjacencyList)
+			pair.remove(toRemove);
 	}
 	
 	public function checkConnection(first:Int, second:Int):Bool
@@ -96,6 +110,7 @@ class Graph
 	
 	public function getVertices():Map<Int,Vertex>
 	{
+		
 		vertices = new Map<Int,Vertex>();
 		for (key in adjacencyList.keys()) 
 		{

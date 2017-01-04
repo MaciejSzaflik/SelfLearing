@@ -1,4 +1,5 @@
 package hex;
+import utilites.IntPair;
 
 
 class HexCoordinates
@@ -43,6 +44,11 @@ class HexCoordinates
 	static public function fromCube(xValue:Int,zValue:Int):HexCoordinates
 	{
 		return new HexCoordinates(xValue, zValue);
+	}
+	
+	static public function froomOddROffset(offset : IntPair):HexCoordinates
+	{
+		return fromOddR(offset.left, offset.right);
 	}
 	
 	static public function fromOddR(row:Int,col:Int):HexCoordinates

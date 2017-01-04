@@ -75,9 +75,9 @@ class MainState extends FlxUIState
 			instance = this;
 			stageDescription = new StageDescription();
 			stageDescription.InitTestStage();
-			drawMap();
-			addText();
-			CreateGameContex();
+			drawMap(true);
+			//addText();
+			//CreateGameContex();
 		});	
 	}
 	
@@ -158,10 +158,12 @@ class MainState extends FlxUIState
 	{
 		this.drawer = new Drawer(7,this);
 	}
-	private function drawMap():Void
+	private function drawMap(drawDebug:Bool):Void
 	{
 		getHexMap().createBackground();
 		getDrawer().drawHexMap(getHexMap(), 0xffAAAA77, 0x00000000, 0);
+		if(drawDebug)
+			drawDebugGraph(0);
 	}
 	
 	public function drawHexesRange(range:List<FlxPoint>,layer:Int,color:FlxColor)
@@ -178,10 +180,10 @@ class MainState extends FlxUIState
 		drawer.drawCircle(position,5, color, layer); 
 	}
 	
-	private function drawDebugGraph():Void
+	private function drawDebugGraph(layer:Int):Void
 	{
 		var lines = getHexMap().getArrayOfPoints();
-		getDrawer().drawListOfLines(lines, 0x66FF0000, 0);
+		getDrawer().drawListOfLines(lines, 0x66FF0000, layer);
 	}
 
 	override public function update(elapsed:Float):Void
@@ -204,7 +206,7 @@ class MainState extends FlxUIState
 	
 	private function onClick()
 	{
-		GameContext.instance.handleInput(getInputFromMouse(InputType.click));
+		//GameContext.instance.handleInput(getInputFromMouse(InputType.click));
 	}
 	
 	private function onMouse()
@@ -212,7 +214,7 @@ class MainState extends FlxUIState
 		var input = getInputFromMouse(InputType.move);
 		setTextToTextObj(debugText,input.coor.toString() + " " + input.coor.toKey());
 		
-		GameContext.instance.handleInput(input);
+		//GameContext.instance.handleInput(input);
 	}
 	
 	private function getInputFromMouse(type:InputType)
@@ -260,8 +262,10 @@ class MainState extends FlxUIState
 			GameContext.instance.undoNextAction();
 		else if (buttonName == "forward")
 		{
-			var minMax = new MinMax(3,null);
-			minMax.generateMove();
+			getDrawer().clear(0);
+			getHexMap().DestroyBackground();
+			this.hexMap = null;
+			drawMap(true);
 		}
 	}
 }

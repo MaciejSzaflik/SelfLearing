@@ -1,7 +1,16 @@
 package hex;
 
 import flash.display3D.IndexBuffer3D;
+import flixel.FlxG;
 import flixel.math.FlxPoint;
+import graph.BreadthFirstSearch;
+import graph.Graph;
+import libnoise.generator.Perlin;
+import utilites.IntPair;
+import libnoise.QualityMode;
+import source.BoardMap;
+import utilites.UtilUtil;
+
 
 class RectangleHexMap extends HexMap
 {	
@@ -15,13 +24,26 @@ class RectangleHexMap extends HexMap
 	
 	override public function InitPoints() 
 	{
+		graphConnections = new Graph();
 		resetLists();
 		CalculatePoints();
 	}
 	
 	private function CalculatePoints():Void
 	{
+		var frequency = 0.1;
+		var lacunarity = 20.0;
+		var persistence = 0.5;
+		var octaves = 6;
+		var seed = Random.int(100,20000);
+		var quality = LOW;
+		var testName = "perlin";
+		var module = new Perlin(frequency, lacunarity, persistence, octaves, seed, quality);
+		
+		
 		var i = 0;
+		var temporaryHexmap = new Map<Int,Hex>();
+		var toRemove = new Array<Int>();
 		while(i<width)
 		{
 			var j = 0;
@@ -31,38 +53,106 @@ class RectangleHexMap extends HexMap
 				var hexIndex = hexCoordinates.toKey();
 				
 				var hex = new Hex(getHexCenterByAxialCor(hexCoordinates), hexCoordinates);
-				hexes.set(hexIndex,hex);
-
+				temporaryHexmap.set(hexIndex, hex);
 				
-				precalculatedPoints.add(HexUtilites.getHexPoints(
-						hex.center,
-						hexSize,
-						topping));	
-				
+				var possibleEdges = new Array<IntPair>();
+						
 				if (j < height - 1)
-				{
-					hexCoordinates = HexCoordinates.fromOddR(j+1, i);
-					graphConnections.addConnection(hexIndex, hexCoordinates.toKey());
-				}
+					possibleEdges.push(new IntPair(1, 0));
 				if (i < width - 1)
-				{
-					hexCoordinates = HexCoordinates.fromOddR(j, i+1);
-					graphConnections.addConnection(hexIndex, hexCoordinates.toKey());
-				}
+					possibleEdges.push(new IntPair(0, 1));
 				if (i < width - 1 && j < height -1 && j % 2 == 1)
-				{
-					hexCoordinates = HexCoordinates.fromOddR(j+1, i+1);
-					graphConnections.addConnection(hexIndex, hexCoordinates.toKey());
-				}
+					possibleEdges.push(new IntPair(1, 1));
 				if (i > 0 && j < height -1 && j % 2 == 0)
-				{
-					hexCoordinates = HexCoordinates.fromOddR(j+1, i-1);
-					graphConnections.addConnection(hexIndex, hexCoordinates.toKey());
-				}					
-
+					possibleEdges.push(new IntPair(1, -1));
+				
+				for(iter in 0 ... possibleEdges.length)
+					addEdge(hexIndex, j, i, possibleEdges[iter]);
 				j++;
+				
+				var noiseValue = getGreyValue(module.getValue(hex.center.x,hex.center.y, 0))/255;
+				if (noiseValue > 0.61)
+				{
+					toRemove.push(hexIndex);
+				}
+				
 			}
 			i++;
+		}
+		for (index in toRemove)
+		{
+			graphConnections.removeVertex(index);
+		}
+		
+		removeIslands();
+		for (vertex in graphConnections.adjacencyList.keys())
+		{
+			hexes.set(vertex, temporaryHexmap.get(vertex));
+			precalculatedPoints.add(HexUtilites.getHexPoints(
+				temporaryHexmap.get(vertex).center,
+				hexSize,
+				topping));
+		}
+		
+	}
+	
+	private function getGreyValue(val : Float) {
+		var val = Std.int(128 * (val + 1));
+		return val > 255 ? 255 : val < 0 ? 0 : val;
+	}
+	
+	private function addEdge(hexIndex : Int,j : Int, i : Int, offset : IntPair)
+	{
+		var hexCoordinates = HexCoordinates.fromOddR(j+offset.left, i+offset.right);
+		graphConnections.addConnection(hexIndex, hexCoordinates.toKey());
+	}
+	
+	private function removeIslands()
+	{
+		var searchBFS = new BreadthFirstSearch(graphConnections);
+		var islands = new Array<Map<Int,Int>>();
+		var max = -1;
+		var maxIndex = -1;
+		var index = 0;
+		for (vertex in graphConnections.adjacencyList.keys())
+		{
+			var inAny = false;
+			for (map in islands)
+			{
+				if (map.exists(vertex))
+				{
+					inAny = true;
+					break;
+				}
+			}
+			if (!inAny)
+			{
+				islands.push(searchBFS.findRange(graphConnections.getVertices().get(vertex), 999, false));
+				
+				islands[index].set(vertex, vertex);
+				var count = UtilUtil.CountMap(islands[index]);
+				
+				if (count > max)
+				{
+					max = count;
+					maxIndex = index;
+				}
+				index++;
+			}
+		}
+		index = 0;
+		trace(max + " " + maxIndex);
+		for (island in islands)
+		{
+			if (index != maxIndex)
+			{
+				for (vertex in island.keys())
+				{
+					trace(vertex);
+					graphConnections.removeVertex(vertex);
+				}
+			}
+			index++;
 		}
 	}
 	

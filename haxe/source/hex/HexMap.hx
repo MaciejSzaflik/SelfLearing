@@ -2,12 +2,15 @@ package hex;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.math.FlxPoint;
+import flixel.util.FlxColor;
 import graph.BreadthFirstSearch;
 import graph.DjikstraPath;
 import graph.Graph;
 import graph.Pathfinder;
 import graph.Vertex;
 import hex.Hex;
+import libnoise.generator.Perlin;
+import libnoise.QualityMode;
 import source.BoardMap;
 
 class HexMap extends BoardMap
@@ -19,6 +22,7 @@ class HexMap extends BoardMap
 	private var mapCenter:FlxPoint;
 	private var bfs:BreadthFirstSearch;
 	private var pathfinder:Pathfinder;
+	private var backgroundSprite:FlxSprite;
 		
 	public var width(get, null):Int;
 	public var height(get, null):Int;
@@ -173,15 +177,27 @@ class HexMap extends BoardMap
 		return HexCoordinates.getManhatanDistance(getHexByIndex(start).getCoor(), getHexByIndex(end).getCoor());
 	}
 	
+	public function DestroyBackground()
+	{
+		if (backgroundSprite != null)
+			backgroundSprite.destroy();
+	}
+	
 	public function createBackground()
 	{
-		var backgroundSprite = new FlxSprite(0, 0);
+		backgroundSprite = new FlxSprite(0, 0);
 		var sprite = new FlxSprite(0, 0);
 		backgroundSprite.makeGraphic(FlxG.width, FlxG.height,0x00000000);
 		for (hex in hexes)
 		{	
 			sprite.loadGraphic("assets/images/hex_basic_" + Random.int(0, 3) +".png", false, Std.int(hexSize) - 1, Std.int(hexSize) - 1);
-			backgroundSprite.stamp(sprite, Std.int(hex.center.x - hexSize / 2), Std.int(hex.center.y - hexSize/2));
+			
+			var x = Std.int(hex.center.x - hexSize / 2);
+			var y = Std.int(hex.center.y - hexSize / 2);
+			
+			var value = graphConnections.GetNumberOfConnections(hex.getIndex());
+		    sprite.color = FlxColor.interpolate(FlxColor.BLACK, FlxColor.WHITE, value/6);
+			backgroundSprite.stamp(sprite, x, y);
 		}
 		sprite.destroy();
 		MainState.getInstance().add(backgroundSprite);
