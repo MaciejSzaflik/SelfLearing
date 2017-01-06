@@ -31,10 +31,10 @@ class RectangleHexMap extends HexMap
 	
 	private function CalculatePoints():Void
 	{
-		var frequency = 0.1;
-		var lacunarity = 20.0;
-		var persistence = 0.5;
-		var octaves = 6;
+		var frequency = 0.01;
+		var lacunarity = 1.0;
+		var persistence = 0.1;
+		var octaves = 2;
 		var seed = Random.int(100,20000);
 		var quality = LOW;
 		var testName = "perlin";
@@ -86,14 +86,15 @@ class RectangleHexMap extends HexMap
 		
 		removeIslands();
 		for (vertex in graphConnections.adjacencyList.keys())
-		{
-			hexes.set(vertex, temporaryHexmap.get(vertex));
-			precalculatedPoints.add(HexUtilites.getHexPoints(
-				temporaryHexmap.get(vertex).center,
-				hexSize,
-				topping));
-		}
-		
+			AddCenterOfHex(vertex, temporaryHexmap.get(vertex));
+		for (vertex in graphConnections.removedVertices.keys())	
+			AddCenterOfHex(vertex, temporaryHexmap.get(vertex));
+	}
+	
+	private function AddCenterOfHex(vertex: Int, hex: Hex)
+	{
+		hexes.set(vertex, hex);
+		precalculatedPoints.add(HexUtilites.getHexPoints(hex.center,hexSize,topping));
 	}
 	
 	private function getGreyValue(val : Float) {

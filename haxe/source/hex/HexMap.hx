@@ -187,16 +187,29 @@ class HexMap extends BoardMap
 	{
 		backgroundSprite = new FlxSprite(0, 0);
 		var sprite = new FlxSprite(0, 0);
-		backgroundSprite.makeGraphic(FlxG.width, FlxG.height,0x00000000);
+		backgroundSprite.makeGraphic(FlxG.width, FlxG.height, 0x00000000);
+		
+		
+		
+		
 		for (hex in hexes)
 		{	
-			sprite.loadGraphic("assets/images/hex_basic_" + Random.int(0, 3) +".png", false, Std.int(hexSize) - 1, Std.int(hexSize) - 1);
-			
+			var value = graphConnections.GetNumberOfConnections(hex.getIndex());
+			if (value > 0)
+			{
+				sprite.loadGraphic("assets/images/hex_basic_" + Random.int(0, 3) +".png", false, Std.int(hexSize) - 1, Std.int(hexSize) - 1);
+				sprite.color = FlxColor.interpolate(FlxColor.BLACK, FlxColor.WHITE, value/6 + 0.2);
+			}
+			else
+			{
+				sprite.loadGraphic("assets/images/hex_empty_1.png", false, Std.int(hexSize) - 1, Std.int(hexSize) - 1);
+				sprite.color = FlxColor.WHITE;
+			}
+
 			var x = Std.int(hex.center.x - hexSize / 2);
 			var y = Std.int(hex.center.y - hexSize / 2);
 			
-			var value = graphConnections.GetNumberOfConnections(hex.getIndex());
-		    sprite.color = FlxColor.interpolate(FlxColor.BLACK, FlxColor.WHITE, value/6);
+
 			backgroundSprite.stamp(sprite, x, y);
 		}
 		sprite.destroy();

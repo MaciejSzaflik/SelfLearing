@@ -10,10 +10,12 @@ class Graph
 	public var impassableVertices:Map<Int,Bool>;
 	private var vertices:Map<Int,Vertex>;
 	private var edges:List<Edge>;
+	public var removedVertices:Map<Int,Map<Int,Bool>>;
 	
 	public function new() 
 	{
 		this.adjacencyList = new Map<Int,Map<Int,Bool>>();
+		this.removedVertices = new Map<Int,Map<Int,Bool>>();
 		this.impassableVertices = new Map<Int,Bool>();
 	}
 	
@@ -26,6 +28,9 @@ class Graph
 	public function GetNumberOfConnections(index:Int):Int
 	{
 	   var ret = 0; 
+	   if (!adjacencyList.exists(index))
+			return ret;
+		
 	   for (_ in adjacencyList.get(index).keys()) ret++; 
 	   return ret; 
 	}
@@ -42,7 +47,9 @@ class Graph
 	
 	public function removeVertex(toRemove:Int)
 	{
+		removedVertices.set(toRemove, adjacencyList.get(toRemove));
 		adjacencyList.remove(toRemove);
+		
 		for (pair in adjacencyList)
 			pair.remove(toRemove);
 	}

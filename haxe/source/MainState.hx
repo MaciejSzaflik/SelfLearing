@@ -75,7 +75,7 @@ class MainState extends FlxUIState
 			instance = this;
 			stageDescription = new StageDescription();
 			stageDescription.InitTestStage();
-			drawMap(true);
+			drawMap(false);
 			//addText();
 			//CreateGameContex();
 		});	
@@ -161,7 +161,7 @@ class MainState extends FlxUIState
 	private function drawMap(drawDebug:Bool):Void
 	{
 		getHexMap().createBackground();
-		getDrawer().drawHexMap(getHexMap(), 0xffAAAA77, 0x00000000, 0);
+		//getDrawer().drawHexMap(getHexMap(), 0xffAAAA77, 0x00000000, 0);
 		if(drawDebug)
 			drawDebugGraph(0);
 	}
@@ -265,7 +265,7 @@ class MainState extends FlxUIState
 			getDrawer().clear(0);
 			getHexMap().DestroyBackground();
 			this.hexMap = null;
-			drawMap(true);
+			drawMap(false);
 		}
 	}
 }
