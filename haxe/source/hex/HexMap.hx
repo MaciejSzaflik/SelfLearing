@@ -123,9 +123,9 @@ class HexMap extends BoardMap
 		return getHexByIndex(index).center;
 	}
 	
-	public function getArrayOfPoints():List<FlxPoint>
+	public function getArrayOfPoints(graph:Graph):List<FlxPoint>
 	{
-		var edges = getGraph().getListOfEdges();
+		var edges = graph.getListOfEdges();
 		var listOfPoints = new List<FlxPoint>();
 		for (edge in edges)
 		{
@@ -191,7 +191,6 @@ class HexMap extends BoardMap
 		
 		
 		
-		
 		for (hex in hexes)
 		{	
 			var value = graphConnections.GetNumberOfConnections(hex.getIndex());
@@ -202,7 +201,8 @@ class HexMap extends BoardMap
 			}
 			else
 			{
-				sprite.loadGraphic("assets/images/hex_empty_1.png", false, Std.int(hexSize) - 1, Std.int(hexSize) - 1);
+				value = graphConnections.subGraph.GetNumberOfConnections(hex.getIndex());
+				sprite.loadGraphic("assets/images/hex_water_"+ value +".png", false, Std.int(hexSize) - 1, Std.int(hexSize) - 1);
 				sprite.color = FlxColor.WHITE;
 			}
 

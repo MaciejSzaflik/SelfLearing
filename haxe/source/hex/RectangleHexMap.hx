@@ -43,7 +43,7 @@ class RectangleHexMap extends HexMap
 		
 		var i = 0;
 		var temporaryHexmap = new Map<Int,Hex>();
-		var toRemove = new Array<Int>();
+		var toRemove = new Map<Int,Bool>();
 		while(i<width)
 		{
 			var j = 0;
@@ -73,16 +73,14 @@ class RectangleHexMap extends HexMap
 				var noiseValue = getGreyValue(module.getValue(hex.center.x,hex.center.y, 0))/255;
 				if (noiseValue > 0.61)
 				{
-					toRemove.push(hexIndex);
+					toRemove.set(hexIndex,true);
 				}
 				
 			}
 			i++;
 		}
-		for (index in toRemove)
-		{
-			graphConnections.removeVertex(index);
-		}
+
+		graphConnections.createSubgrafFromVertices(toRemove, true);
 		
 		removeIslands();
 		for (vertex in graphConnections.adjacencyList.keys())
@@ -147,11 +145,7 @@ class RectangleHexMap extends HexMap
 		{
 			if (index != maxIndex)
 			{
-				for (vertex in island.keys())
-				{
-					trace(vertex);
-					graphConnections.removeVertex(vertex);
-				}
+				graphConnections.createSubgrafFromVertices(island, true);
 			}
 			index++;
 		}

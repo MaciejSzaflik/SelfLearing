@@ -7,6 +7,7 @@ package graph;
 class Graph
 {
 	public var adjacencyList:Map<Int,Map<Int,Bool>>;
+	public var subGraph:Graph;
 	public var impassableVertices:Map<Int,Bool>;
 	private var vertices:Map<Int,Vertex>;
 	private var edges:List<Edge>;
@@ -43,6 +44,31 @@ class Graph
 		}
 		else
 			adjacencyList.set(first, [second => true]);
+	}
+	
+	public function createSubgrafFromVertices<T>(vertices:Map<Int,T>,removeFromMain:Bool)
+	{
+		if (subGraph == null)
+			subGraph = new Graph();
+		
+		for (vert in vertices.keys())
+		{
+			subGraph.adjacencyList.set(vert, new Map<Int,Bool>());
+			for (neigh in adjacencyList.get(vert).keys())
+			{
+				if (vertices.exists(neigh))
+				{
+					subGraph.addConnection(vert, neigh);
+				}
+			}	
+		}
+		if (removeFromMain)
+		{
+			for (vert in vertices.keys())
+			{
+				removeVertex(vert);
+			}
+		}
 	}
 	
 	public function removeVertex(toRemove:Int)
@@ -116,8 +142,7 @@ class Graph
 	}
 	
 	public function getVertices():Map<Int,Vertex>
-	{
-		
+	{	
 		vertices = new Map<Int,Vertex>();
 		for (key in adjacencyList.keys()) 
 		{
