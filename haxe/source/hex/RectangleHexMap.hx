@@ -18,8 +18,7 @@ class RectangleHexMap extends HexMap
 	{
 		super(mapCenter, hexSize);
 		this.width = width;
-		this.height = height; 
-		
+		this.height = height; 	
 	}
 	
 	override public function InitPoints() 
@@ -39,7 +38,6 @@ class RectangleHexMap extends HexMap
 		var quality = LOW;
 		var testName = "perlin";
 		var module = new Perlin(frequency, lacunarity, persistence, octaves, seed, quality);
-		
 		
 		var i = 0;
 		var temporaryHexmap = new Map<Int,Hex>();
@@ -71,7 +69,7 @@ class RectangleHexMap extends HexMap
 				j++;
 				
 				var noiseValue = getGreyValue(module.getValue(hex.center.x,hex.center.y, 0))/255;
-				if (noiseValue > 0.61)
+				if (noiseValue > 0.56)
 				{
 					toRemove.set(hexIndex,true);
 				}
@@ -140,7 +138,6 @@ class RectangleHexMap extends HexMap
 			}
 		}
 		index = 0;
-		trace(max + " " + maxIndex);
 		for (island in islands)
 		{
 			if (index != maxIndex)

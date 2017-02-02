@@ -64,6 +64,12 @@ class HexMap extends BoardMap
 		resetLists();
 	}
 	
+	public function reInitFinders()
+	{
+		bfs = new BreadthFirstSearch(graphConnections);
+		pathfinder = new DjikstraPath(graphConnections);
+	}
+	
 	private function resetLists():Void
 	{
 		this.precalculatedPoints = new List<Array<FlxPoint>>();
@@ -196,8 +202,7 @@ class HexMap extends BoardMap
 			var value = graphConnections.GetNumberOfConnections(hex.getIndex());
 			if (value > 0)
 			{
-				sprite.loadGraphic("assets/images/hex_basic_" + Random.int(0, 3) +".png", false, Std.int(hexSize) - 1, Std.int(hexSize) - 1);
-				sprite.color = FlxColor.interpolate(FlxColor.BLACK, FlxColor.WHITE, value/6 + 0.2);
+				sprite.loadGraphic("assets/images/hex_dirt_" + value +".png", false, Std.int(hexSize) - 1, Std.int(hexSize) - 1);
 			}
 			else
 			{
@@ -214,5 +219,36 @@ class HexMap extends BoardMap
 		}
 		sprite.destroy();
 		MainState.getInstance().add(backgroundSprite);
+	}
+	
+	public function findMaxXHex()
+	{
+		var maximum = -10000;
+		var maxIndex = 0;
+		for (key in hexes.keys())
+		{
+			var hex = hexes.get(key);
+			if (hex.getSumOfCoordinates() > maximum && this.graphConnections.isThisVerPassable(hex.getIndex()))
+			{
+				maximum = hex.getSumOfCoordinates();
+				maxIndex = key;
+			}
+		}
+		return hexes.get(maxIndex);
+	}
+	public function findMinXHex():Hex
+	{
+		var minimum = 10000;
+		var minIndex = 0;
+		for (key in hexes.keys())
+		{
+			var hex = hexes.get(key);
+			if (hex.getSumOfCoordinates() < minimum && this.graphConnections.isThisVerPassable(hex.getIndex()))
+			{
+				minimum = hex.getSumOfCoordinates();
+				minIndex = key;
+			}
+		}
+		return hexes.get(minIndex);
 	}
 }

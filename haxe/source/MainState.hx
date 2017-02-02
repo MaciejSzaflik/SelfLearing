@@ -75,9 +75,9 @@ class MainState extends FlxUIState
 			instance = this;
 			stageDescription = new StageDescription();
 			stageDescription.InitTestStage();
-			drawMap(true);
-			//addText();
-			//CreateGameContex();
+			drawMap(false);
+			addText();
+			CreateGameContex();
 		});	
 	}
 	
@@ -166,18 +166,24 @@ class MainState extends FlxUIState
 			drawDebugGraph(0);
 	}
 	
+	public function drawHexesRangeIds(range:Map<Int,Int>,layer:Int,color:FlxColor)
+	{
+		for (hex in range)  
+			getDrawer().drawHex(getHexMap().getHexCenter(hex), getHexMap().hexSize, HexTopping.Pointy, color, layer); 
+	}
+	
 	public function drawHexesRange(range:List<FlxPoint>,layer:Int,color:FlxColor)
 	{
 		for (hex in range)  
-			drawer.drawHex(hex, getHexMap().hexSize, HexTopping.Pointy, color, layer); 
+			getDrawer().drawHex(hex, getHexMap().hexSize, HexTopping.Pointy, color, layer); 
 	}
 	public function drawHex(position:FlxPoint,layer:Int,color:FlxColor)
 	{
-		drawer.drawHex(position, getHexMap().hexSize, HexTopping.Pointy, color, layer); 
+		getDrawer().drawHex(position, getHexMap().hexSize, HexTopping.Pointy, color, layer); 
 	}
 	public function drawCircle(position:FlxPoint,layer:Int,color:FlxColor)
 	{
-		drawer.drawCircle(position,5, color, layer); 
+		getDrawer().drawCircle(position,5, color, layer); 
 	}
 	
 	private function drawDebugGraph(layer:Int):Void
@@ -209,7 +215,7 @@ class MainState extends FlxUIState
 	
 	private function onClick()
 	{
-		//GameContext.instance.handleInput(getInputFromMouse(InputType.click));
+		GameContext.instance.handleInput(getInputFromMouse(InputType.click));
 	}
 	
 	private function onMouse()
@@ -217,7 +223,7 @@ class MainState extends FlxUIState
 		var input = getInputFromMouse(InputType.move);
 		setTextToTextObj(debugText,input.coor.toString() + " " + input.coor.toKey());
 		
-		//GameContext.instance.handleInput(input);
+		GameContext.instance.handleInput(input);
 	}
 	
 	private function getInputFromMouse(type:InputType)

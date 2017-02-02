@@ -4,14 +4,14 @@
   <output>
     <movie outputType="CustomBuild" />
     <movie input="" />
-    <movie path="Project.xml" />
+    <movie path="project.xml" />
     <movie fps="60" />
     <movie width="640" />
     <movie height="480" />
-    <movie version="1" />
+    <movie version="0" />
     <movie minorVersion="0" />
     <movie platform="Lime" />
-    <movie background="000000" />
+    <movie background="#000000" />
   </output>
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>

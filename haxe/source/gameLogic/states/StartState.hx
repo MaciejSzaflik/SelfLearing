@@ -4,6 +4,8 @@ import gameLogic.GameStateMachine;
 import gameLogic.GamePlayer;
 import gameLogic.StateMachine;
 import hex.HexCoordinates;
+import ui.ColorTable;
+import utilites.UtilUtil;
 
 /**
  * ...
@@ -31,19 +33,30 @@ class StartState extends State
 	
 	public function placeCreaturesOnMap()
 	{
+		GameContext.instance.map.reInitFinders();
 		var playerIndex = 0;
 		for (player in GameContext.instance.mapOfPlayers)
 		{
-			var creatureIndex = 0;
+			var rangeSize = 1;
+			var range = new Map<Int,Int>();
+			
+			var hexIndex = playerIndex%2==0?GameContext.instance.map.findMinXHex().getIndex():GameContext.instance.map.findMaxXHex().getIndex();
+			do
+			{
+				range = GameContext.instance.map.getRange(hexIndex, rangeSize, true);
+				rangeSize++;
+			}
+			while (UtilUtil.CountMap(range) < player.creatures.length);
+			
 			for (creature in player.creatures)
 			{
-				var col = playerIndex % 2 == 0 ? 0 : GameContext.instance.mapWidth() - 1;
-				var coor = HexCoordinates.fromOddR(creatureIndex, col);
-				var point = GameContext.instance.getPositionOnMap(coor);
-				creature.setPosition(point);
-				creature.setCoodinates(coor);
-				creatureIndex+=2;
+				var key = Random.fromIterable(range);
+				range.remove(key);
+				var hex = GameContext.instance.map.getHexByIndex(key);
+				creature.setPosition(hex.center);
+				creature.setCoodinates(hex.getCoor());
 			}
+			
 			playerIndex++;
 		}
 	}

@@ -1,0 +1,154 @@
+[{
+	"creatures": [{
+		"_hxcls": "game.CreatureDefinition",
+		"id": 0,
+		"level":1,
+		"initiative": 2,
+		"health": 35,
+		"actionPoints": 6,
+		"attackRange": 1,
+		"attackPointCost": 1,
+		"attackPower": 5,
+		"attackRandom": 2,
+		"name": "Knight",
+		"spriteDef": 0,
+		"contrattactsNumber": 2,
+		"isRanger": false
+	}, {
+		"_hxcls": "game.CreatureDefinition",
+		"id": 1,
+		"level":1,
+		"initiative": 5,
+		"health": 10,
+		"actionPoints": 5,
+		"attackRange": 18,
+		"attackPointCost": 5,
+		"attackPower": 8,
+		"attackRandom": 4,
+		"name": "Archer",
+		"spriteDef": 1,
+		"contrattactsNumber": 1,
+		"isRanger": true
+	}, {
+		"_hxcls": "game.CreatureDefinition",
+		"id": 2,
+		"level":3,
+		"initiative": 1,
+		"health": 32,
+		"actionPoints": 4,
+		"attackRange": 4,
+		"attackPointCost": 4,
+		"attackPower": 10,
+		"attackRandom": 3,
+		"name": "Lantern",
+		"spriteDef": 2,
+		"contrattactsNumber": 1,
+		"isRanger": true,
+		"abilites": [0]
+	}, {
+		"_hxcls": "game.CreatureDefinition",
+		"id": 3,
+		"level":4,
+		"initiative": 2,
+		"health": 100,
+		"actionPoints": 1,
+		"attackRange": 1,
+		"attackPointCost": 1,
+		"attackPower": 2,
+		"attackRandom": 1,
+		"name": "Pillar",
+		"spriteDef": 3,
+		"contrattactsNumber": 1,
+		"isRanger": false,
+		"abilites": [1]
+	}],
+	"abilites": [{
+		"_hxcls": "data.AbilityDefinition",
+		"id": 0,
+		"abilityType": 0,
+		"params":[10,5]
+		
+	}, {
+		"_hxcls": "data.AbilityDefinition",
+		"id": 1,
+		"abilityType": 1,
+		"params":[1,3,2]
+		
+	}],
+	"creatureAnimations": [{
+		"_hxcls": "data.FrameAnimationDef",
+		"id": 0,
+		"name": "idle",
+		"framesPerSecond": 10,
+		"looped": true,
+		"frameOrder": [
+			0,
+			1,
+			2,
+			3
+		]
+	}, {
+		"_hxcls": "data.FrameAnimationDef",
+		"id": 1,
+		"name": "idle",
+		"framesPerSecond": 10,
+		"looped": true,
+		"frameOrder": [
+			0,
+			1,
+			2,
+			3,
+			2,
+			1
+		]
+	}],
+	"creatureSprites": [{
+		"_hxcls": "data.SpriteDefinition",
+		"id": 0,
+		"graphicName": "assets/images/Knight.png",
+		"animated": true,
+		"height": 64,
+		"widght": 64,
+		"animationList": [
+			0
+		],
+		"anchorX": 0.6,
+		"anchorY": 0.8
+	}, {
+		"_hxcls": "data.SpriteDefinition",
+		"id": 1,
+		"graphicName": "assets/images/Archer.png",
+		"animated": true,
+		"height": 64,
+		"widght": 64,
+		"animationList": [
+			1
+		],
+		"anchorX": 0.6,
+		"anchorY": 0.8
+	}, {
+		"_hxcls": "data.SpriteDefinition",
+		"id": 2,
+		"graphicName": "assets/images/Lantern.png",
+		"animated": true,
+		"height": 64,
+		"widght": 64,
+		"animationList": [
+			1
+		],
+		"anchorX": 0.6,
+		"anchorY": 0.8
+	}, {
+		"_hxcls": "data.SpriteDefinition",
+		"id": 3,
+		"graphicName": "assets/images/Pillar.png",
+		"animated": true,
+		"height": 64,
+		"widght": 64,
+		"animationList": [
+			1
+		],
+		"anchorX": 0.5,
+		"anchorY": 0.7
+	}]
+}]

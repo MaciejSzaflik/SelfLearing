@@ -19,6 +19,11 @@ class Hex
 		return coor.toKey();
 	}
 	
+	public function getSumOfCoordinates():Int
+	{
+		return coor.q + coor.r;
+	}
+	
 	public function getCoor():HexCoordinates
 	{
 		return coor;

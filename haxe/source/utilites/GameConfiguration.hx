@@ -38,6 +38,20 @@ class GameConfiguration
 		spriteDefinitions = new Map<Int,SpriteDefinition>();
 		abilitesDefinitions = new Map<Int,AbilityDefinition>();
 		
+		loadFromGist(callBack);
+		//loadFromLocal(callBack);
+	}
+	
+	/*private function loadFromLocal(callBack:Function)
+	{
+		var data = File.getContent("assets/data/configuration_backup.json");
+		parseRawData(data); 
+		if (callBack != null)
+			callBack();
+	}*/
+	
+	private function loadFromGist(callBack:Function)
+	{
 		var loadConfigurationRequest = new Http("https://api.github.com/gists/6477e19437bc24fc24ebc1879b6087a4");
 		loadConfigurationRequest.request(false);
 		loadConfigurationRequest.onData = function(data) 

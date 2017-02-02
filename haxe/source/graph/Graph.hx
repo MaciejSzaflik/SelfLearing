@@ -1,4 +1,5 @@
 package graph;
+import utilites.MathUtil;
 
 /**
  * ...
@@ -9,7 +10,6 @@ class Graph
 	public var adjacencyList:Map<Int,Map<Int,Bool>>;
 	public var subGraph:Graph;
 	public var impassableVertices:Map<Int,Bool>;
-	private var vertices:Map<Int,Vertex>;
 	private var edges:List<Edge>;
 	public var removedVertices:Map<Int,Map<Int,Bool>>;
 	
@@ -123,7 +123,7 @@ class Graph
 	
 	public function isThisVerPassable(vertex:Int):Bool
 	{
-		return !impassableVertices.exists(vertex);
+		return !impassableVertices.exists(vertex) && adjacencyList.exists(vertex);
 	}
 	
 	public function getListOfEdges():List<Edge>
@@ -143,12 +143,11 @@ class Graph
 	
 	public function getVertices():Map<Int,Vertex>
 	{	
-		vertices = new Map<Int,Vertex>();
+		var verts = new Map<Int,Vertex>();
 		for (key in adjacencyList.keys()) 
 		{
-			//if (isThisVerPassable(key))
-				vertices.set(key, new Vertex(key));
+			verts.set(key, new Vertex(key));
 		}
-		return vertices;
+		return verts;
 	}
 }

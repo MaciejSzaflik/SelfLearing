@@ -24,7 +24,6 @@ class BreadthFirstSearch
 		while (!queue.isEmpty())
 		{
 			var current = queue.pop();
-			
 			for (nodeIndex in graphObject.getConnected(current.index))
 			{
 				if (!checkPassable || graphObject.isThisVerPassable(nodeIndex))

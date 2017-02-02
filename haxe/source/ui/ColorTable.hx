@@ -8,6 +8,8 @@ class ColorTable
 {
 	public static inline var PLAYER1_COLOR = 0xffcc1111;
 	public static inline var PLAYER2_COLOR = 0xff1111ff;
+	public static inline var PLAYER1_TRANS = 0x40cc1111;
+	public static inline var PLAYER2_TRANS = 0x401111ff;
 	public static inline var POINTER_COLOR = 0x99ffffff;
 	public static inline var SELF_COLOR =  0xa0ff00a0;
 	public static inline var MOVE_RANGE_COLOR =  0x341033ff;
