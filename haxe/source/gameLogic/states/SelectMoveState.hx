@@ -13,6 +13,7 @@ import gameLogic.moves.ListOfMoves;
 import gameLogic.moves.MoveData;
 import gameLogic.moves.MoveType;
 import haxe.Constraints.Function;
+import source.Drawer;
 import ui.ColorTable;
 import utilites.InputType;
 
@@ -41,6 +42,8 @@ class SelectMoveState extends State
 			getMoveRange();
 			getAttackRange();
 		}
+		
+		MainState.getInstance().getDrawer().currentLayersInGroup();
 	}
 
 	override public function onEnter():Void 

@@ -4,6 +4,7 @@ import animation.Tweener;
 import game.Creature;
 import haxe.Constraints.Function;
 import hex.HexCoordinates;
+import ui.ColorTable;
 
 /**
  * ...
@@ -42,7 +43,7 @@ class MoveAction extends Action
 		var checkpoints = GameContext.instance.map.getPathCenters(from, moveTo);
 		performer.setCoodinates(GameContext.instance.map.getHexByIndex(moveTo).getCoor());
 
-		MainState.getInstance().drawHexesRange(checkpoints, 1,0x55ffff44);
+		MainState.getInstance().drawHexesRange(checkpoints, 1, ColorTable.MOVING_COLOR);
 		
 		var moveAnimation = new MoveBetweenPoints(
 			performer,

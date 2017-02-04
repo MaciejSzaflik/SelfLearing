@@ -188,8 +188,8 @@ class GameContext
 	public function getCreaturesInAttackRange(creature:Creature):PossibleAttacksInfo
 	{
 		if (creature.isRanger && !creature.moved)
-			return getEnemyCreatures(creature.idPlayerId);
-		return getEnemiesInRange(creature.getTileId(), creature.attackRange, creature.idPlayerId);
+			return getEnemiesInRange(creature.getTileId(), creature.attackRange, creature.idPlayerId);
+		return getEnemiesInRange(creature.getTileId(), 1, creature.idPlayerId);
 	}
 	
 	private function getCreatureAttackTargets(creature:Creature,listOfMoves:ListOfMoves,rangeInformation:Map<Int,Int>)

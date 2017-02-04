@@ -254,10 +254,9 @@ class Creature
 	
 	public function addCreatureToState(stateToAdd:FlxState)
 	{	
-		stateToAdd.add(sprite);
-		sprite.setPosition(x, y);
+		MainState.getInstance().getDrawer().AddToCreatureGroup(this);
 		
-		label.addToState(stateToAdd);
+		sprite.setPosition(x, y);
 		label.setPosition(x, y);
 	}
 	

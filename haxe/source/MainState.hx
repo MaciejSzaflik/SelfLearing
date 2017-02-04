@@ -156,7 +156,7 @@ class MainState extends FlxUIState
 	}
 	private function createDrawer():Void
 	{
-		this.drawer = new Drawer(7,this);
+		this.drawer = new Drawer(3,this);
 	}
 	private function drawMap(drawDebug:Bool):Void
 	{

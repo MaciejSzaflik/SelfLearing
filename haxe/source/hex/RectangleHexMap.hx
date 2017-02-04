@@ -69,7 +69,7 @@ class RectangleHexMap extends HexMap
 				j++;
 				
 				var noiseValue = getGreyValue(module.getValue(hex.center.x,hex.center.y, 0))/255;
-				if (noiseValue > 0.56)
+				if (noiseValue > 0.55)
 				{
 					toRemove.set(hexIndex,true);
 				}

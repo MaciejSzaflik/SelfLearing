@@ -44,11 +44,11 @@ class SpriteFactory
 		return new CreatureLabel(text,sprite);
 	}
 	
-	public function createNewLayer(stateToAdd:FlxState, groupToAdd:FlxTypedGroup<FlxSprite>):FlxSprite
+	public function createNewLayer(groupToAdd:FlxTypedGroup<FlxSprite>):FlxSprite
 	{
 		var canvas = new FlxSprite();
 		canvas.makeGraphic(FlxG.width, FlxG.height, FlxColor.TRANSPARENT, true);
-		addToStateAndGroup(canvas, stateToAdd, groupToAdd);
+		addToStateAndGroup(canvas, groupToAdd);
 		return canvas;
 	}
 	
@@ -58,10 +58,9 @@ class SpriteFactory
 		creature.InitGraphic();
 		return creature;
 	}
-	private function addToStateAndGroup(sprite:FlxSprite,stateToAdd:FlxState, groupToAdd:FlxTypedGroup<FlxSprite>)
+	private function addToStateAndGroup(sprite:FlxSprite, groupToAdd:FlxTypedGroup<FlxSprite>)
 	{
 		groupToAdd.add(sprite);
-		stateToAdd.add(sprite);
 	}
 	
 	

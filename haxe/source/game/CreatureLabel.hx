@@ -10,8 +10,8 @@ import flixel.util.FlxColor;
  */
 class CreatureLabel
 {
-	var text:FlxText;
-	var background:FlxSprite;
+	public var text:FlxText;
+	public var background:FlxSprite;
 	public function new(text:FlxText, background:FlxSprite)
 	{
 		this.text = text;
@@ -32,12 +32,6 @@ class CreatureLabel
 	public function setLabelColor(color:FlxColor)
 	{
 		background.color = color;
-	}
-	
-	public function addToState(stateToAdd:FlxState) 
-	{
-		stateToAdd.add(background);
-		stateToAdd.add(text);
 	}
 	
 	public function enable(enable:Bool)
