@@ -26,7 +26,7 @@
     <class path="C:\HaxeToolkit\haxe\lib\flixel-ui\2,1,0" />
     <class path="source" />
     <class path="C:\HaxeToolkit\haxe\lib\openfl\3,6,1\extern" />
-    <class path="export\windows\neko\haxe" />
+    <class path="export\windows\cpp\haxe" />
   </classpaths>
   <!-- Build options -->
   <build>

@@ -28,7 +28,8 @@ class InitiativeQueue
 		{
 			for (creature in player.creatures)
 			{
-				queue.push(creature);
+				if(creature != null)
+					queue.push(creature);
 			}
 		}
 		queue.sort(function(x:Creature, y:Creature):Int 
@@ -116,7 +117,10 @@ class InitiativeQueue
 	public function informOnFill()
 	{
 		for (listener in fillListeners)
-			listener();
+		{
+			if(listener!=null)
+				listener();
+		}
 	}
 	
 	
