@@ -8,6 +8,9 @@ import gameLogic.abilites.AbilityType;
 import haxe.Constraints.Function;
 import haxe.Http;
 import haxe.Json;
+#if windows
+import sys.io.File;
+#end
 import tjson.TJSON;
 /**
  * ...
@@ -33,22 +36,29 @@ class GameConfiguration
 	
 	private function new(callBack:Function) 
 	{
+		set_instance(this);
 		creatures = new Map<Int,CreatureDefinition>();
 		frameAnimations = new Map<Int,FrameAnimationDef>();
 		spriteDefinitions = new Map<Int,SpriteDefinition>();
 		abilitesDefinitions = new Map<Int,AbilityDefinition>();
 		
+		#if windows
+		loadFromLocal(callBack);
+		#else
 		loadFromGist(callBack);
-		//loadFromLocal(callBack);
+		#end
+		
 	}
 	
-	/*private function loadFromLocal(callBack:Function)
+	private function loadFromLocal(callBack:Function)
 	{
+		#if windows
 		var data = File.getContent("assets/data/configuration_backup.json");
 		parseRawData(data); 
 		if (callBack != null)
 			callBack();
-	}*/
+		#end
+	}
 	
 	private function loadFromGist(callBack:Function)
 	{
@@ -64,13 +74,21 @@ class GameConfiguration
 	
 	private function parseRawData(data:String)
 	{
+		try {
+		#if windows
+		var parsedContent = Json.parse(data);
+		#else
 		var map = JsonSerializer.deserialize(data);
 		var content = Reflect.getProperty(map.files, "configuration.json").content;
 		var parsedContent = Json.parse(content);
+		#end
 		parseCreatures(parsedContent[0].creatures);
 		parseFrameAnimations(parsedContent[0].creatureAnimations);
 		parseSpriteDefinitions(parsedContent[0].creatureSprites);
 		parseAbilites(parsedContent[0].abilites);
+		}  catch( msg : String ) {
+			trace("Error occurred: " + msg);
+		}
 	}
 	
 	private function parseAbilites(data:Array<Dynamic>)

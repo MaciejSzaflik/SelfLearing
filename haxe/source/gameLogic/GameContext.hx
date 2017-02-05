@@ -51,6 +51,7 @@ class GameContext
 	
 	public function new() 
 	{
+		set_instance(this);
 		tileToCreature = new Map<Int,Creature>();
 		actionLog = new ActionLog();
 	}

@@ -77,7 +77,7 @@ class Drawer
 	public function drawCircle(center:FlxPoint, radius:Float, fillColor:FlxColor, layer:Int) : Void
 	{
 		var lineStyle = { color: fillColor, thickness: 1.0 };
-		this.layersBackground.members[layer].drawCircle(center.x,center.y,radius,lineStyle);
+		this.layersBackground.members[layer].drawCircle(center.x,center.y,radius,fillColor,lineStyle);
 	}
 	
 	public function drawHex(center:FlxPoint, radius:Float, hexTopping:HexTopping, fillColor:FlxColor, layer:Int) : Void

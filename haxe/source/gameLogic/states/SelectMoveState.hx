@@ -42,8 +42,6 @@ class SelectMoveState extends State
 			getMoveRange();
 			getAttackRange();
 		}
-		
-		MainState.getInstance().getDrawer().currentLayersInGroup();
 	}
 
 	override public function onEnter():Void 

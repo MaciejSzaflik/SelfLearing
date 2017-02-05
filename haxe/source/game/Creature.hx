@@ -198,6 +198,7 @@ class Creature
 		var spriteDefinition = GameConfiguration.instance.spriteDefinitions.get(definition.spriteDef);
 		
 		creature.sprite = SpriteFactory.instance.createNewCreature(spriteDefinition);
+		creature.recalculateStackSize(definition.health*stackCounter);
 		return creature;
 	}
 	
@@ -234,7 +235,11 @@ class Creature
 	
 	public function flipSprite(flip)
 	{
+		#if neko
+		sprite.flipX = !flip;
+		#else
 		sprite.flipX = flip;
+		#end
 	}
 	
 	public function getHeight():Float

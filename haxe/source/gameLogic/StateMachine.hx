@@ -25,6 +25,7 @@ class StateMachine
 	
 	public function setCurrentState(state:State)
 	{
+		trace("setCurrentState " + state.stateName);
 		if (currentState != null)
 		{
 			currentState.onLeave();

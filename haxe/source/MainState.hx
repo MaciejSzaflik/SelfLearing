@@ -71,24 +71,24 @@ class MainState extends FlxUIState
 		_xml_id = "battle_state";
 		super.create();
 		
-		GameConfiguration.init(function(){
+	    GameConfiguration.init(function(){
 			instance = this;
+			
 			stageDescription = new StageDescription();
 			stageDescription.InitTestStage();
 			drawMap(false);
 			addText();
 			CreateGameContex();
-		});	
+		});
 	}
 	
 	private function CreateUIQueue()
 	{
-		var uiRightPanel:FlxUI = cast _ui.getAsset("right_panel");
+		var uiRightPanel:FlxUI9SliceSprite = cast _ui.getAsset("right_panel");
 		var uiQueue:FlxUI9SliceSprite = cast _ui.getAsset("queue_panel");
 		var uiPortrait:FlxUI9SliceSprite = cast _ui.getAsset("portrait_panel");
+		
 		portraitQueue = new PortraitsQueue(GameContext.instance.inititativeQueue, uiQueue,uiPortrait, uiRightPanel.height, 64);
-		
-		
 	}
 
 	private function CreateGameContex()
@@ -97,6 +97,7 @@ class MainState extends FlxUIState
 		var player2 = new GamePlayer(1, CreateDubugCreatureList(), ColorTable.PLAYER2_COLOR, PlayerType.Human,false);
 		//player2.setAI(new BestMove(new KillTheWeakest(false)));
 		//player1.setAI(new BestMove(new KillTheWeakest(true)));
+		trace(GameContext.instance == null);
 		GameContext.instance.Init(getHexMap(), [player1, player2]);
 		CreateUIQueue();
 		GameContext.instance.stateMachine.addNewStateChangeListener(function(state:String)
@@ -113,7 +114,7 @@ class MainState extends FlxUIState
 		var i = 0;
 		while (i < 8)
 		{
-			var creatureDefinition = GameConfiguration.instance.creatures.get(Random.int(0,3));
+			var creatureDefinition = GameConfiguration.instance.creatures.get(Random.int(0, 3));
 			var creature = Creature.fromDefinition(creatureDefinition,Random.int(10,12));
 			creatureList.push(creature);
 			creature.addCreatureToState(this);

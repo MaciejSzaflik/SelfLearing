@@ -33,6 +33,7 @@ class StartState extends State
 	
 	public function placeCreaturesOnMap()
 	{
+		trace("start : placeCreaturesOnMap");
 		GameContext.instance.map.reInitFinders();
 		var playerIndex = 0;
 		for (player in GameContext.instance.mapOfPlayers)
@@ -59,5 +60,6 @@ class StartState extends State
 			
 			playerIndex++;
 		}
+		trace("end : placeCreaturesOnMap");
 	}
 }

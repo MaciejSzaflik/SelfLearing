@@ -1,6 +1,6 @@
 [{
 	"creatures": [{
-		"_hxcls": "game.CreatureDefinition",
+		"_hxcls": "data.CreatureDefinition",
 		"id": 0,
 		"level":1,
 		"initiative": 2,
@@ -15,7 +15,7 @@
 		"contrattactsNumber": 2,
 		"isRanger": false
 	}, {
-		"_hxcls": "game.CreatureDefinition",
+		"_hxcls": "data.CreatureDefinition",
 		"id": 1,
 		"level":1,
 		"initiative": 5,
@@ -30,7 +30,7 @@
 		"contrattactsNumber": 1,
 		"isRanger": true
 	}, {
-		"_hxcls": "game.CreatureDefinition",
+		"_hxcls": "data.CreatureDefinition",
 		"id": 2,
 		"level":3,
 		"initiative": 1,
@@ -46,12 +46,12 @@
 		"isRanger": true,
 		"abilites": [0]
 	}, {
-		"_hxcls": "game.CreatureDefinition",
+		"_hxcls": "data.CreatureDefinition",
 		"id": 3,
 		"level":4,
 		"initiative": 2,
 		"health": 100,
-		"actionPoints": 1,
+		"actionPoints": 4,
 		"attackRange": 1,
 		"attackPointCost": 1,
 		"attackPower": 2,
