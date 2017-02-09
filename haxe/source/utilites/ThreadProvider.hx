@@ -1,8 +1,6 @@
 package utilites;
 import haxe.Constraints.Function;
 import lime.system.BackgroundWorker;
-import neko.vm.Thread;
-
 /**
  * ...
  * @author 

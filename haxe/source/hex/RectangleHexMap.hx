@@ -14,11 +14,13 @@ import utilites.UtilUtil;
 
 class RectangleHexMap extends HexMap
 {	
-	public function new(mapCenter:FlxPoint, hexSize:Float,width:Int,height:Int) 
+	var waterLevel:Float;
+	public function new(mapCenter:FlxPoint, hexSize:Float,width:Int,height:Int,waterLevel:Float) 
 	{
 		super(mapCenter, hexSize);
 		this.width = width;
-		this.height = height; 	
+		this.height = height; 
+		this.waterLevel = waterLevel;
 	}
 	
 	override public function InitPoints() 
@@ -69,7 +71,7 @@ class RectangleHexMap extends HexMap
 				j++;
 				
 				var noiseValue = getGreyValue(module.getValue(hex.center.x,hex.center.y, 0))/255;
-				if (noiseValue > 0.55)
+				if (noiseValue > this.waterLevel)
 				{
 					toRemove.set(hexIndex,true);
 				}

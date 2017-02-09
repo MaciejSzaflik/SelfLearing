@@ -12,6 +12,7 @@ class Graph
 	public var impassableVertices:Map<Int,Bool>;
 	private var edges:List<Edge>;
 	public var removedVertices:Map<Int,Map<Int,Bool>>;
+	private var vertices: Map<Int,Vertex>;
 	
 	public function new() 
 	{
@@ -24,6 +25,8 @@ class Graph
 	{	
 		addSingleConnection(first, second);
 		addSingleConnection(second, first);
+		
+		this.vertices = null;
 	}
 	
 	public function GetNumberOfConnections(index:Int):Int
@@ -69,6 +72,7 @@ class Graph
 				removeVertex(vert);
 			}
 		}
+		this.vertices = null;
 	}
 	
 	public function removeVertex(toRemove:Int)
@@ -78,6 +82,8 @@ class Graph
 		
 		for (pair in adjacencyList)
 			pair.remove(toRemove);
+		
+		this.vertices = null;
 	}
 	
 	public function checkConnection(first:Int, second:Int):Bool
@@ -143,11 +149,11 @@ class Graph
 	
 	public function getVertices():Map<Int,Vertex>
 	{	
-		var verts = new Map<Int,Vertex>();
+		var vert = new Map<Int,Vertex>();
 		for (key in adjacencyList.keys()) 
 		{
-			verts.set(key, new Vertex(key));
+			vert.set(key, new Vertex(key));
 		}
-		return verts;
+		return vert;
 	}
 }

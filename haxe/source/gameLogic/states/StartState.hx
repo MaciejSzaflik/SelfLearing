@@ -19,15 +19,6 @@ class StartState extends State
 	{
 		super(stateMachine);
 		stateName = "Start Game";
-		ThreadProvider.instance.AddTask(function():String{
-			trace ("this is thread hello");
-			for (i in 0...1000)
-			{
-				trace ("this is thread hello: " + i);
-				Sys.sleep(5);
-			}
-			return "hello";
-		});
 	}
 	
 	private function selectRandomPlayer():Int

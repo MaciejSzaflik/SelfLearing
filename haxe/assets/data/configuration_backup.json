@@ -51,7 +51,7 @@
 		"level":4,
 		"initiative": 2,
 		"health": 100,
-		"actionPoints": 4,
+		"actionPoints": 1,
 		"attackRange": 1,
 		"attackPointCost": 1,
 		"attackPower": 2,

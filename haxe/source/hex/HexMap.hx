@@ -202,15 +202,14 @@ class HexMap extends BoardMap
 			var value = graphConnections.GetNumberOfConnections(hex.getIndex());
 			if (value > 0)
 			{
-				sprite.loadGraphic("assets/images/hex_dirt_" + value +".png", false, Std.int(hexSize) - 1, Std.int(hexSize) - 1);
+				sprite.loadGraphic("assets/images/hex_dirt_" + value +".png", false, 51, 51);
 			}
 			else
 			{
 				value = graphConnections.subGraph.GetNumberOfConnections(hex.getIndex());
-				sprite.loadGraphic("assets/images/hex_water_"+ value +".png", false, Std.int(hexSize) - 1, Std.int(hexSize) - 1);
-				sprite.color = FlxColor.WHITE;
+				sprite.loadGraphic("assets/images/hex_water_"+ value +".png", false, 51, 51);
 			}
-
+			sprite.scale.set((hexSize-1) / 51.0, (hexSize-1) / 51.0);
 			var x = Std.int(hex.center.x - hexSize / 2);
 			var y = Std.int(hex.center.y - hexSize / 2);
 			
