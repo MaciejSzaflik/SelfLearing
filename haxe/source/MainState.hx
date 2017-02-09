@@ -130,11 +130,12 @@ class MainState extends FlxUIState
 					getHexMap(),  
 					GameContext.instance.mapOfPlayers.get(0).creatures[0], 
 					GameContext.instance.mapOfPlayers.get(1).creatures);
-				for (index in values.keys())
+				for (index in values.values.keys())
 				{
+					var realValue = values.values[index] / values.maxValue;
 					var color = new FlxColor(0xffff0000);
-					color.lightness = values[index];
-					color.alpha = Math.floor(values[index]*255);
+					color.lightness = realValue;
+					color.alpha = Math.floor(realValue*255);
 					drawHex(getHexMap().getHexCenter(index), 3, color);	
 				}
 			

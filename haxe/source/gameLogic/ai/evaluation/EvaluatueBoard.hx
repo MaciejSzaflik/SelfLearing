@@ -7,5 +7,5 @@ import hex.HexMap;
  */
 interface EvaluatueBoard 
 {
-	public function evaluateBoard(map : HexMap, creature : Creature, enemyCreatures : Array<Creature>):Map<Int,Float>;
+	public function evaluateBoard(map : HexMap, creature : Creature, enemyCreatures : Array<Creature>):RiskValues;
 }
