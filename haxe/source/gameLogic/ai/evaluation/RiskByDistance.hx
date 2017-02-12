@@ -3,6 +3,7 @@ import game.Creature;
 import gameLogic.ai.evaluation.RiskValues;
 import hex.HexCoordinates;
 import hex.HexMap;
+import utilites.MathUtil;
 
 /**
  * ...
@@ -31,6 +32,7 @@ class RiskByDistance implements EvaluatueBoard
 				if (enemy.currentCordinates != null)
 					values.values[hex] += HexCoordinates.getManhatanDistance(enemy.currentCordinates, coor) / 10.0;
 			}	
+			values.values[hex] = MathUtil.clamp01(values.values[hex]);
 			if (values.values[hex] > values.maxValue)
 				values.maxValue = values.values[hex];
 		}

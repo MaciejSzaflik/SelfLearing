@@ -44,6 +44,7 @@ class InitiativeQueue
 	
 	public function getNextCreature():Creature
 	{
+		trace("get next creature");
 		return onPop(queue.pop());
 	}
 	

@@ -33,6 +33,7 @@ import ui.ColorTable;
 import ui.PortraitsQueue;
 import utilites.GameConfiguration;
 import utilites.InputType;
+import utilites.MathUtil;
 import utilites.ThreadProvider;
 
 using flixel.util.FlxSpriteUtil;
@@ -99,10 +100,10 @@ class MainState extends FlxUIState
 
 	private function CreateGameContex()
 	{
-		var player1 = new GamePlayer(0, GetSingleCreature(1,500), ColorTable.PLAYER1_COLOR, PlayerType.Human,true);
-		var player2 = new GamePlayer(1, CreateDubugCreatureList(5), ColorTable.PLAYER2_COLOR, PlayerType.Human,false);
+		var player1 = new GamePlayer(0, CreateDubugCreatureList(12), ColorTable.PLAYER1_COLOR, PlayerType.Human,true);
+		var player2 = new GamePlayer(1, CreateDubugCreatureList(12), ColorTable.PLAYER2_COLOR, PlayerType.Human,false);
 		player2.setAI(new BestMove(new KillTheWeakest(false)));
-		//player1.setAI(new BestMove(new KillTheWeakest(true)));
+		player1.setAI(new BestMove(new KillTheWeakest(true)));
 		trace(GameContext.instance == null);
 		GameContext.instance.Init(getHexMap(), [player1, player2]);
 		CreateUIQueue();
@@ -111,35 +112,23 @@ class MainState extends FlxUIState
 			currentStateText.text = state;
 		});
 		
-		GameContext.instance.stateMachine.addNewStateChangeListener(function(state:String)
+		/*GameContext.instance.stateMachine.addNewStateChangeListener(function(state:String)
 		{
 			if(state == "Select Move")
 				ShowRiskByDistance();
-		});
+		});*/
 				
 		GameContext.instance.Start();
 	}
 	
 	private function ShowRiskByDistance()
 	{
-		ThreadProvider.instance.AddTask(function() {
-			
-				getDrawer().clear(3);
-				var boardEvaluation = new RiskByDistance();
-				var values = boardEvaluation.evaluateBoard(
-					getHexMap(),  
-					GameContext.instance.mapOfPlayers.get(0).creatures[0], 
-					GameContext.instance.mapOfPlayers.get(1).creatures);
-				for (index in values.values.keys())
-				{
-					var realValue = values.values[index] / values.maxValue;
-					var color = new FlxColor(0xffff0000);
-					color.lightness = realValue;
-					color.alpha = Math.floor(realValue*255);
-					drawHex(getHexMap().getHexCenter(index), 3, color);	
-				}
-			
-		});
+			/*getDrawer().clear(3);
+			var boardEvaluation = new RiskByDistance();
+			var values = boardEvaluation.evaluateBoard(
+				getHexMap(),  
+				GameContext.instance.mapOfPlayers.get(0).creatures[0], 
+				GameContext.instance.mapOfPlayers.get(1).creatures);*/
 	}
 	
 	private function GetSingleCreature(creature:Int,count:Int):Array<Creature>

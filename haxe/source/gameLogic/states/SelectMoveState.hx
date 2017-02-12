@@ -197,6 +197,7 @@ class SelectMoveState extends State
 	
 	private function endState()
 	{
+		try{
 		selectedCreature.redrawPosition();
 		var counterOfPlayersWithCreatures = 0;
 		for (player in GameContext.instance.mapOfPlayers)
@@ -209,7 +210,12 @@ class SelectMoveState extends State
 		else if (GameContext.instance.getSizeOfQueue() == 0)
 			stateMachine.setCurrentState(new StartRound(this.stateMachine));
 		else
-			stateMachine.setCurrentState(new SelectMoveState(this.stateMachine,GameContext.instance.getNextCreature()));
+			stateMachine.setCurrentState(new SelectMoveState(this.stateMachine, GameContext.instance.getNextCreature()));
+		}
+		catch(msg:String)
+		{
+			trace(msg);
+		}
 	}
 	
 	private function handleMoveClick(input:Input)

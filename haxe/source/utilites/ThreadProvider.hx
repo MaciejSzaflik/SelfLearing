@@ -22,11 +22,11 @@ class ThreadProvider
 	
 	public function AddTask(work:Function)
 	{
-		var worker = new BackgroundWorker();
+		/*var worker = new BackgroundWorker();
 		
 		worker.doWork.add(function(_){
 			work();
 		});
-		worker.run();
+		worker.run();*/
 	}
 }
