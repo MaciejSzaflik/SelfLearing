@@ -29,6 +29,7 @@ class SelectMoveState extends State
 	
 	private var isAnimationPlaying = false;
 	private var isHuman = false;
+	private var enableAnimations = true;
 	
 	public function new(stateMachine:StateMachine,creature:Creature) 
 	{
@@ -120,7 +121,7 @@ class SelectMoveState extends State
 		}
 		else if (move.type == MoveType.Attack)
 		{
-			var attackAction = ActionFactory.actionFromMoveData(move,function(){endState();},true);
+			var attackAction = ActionFactory.actionFromMoveData(move,function(){endState();},enableAnimations);
 			if (selectedCreature.getTileId() == move.tileId)
 				attackAction.performAction();
 			else
@@ -144,14 +145,14 @@ class SelectMoveState extends State
 		selectedCreature.moved = true;
 		
 		clearAll();
-		var action = ActionFactory.actionFromMoveData(moveData, callBack,true);
+		var action = ActionFactory.actionFromMoveData(moveData, callBack,enableAnimations);
 		action.performAction();
 	}
 	
 	private function handleAction(move:MoveData,callBack:Function)
 	{
 		clearAll();
-		var action = ActionFactory.actionFromMoveData(move, callBack,true);
+		var action = ActionFactory.actionFromMoveData(move, callBack,enableAnimations);
 		action.performAction();
 	}
 
@@ -189,7 +190,7 @@ class SelectMoveState extends State
 		{
 			var moveData = new MoveData(selectedCreature, MoveType.Attack, key);
 			moveData.affected = attacksInfo.listOfCreatures.get(key);
-			var attackAction = ActionFactory.actionFromMoveData(moveData,function(){endState();},true);
+			var attackAction = ActionFactory.actionFromMoveData(moveData,function(){endState();},enableAnimations);
 			attackAction.performAction();
 		}
 
@@ -197,7 +198,6 @@ class SelectMoveState extends State
 	
 	private function endState()
 	{
-		try{
 		selectedCreature.redrawPosition();
 		var counterOfPlayersWithCreatures = 0;
 		for (player in GameContext.instance.mapOfPlayers)
@@ -211,11 +211,6 @@ class SelectMoveState extends State
 			stateMachine.setCurrentState(new StartRound(this.stateMachine));
 		else
 			stateMachine.setCurrentState(new SelectMoveState(this.stateMachine, GameContext.instance.getNextCreature()));
-		}
-		catch(msg:String)
-		{
-			trace(msg);
-		}
 	}
 	
 	private function handleMoveClick(input:Input)

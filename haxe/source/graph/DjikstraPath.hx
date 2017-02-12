@@ -32,7 +32,9 @@ class DjikstraPath implements Pathfinder
 			Q.sort(function(x:Int, y:Int):Int {return distance.get(x) - distance.get(y); });
 			var u = Q[0];
 			if (u == end)
+			{
 				return backtrackOfPredecessors(predecessors, end, start);
+			}
 				
 			Q.remove(u);
 			for (neighbor in graphObject.getConnected(u))
@@ -63,7 +65,10 @@ class DjikstraPath implements Pathfinder
 			{
 				current = predecessors.get(current);
 				path.push(current);
+				predecessors.remove(current);
 			}
+			else
+				break;
 		}	
 		path.reverse();
 		return path;

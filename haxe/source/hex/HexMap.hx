@@ -161,7 +161,10 @@ class HexMap extends BoardMap
 	{
 		var toReturn = new Map<Int, Int>();
 		for (value in graphConnections.getConnected(index))
-			toReturn.set(value, value);
+		{
+			if(graphConnections.isThisVerPassable(value))
+				toReturn.set(value, value);
+		}
 		return toReturn;
 	}
 	

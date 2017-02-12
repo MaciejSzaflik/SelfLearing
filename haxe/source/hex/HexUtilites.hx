@@ -9,7 +9,7 @@ class HexUtilites
 		if(topping == HexTopping.Pointy)
 			return getPointyToppedHexPoints(center,radius);
 		else
-			return getFlatToppedHexPoints(center,radius);
+			return getFlatToppedHexPoints(center, radius);
 	}
 	
 	static private function getPointyToppedHexPoints(center:FlxPoint, radius:Float):Array<FlxPoint>

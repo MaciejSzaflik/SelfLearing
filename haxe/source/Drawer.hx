@@ -19,6 +19,7 @@ class Drawer
 	private var creatureGroup : FlxTypedGroup<FlxSprite>;
 	private var labelsGroup : FlxTypedGroup<FlxSprite>;
 	private var labelTextGroup : FlxTypedGroup<FlxText>;
+	private var debugGroup : FlxTypedGroup<FlxSprite>;
 	
 	public function new(numberOfLayers:Int,stateToAdd:FlxState) 
 	{
@@ -26,6 +27,7 @@ class Drawer
 		this.creatureGroup = new FlxTypedGroup<FlxSprite>();
 		this.labelsGroup = new FlxTypedGroup<FlxSprite>();
 		this.labelTextGroup = new FlxTypedGroup<FlxText>();
+		this.debugGroup = new FlxTypedGroup<FlxSprite>();
 		
 		for (i in 0...numberOfLayers)
 			createNewLayer();
@@ -34,6 +36,7 @@ class Drawer
 		stateToAdd.add(creatureGroup);
 		stateToAdd.add(labelsGroup);
 		stateToAdd.add(labelTextGroup);
+		stateToAdd.add(debugGroup);
 		
 	}
 	
@@ -80,13 +83,22 @@ class Drawer
 		this.layersBackground.members[layer].drawCircle(center.x,center.y,radius,fillColor,lineStyle);
 	}
 	
-	public function drawHex(center:FlxPoint, radius:Float, hexTopping:HexTopping, fillColor:FlxColor, layer:Int) : Void
+	public function drawHex(center:FlxPoint, radius:Float, hexTopping:HexTopping, fillColor:FlxColor, layer:Int) : FlxSprite
 	{
-		this.layersBackground.members[layer].drawPolygon(HexUtilites.getHexPoints(center, radius, hexTopping),fillColor);
+		return this.layersBackground.members[layer].drawPolygon(HexUtilites.getHexPoints(center, radius, hexTopping),fillColor);	
 	}
 	public function clear(layer:Int)
 	{
 		this.layersBackground.members[layer].fill(FlxColor.TRANSPARENT);
+	}
+	
+	public function getDebugHex(center:FlxPoint, size:Int, fillColor:FlxColor) : FlxSprite
+	{
+		var sprite = new FlxSprite(0, 0);
+		sprite.loadGraphic("assets/images/hex_basic_0.png",false, 51, 51);
+		sprite.setPosition(center.x - size / 2, center.y - size / 2);
+		debugGroup.add(sprite);
+		return sprite;
 	}
 	
 	public function drawHexMap(map:HexMap,lineColor : FlxColor,fillcolor : FlxColor,layer:Int) : Void

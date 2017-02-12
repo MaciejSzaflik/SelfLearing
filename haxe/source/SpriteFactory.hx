@@ -4,11 +4,15 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.math.FlxPoint;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import game.Creature;
 import game.CreatureLabel;
 import game.CreatureSprite;
+import hex.HexTopping;
+import hex.HexUtilites;
+using flixel.util.FlxSpriteUtil;
 
 class SpriteFactory
 {
@@ -50,6 +54,15 @@ class SpriteFactory
 		canvas.makeGraphic(FlxG.width, FlxG.height, FlxColor.TRANSPARENT, true);
 		addToStateAndGroup(canvas, groupToAdd);
 		return canvas;
+	}
+	
+	public function createHexSprite(groupToAdd:FlxTypedGroup<FlxSprite>,size : Int, hextTopping : HexTopping,color:FlxColor):FlxSprite
+	{
+		var sprite = new FlxSprite();
+		sprite.makeGraphic(size, size, FlxColor.TRANSPARENT, true);
+		sprite.drawPolygon(HexUtilites.getHexPoints(new FlxPoint(size/2,size/2), size, hextTopping), color);	
+		addToStateAndGroup(sprite, groupToAdd);
+		return sprite;
 	}
 	
 	public function createNewCreature(spriteDef:SpriteDefinition):CreatureSprite

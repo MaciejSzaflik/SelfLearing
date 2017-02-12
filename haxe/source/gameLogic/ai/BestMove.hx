@@ -1,4 +1,5 @@
 package gameLogic.ai;
+import flixel.util.FlxColor;
 import gameLogic.ai.evaluation.EvaluationMethod;
 import gameLogic.moves.MoveData;
 

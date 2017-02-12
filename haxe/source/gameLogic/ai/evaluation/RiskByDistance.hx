@@ -32,7 +32,7 @@ class RiskByDistance implements EvaluatueBoard
 				if (enemy.currentCordinates != null)
 					values.values[hex] += HexCoordinates.getManhatanDistance(enemy.currentCordinates, coor) / 10.0;
 			}	
-			values.values[hex] = MathUtil.clamp01(values.values[hex]);
+			values.values[hex] = MathUtil.clamp01(values.values[hex]/enemyCreatures.length);
 			if (values.values[hex] > values.maxValue)
 				values.maxValue = values.values[hex];
 		}

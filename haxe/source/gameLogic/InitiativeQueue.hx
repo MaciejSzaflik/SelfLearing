@@ -42,29 +42,28 @@ class InitiativeQueue
 		informOnFill();
 	}
 	
-	public function getNextCreature():Creature
+	public inline function getNextCreature():Creature
 	{
-		trace("get next creature");
 		return onPop(queue.pop());
 	}
 	
-	public function putCreatureOnQueueBottom(creature:Creature)
+	public inline function putCreatureOnQueueBottom(creature:Creature)
 	{
 		queue.insert(0, creature);
 		informOnFill();
 	}
 	
-	public function putCreatureOnTop(creature:Creature)
+	public inline function putCreatureOnTop(creature:Creature)
 	{
 		queue.push(creature);
 	}
 	
-	public function putCreatureOnIndex(creature:Creature,index:Int)
+	public inline function putCreatureOnIndex(creature:Creature,index:Int)
 	{
 		queue.insert(index,creature);
 	}
 	
-	public function getInOrder(index:Int):Creature
+	public inline function getInOrder(index:Int):Creature
 	{
 		if (queue.length > index)
 			return queue[queue.length - index - 1];

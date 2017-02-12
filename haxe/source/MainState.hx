@@ -2,6 +2,7 @@ package;
 
 import animation.Tweener;
 import flixel.FlxG;
+import flixel.FlxSprite;
 import flixel.addons.ui.FlxUI;
 import flixel.addons.ui.FlxUI9SliceSprite;
 import flixel.addons.ui.FlxUIButton;
@@ -19,6 +20,7 @@ import gameLogic.GamePlayer;
 import gameLogic.PlayerType;
 import gameLogic.ai.BestMove;
 import gameLogic.ai.MinMax;
+import gameLogic.ai.RandomAI;
 import gameLogic.ai.evaluation.KillTheWeakest;
 import gameLogic.ai.evaluation.RiskByDistance;
 import gameLogic.ai.evaluation.TotalHp;
@@ -57,6 +59,7 @@ class MainState extends FlxUIState
 	
 	private var evaluationPlayer1:FlxText;
 	private var evaluationPlayer2:FlxText;
+	private var debugHexes: Map<Int,FlxSprite>;
 	
 	private var portraitQueue:PortraitsQueue;
 	
@@ -85,8 +88,18 @@ class MainState extends FlxUIState
 			stageDescription.InitTestStage();
 			drawMap(false);
 			addText();
+			CreateDebugMap();
 			CreateGameContex();
 		});
+	}
+	
+	private function CreateDebugMap()
+	{
+		debugHexes = new Map<Int,FlxSprite>();
+		for (hex in getHexMap().getGraph().getVertices().keys())
+		{
+			debugHexes[hex] = getDrawer().getDebugHex(getHexMap().getHexCenter(hex), Std.int(getHexMap().hexSize), 0x70FFFF00);
+		}
 	}
 	
 	private function CreateUIQueue()
@@ -102,9 +115,9 @@ class MainState extends FlxUIState
 	{
 		var player1 = new GamePlayer(0, CreateDubugCreatureList(12), ColorTable.PLAYER1_COLOR, PlayerType.Human,true);
 		var player2 = new GamePlayer(1, CreateDubugCreatureList(12), ColorTable.PLAYER2_COLOR, PlayerType.Human,false);
-		player2.setAI(new BestMove(new KillTheWeakest(false)));
+		player2.setAI(new BestMove(new KillTheWeakest(true)));
 		player1.setAI(new BestMove(new KillTheWeakest(true)));
-		trace(GameContext.instance == null);
+		//player1.setAI(new RandomAI());
 		GameContext.instance.Init(getHexMap(), [player1, player2]);
 		CreateUIQueue();
 		GameContext.instance.stateMachine.addNewStateChangeListener(function(state:String)
@@ -112,23 +125,34 @@ class MainState extends FlxUIState
 			currentStateText.text = state;
 		});
 		
-		/*GameContext.instance.stateMachine.addNewStateChangeListener(function(state:String)
+		GameContext.instance.stateMachine.addNewStateChangeListener(function(state:String)
 		{
 			if(state == "Select Move")
 				ShowRiskByDistance();
-		});*/
+		});
 				
 		GameContext.instance.Start();
 	}
 	
 	private function ShowRiskByDistance()
 	{
-			/*getDrawer().clear(3);
+		ThreadProvider.instance.AddTask(function(){
+			getDrawer().clear(3);
 			var boardEvaluation = new RiskByDistance();
 			var values = boardEvaluation.evaluateBoard(
 				getHexMap(),  
 				GameContext.instance.mapOfPlayers.get(0).creatures[0], 
-				GameContext.instance.mapOfPlayers.get(1).creatures);*/
+				GameContext.instance.mapOfPlayers.get(1).creatures);
+			for (index in values.values.keys())	
+			{
+				var realValue = values.values[index] / values.maxValue;
+				if (debugHexes.exists(index))
+				{
+					debugHexes[index].color = FlxColor.RED;
+					debugHexes[index].alpha = realValue*0.5;
+				}
+			}
+		});
 	}
 	
 	private function GetSingleCreature(creature:Int,count:Int):Array<Creature>
@@ -219,13 +243,15 @@ class MainState extends FlxUIState
 		for (hex in range)  
 			getDrawer().drawHex(hex, getHexMap().hexSize, HexTopping.Pointy, color, layer); 
 	}
-	public function drawHex(position:FlxPoint,layer:Int,color:FlxColor)
+	public function drawHex(position:FlxPoint, layer:Int, color:FlxColor) : FlxSprite
 	{
-		if (position == null)
-			return;
-			
-		getDrawer().drawHex(position, getHexMap().hexSize, HexTopping.Pointy, color, layer); 
+		return getDrawer().drawHex(position, getHexMap().hexSize, HexTopping.Pointy, color, layer); 
 	}
+	public function drawHexId(hex:Int, layer:Int, color:FlxColor) : FlxSprite
+	{
+		return drawHex(getHexMap().getHexCenter(hex), layer, color); 
+	}
+	
 	public function drawCircle(position:FlxPoint,layer:Int,color:FlxColor)
 	{
 		getDrawer().drawCircle(position,5, color, layer); 
