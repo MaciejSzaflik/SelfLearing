@@ -60,6 +60,7 @@ class MainState extends FlxUIState
 	private var evaluationPlayer1:FlxText;
 	private var evaluationPlayer2:FlxText;
 	private var debugHexes: Map<Int,FlxSprite>;
+	private var debugTexts: Map<Int,FlxText>;
 	
 	private var portraitQueue:PortraitsQueue;
 	
@@ -96,9 +97,13 @@ class MainState extends FlxUIState
 	private function CreateDebugMap()
 	{
 		debugHexes = new Map<Int,FlxSprite>();
+		debugTexts = new Map<Int,FlxText>();
 		for (hex in getHexMap().getGraph().getVertices().keys())
 		{
-			debugHexes[hex] = getDrawer().getDebugHex(getHexMap().getHexCenter(hex), Std.int(getHexMap().hexSize), 0x70FFFF00);
+			var point = getHexMap().getHexCenter(hex);
+			debugHexes[hex] = getDrawer().getDebugHex(point, Std.int(getHexMap().hexSize), 0x70FFFF00);
+			debugTexts[hex] = new FlxText(point.x, point.y, 30, "0");
+			add(debugTexts[hex]);
 		}
 	}
 	
@@ -113,11 +118,11 @@ class MainState extends FlxUIState
 
 	private function CreateGameContex()
 	{
-		var player1 = new GamePlayer(0, CreateDubugCreatureList(12), ColorTable.PLAYER1_COLOR, PlayerType.Human,true);
-		var player2 = new GamePlayer(1, CreateDubugCreatureList(12), ColorTable.PLAYER2_COLOR, PlayerType.Human,false);
+		var player1 = new GamePlayer(0, GetSingleCreature(0,100), ColorTable.PLAYER1_COLOR, PlayerType.Human,true);
+		var player2 = new GamePlayer(1, GetSingleCreature(0,100), ColorTable.PLAYER2_COLOR, PlayerType.Human,false);
 		player2.setAI(new BestMove(new KillTheWeakest(true)));
-		player1.setAI(new BestMove(new KillTheWeakest(true)));
-		//player1.setAI(new RandomAI());
+		//player1.setAI(new BestMove(new KillTheWeakest(true)));
+		player1.setAI(new RandomAI());
 		GameContext.instance.Init(getHexMap(), [player1, player2]);
 		CreateUIQueue();
 		GameContext.instance.stateMachine.addNewStateChangeListener(function(state:String)
@@ -148,8 +153,9 @@ class MainState extends FlxUIState
 				var realValue = values.values[index] / values.maxValue;
 				if (debugHexes.exists(index))
 				{
-					debugHexes[index].color = FlxColor.RED;
-					debugHexes[index].alpha = realValue*0.5;
+					debugHexes[index].color = FlxColor.BLUE;
+					debugHexes[index].alpha = realValue;
+					debugTexts[index].text = Std.string(values.values[index]);
 				}
 			}
 		});

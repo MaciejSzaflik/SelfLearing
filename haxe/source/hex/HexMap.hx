@@ -157,12 +157,12 @@ class HexMap extends BoardMap
 		return centers;
 	}
 	
-	public function getNeighbors(index):Map<Int,Int>
+	public function getNeighbors(index,ignorePassable : Bool = false):Map<Int,Int>
 	{
 		var toReturn = new Map<Int, Int>();
 		for (value in graphConnections.getConnected(index))
 		{
-			if(graphConnections.isThisVerPassable(value))
+			if(graphConnections.isThisVerPassable(value) || ignorePassable)
 				toReturn.set(value, value);
 		}
 		return toReturn;
@@ -173,7 +173,7 @@ class HexMap extends BoardMap
 		if (hexes.exists(index))
 		{
 			if (rangeSize == 1)
-				return getNeighbors(index);
+				return getNeighbors(index,!checkPassble);
 			else
 				return bfs.findRange(new Vertex(index), rangeSize, checkPassble);
 		}
