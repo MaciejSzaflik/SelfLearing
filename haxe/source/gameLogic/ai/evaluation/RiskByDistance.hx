@@ -12,8 +12,11 @@ import utilites.MathUtil;
  */
 class RiskByDistance implements EvaluatueBoard 
 {
-	var baseValue : Float = 0.5;
-	var controlerValue : Float = 0.8;
+	var baseValueMelee : Float = 0.5;
+	var controlerValueMelee : Float = 0.8;
+	
+	var baseValueRanger : Float = 0.3;
+	var controlerValueRanger : Float = 0.9;
 	public function new() 
 	{
 		
@@ -56,7 +59,19 @@ class RiskByDistance implements EvaluatueBoard
 	
 	private function calculateRangerValue(creature : Creature, distance : Float) : Float
 	{
-		return 0;
+		var attackValue = getDmgOutput(creature);
+		
+		if (distance == 1)
+			return attackValue * 0.5;
+		if (distance < creature.attackRange)
+			return attackValue;
+		
+		var movesToGetThere =  Math.floor(distance / creature.range) + 1;
+		if (movesToGetThere == 0)
+			return 0;
+		
+			
+		return attackValue * Math.pow(baseValueRanger,(movesToGetThere-1)*baseValueRanger);
 	}
 	
 	private function calculateMeleeValue(creature : Creature, distance : Float) : Float
@@ -66,6 +81,6 @@ class RiskByDistance implements EvaluatueBoard
 		if (movesToGetThere == 0)
 			return 0;
 		
-		return attackValue * Math.pow(baseValue,(movesToGetThere-1)*controlerValue);
+		return attackValue * Math.pow(baseValueMelee,(movesToGetThere-1)*controlerValueMelee);
 	}
 }

@@ -21,7 +21,7 @@
 		"initiative": 5,
 		"health": 10,
 		"actionPoints": 5,
-		"attackRange": 18,
+		"attackRange": 10,
 		"attackPointCost": 5,
 		"attackPower": 8,
 		"attackRandom": 4,
