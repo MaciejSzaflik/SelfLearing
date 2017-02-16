@@ -25,7 +25,7 @@ class StageDescription
 		mapRows = 15;
 		mapCols = 16;
 		mapHexSize = 52;
-		waterLevel = 1;
+		waterLevel = 0.55;
 	}
 	
 }

@@ -29,7 +29,7 @@ class MoveAction extends Action
 	private function endWithoutAnimation()
 	{
 		performer.setCoodinates(GameContext.instance.map.getHexByIndex(moveTo).getCoor());
-		if (onFinish!=null)
+		if (onFinish != null)
 			onFinish();
 	}
 	

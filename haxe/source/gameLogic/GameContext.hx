@@ -133,6 +133,18 @@ class GameContext
 		stateMachine.init();
 	}
 	
+	public function getEnemies(playerId:Int):Array<Creature>
+	{
+		var enemies = new Array<Creature>();
+		for (player in mapOfPlayers)
+		{
+			if (player.id != playerId)
+			{
+				enemies = enemies.concat(player.creatures);
+			}
+		}
+		return enemies;
+	}
 	
 	public function getEnemyCreatures(playerId):PossibleAttacksInfo
 	{
@@ -303,13 +315,13 @@ class GameContext
 		if (backedAction == null)
 			return;
 		
-		inititativeQueue.putCreatureOnTop(currentCreature);	
+		//inititativeQueue.putCreatureOnTop(currentCreature);	
 			
 		//resetCreaturesPositions();
-		inititativeQueue.putCreatureOnTop(backedAction.performer);
-		currentCreature = backedAction.performer;
-		stateMachine.setCurrentState(new SelectMoveState(stateMachine, inititativeQueue.getNextCreature()));
-		inititativeQueue.informOnFill();
+		//inititativeQueue.putCreatureOnTop(backedAction.performer);
+		//currentCreature = backedAction.performer;
+		//stateMachine.setCurrentState(new SelectMoveState(stateMachine, inititativeQueue.getNextCreature()));
+		//inititativeQueue.informOnFill();
 	}
 	public function redoNextAction()
 	{

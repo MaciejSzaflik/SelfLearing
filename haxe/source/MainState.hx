@@ -23,6 +23,7 @@ import gameLogic.ai.MinMax;
 import gameLogic.ai.RandomAI;
 import gameLogic.ai.evaluation.KillTheWeakest;
 import gameLogic.ai.evaluation.RiskByDistance;
+import gameLogic.ai.evaluation.RiskMinimaizer;
 import gameLogic.ai.evaluation.TotalHp;
 import haxe.Timer;
 import hex.HexMap;
@@ -118,9 +119,9 @@ class MainState extends FlxUIState
 
 	private function CreateGameContex()
 	{
-		var player1 = new GamePlayer(0, CreateDubugCreatureList(2), ColorTable.PLAYER1_COLOR, PlayerType.Human,true);
-		var player2 = new GamePlayer(1, CreateDubugCreatureList(2), ColorTable.PLAYER2_COLOR, PlayerType.Human,false);
-		//player2.setAI(new BestMove(new KillTheWeakest(true)));
+		var player1 = new GamePlayer(0, CreateDubugCreatureList(3), ColorTable.PLAYER1_COLOR, PlayerType.Human,true);
+		var player2 = new GamePlayer(1, CreateDubugCreatureList(3), ColorTable.PLAYER2_COLOR, PlayerType.Human,false);
+		player2.setAI(new BestMove(new RiskMinimaizer()));
 		//player1.setAI(new BestMove(new KillTheWeakest(true)));
 		//player1.setAI(new RandomAI());
 		GameContext.instance.Init(getHexMap(), [player1, player2]);
@@ -153,8 +154,8 @@ class MainState extends FlxUIState
 				var realValue = values.values[index] / values.maxValue;
 				if (debugHexes.exists(index))
 				{
-					debugHexes[index].color = FlxColor.BLUE;
-					debugHexes[index].alpha = realValue;
+					debugHexes[index].color = FlxColor.PURPLE;
+					debugHexes[index].alpha = realValue*0.75;
 					debugTexts[index].text = Std.string(values.values[index]);
 				}
 			}
