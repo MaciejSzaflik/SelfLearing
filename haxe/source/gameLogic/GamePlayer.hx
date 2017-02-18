@@ -6,6 +6,7 @@ import gameLogic.ai.BestMove;
 import gameLogic.ai.RandomAI;
 import gameLogic.ai.evaluation.KillTheWeakest;
 import gameLogic.moves.MoveData;
+import gameLogic.moves.MoveType;
 
 /**
  * ...
@@ -75,6 +76,7 @@ class GamePlayer
 	{
 		if (artificialInt != null && playerType == PlayerType.AI)
 		{
+			var move = artificialInt.generateMove();				
 			return artificialInt.generateMove();
 		}
 		return null;

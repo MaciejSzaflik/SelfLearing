@@ -49,10 +49,11 @@ class MainState extends FlxUIState
 		return instance;
 	}
 	
+	public var stageDescription:StageDescription;
+
 	private var btnPlay:FlxButton;
 	private var drawer:Drawer;
 	private var hexMap:HexMap;
-	private var stageDescription:StageDescription;
 	
 	private var fpsText:FlxText;
 	private var debugText:FlxText;
@@ -88,7 +89,7 @@ class MainState extends FlxUIState
 			
 			stageDescription = new StageDescription();
 			stageDescription.InitTestStage();
-			drawMap(false);
+			drawMap(true);
 			addText();
 			CreateDebugMap();
 			CreateGameContex();
@@ -122,9 +123,9 @@ class MainState extends FlxUIState
 	{
 		var player1 = new GamePlayer(0, CreateDubugCreatureList(3), ColorTable.PLAYER1_COLOR, PlayerType.Human,true);
 		var player2 = new GamePlayer(1, CreateDubugCreatureList(3), ColorTable.PLAYER2_COLOR, PlayerType.Human,false);
-		player2.setAI(new BestMove(new RiskMinimaizer()));
-		//player1.setAI(new BestMove(new KillTheWeakest(true)));
-		//player1.setAI(new RandomAI());
+		//player2.setAI(new BestMove(new RiskMinimaizer()));
+		player1.setAI(new BestMove(new KillTheWeakest(true)));
+		//player2.setAI(new RandomAI());
 		GameContext.instance.Init(getHexMap(), [player1, player2]);
 		CreateUIQueue();
 		GameContext.instance.stateMachine.addNewStateChangeListener(function(state:String)
@@ -219,7 +220,8 @@ class MainState extends FlxUIState
 		var mapWidth = stageDescription.mapCols * stageDescription.mapHexSize;
 		var mapHeight = stageDescription.mapRows * stageDescription.mapHexSize*0.75;
 		
-		var startPoisitionX =  (mapWidth / FlxG.width)*0.28;
+		var startPoisitionX =  0.15 + stageDescription.mapHexSize/ FlxG.width;
+		
 		var startPoisitionY = 1 - ((1- (mapHeight / FlxG.height))*0.82);
 		var mapCenter = new FlxPoint(FlxG.width * startPoisitionX, FlxG.height * startPoisitionY);
 		this.hexMap = new RectangleHexMap(

@@ -8,6 +8,7 @@ import flixel.util.FlxColor;
 import flixel.FlxG;
 import flixel.util.FlxSort;
 import game.Creature;
+import game.StageDescription;
 import hex.HexMap;
 import hex.HexTopping;
 import hex.HexUtilites;
@@ -97,7 +98,9 @@ class Drawer
 	{
 		var sprite = new FlxSprite(0, 0);
 		sprite.loadGraphic("assets/images/hex_debug_1.png",false, 51, 51);
-		sprite.setPosition(center.x - size / 2, center.y - size / 2);
+		sprite.setPosition(center.x - 51 / 2, center.y - 51 / 2);
+		var scale = StageDescription.scaleFactor;
+		sprite.scale.set(scale, scale);
 		debugGroup.add(sprite);
 		return sprite;
 	}

@@ -205,44 +205,49 @@ class GameContext
 		return getEnemiesInRange(creature.getTileId(), 1, creature.idPlayerId);
 	}
 	
+	private function addMeleeAttacks(creature:Creature,listOfMoves:ListOfMoves,rangeInformation:Map<Int,Int>,enemies:Array<Creature>)
+	{
+		for (enemy in enemies)
+		{	
+			var attackPossiblites = map.findRangeNoObstacles(enemy.getTileId(), 1);
+			for (hex in attackPossiblites)
+			{
+				if (rangeInformation.exists(hex))
+				{
+					var move = MoveData.createAttackMove(creature, MoveType.Attack, hex, enemy);
+					listOfMoves.addMove(move);
+				}
+			}
+		}
+	}
+	
+	private function addRangerAttacks(creature:Creature, listOfMoves:ListOfMoves, rangeInformation:Map<Int,Int>, enemies:Array<Creature>)
+	{
+		trace(creature.isRanger + " " + creature.moved );
+		if (creature.isRanger && !creature.moved)
+		{
+			trace(creature.getEnemyNeighbours().lenght);
+			if (creature.getEnemyNeighbours().lenght > 0)
+				return;
+			
+			
+			var range = map.findRangeNoObstacles(creature.getTileId(), creature.attackRange);
+			for (enemy in enemies)
+			{
+				if (range.exists(enemy.getTileId()))
+				{
+					trace("adding ranger attack");
+					listOfMoves.addMove(MoveData.createAttackMove(creature, MoveType.Attack, creature.getTileId(), enemy));
+				}
+			}
+		}
+	}
+	
 	private function getCreatureAttackTargets(creature:Creature,listOfMoves:ListOfMoves,rangeInformation:Map<Int,Int>)
 	{
-		var creatureEffectiveRange = creature.isRanger?1:creature.attackRange;
-		for (player in mapOfPlayers)
-		{
-			if (player.id != creature.idPlayerId)
-			{
-				for (playerCreature in player.creatures)
-				{	
-						var attackPossiblites = map.getRange(playerCreature.getTileId(), 1, false);
-						for (hex in attackPossiblites)
-						{
-							if (rangeInformation.exists(hex))
-							{
-								var move = MoveData.createAttackMove(creature, MoveType.Attack, hex, playerCreature);
-								listOfMoves.addMove(move);
-							}
-						}
-				}
-			}
-			else
-				continue;
-		}
-		if (creature.isRanger)
-		{
-			for (player in mapOfPlayers)
-			{
-				if (player.id != creature.idPlayerId)
-				{
-					for (playerCreature in player.creatures)
-					{
-						var move = MoveData.createAttackMove(creature, MoveType.Attack, creature.getTileId(), playerCreature);
-						listOfMoves.addMove(move);
-						
-					}
-				}
-			}
-		}
+		var enemies = getEnemies(creature.idPlayerId);
+		addMeleeAttacks(creature, listOfMoves, rangeInformation, enemies);
+		addRangerAttacks(creature, listOfMoves, rangeInformation, enemies);
 	}
 	
 	public function generateMovesForCurrentCreature():ListOfMoves

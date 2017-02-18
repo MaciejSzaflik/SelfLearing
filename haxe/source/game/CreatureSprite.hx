@@ -18,6 +18,9 @@ class CreatureSprite extends FlxSprite
 			return;
 
 		this.loadGraphic(spriteDef.graphicName, spriteDef.animated, spriteDef.widght, spriteDef.height);
+		var scale = StageDescription.scaleFactor;
+		this.scale.set(scale, scale);
+		
 		if (spriteDef.animationList == null)
 			return; 
 		

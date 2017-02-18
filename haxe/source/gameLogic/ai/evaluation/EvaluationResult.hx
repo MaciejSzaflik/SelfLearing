@@ -24,7 +24,9 @@ class EvaluationResult
 	public function getBestMove():MoveData
 	{
 		if (bestIndex == -1)
-			return new MoveData(null,MoveType.Pass, -1);
+		{
+			return new MoveData(null, MoveType.Pass, -1);
+		}
 		else
 			return listOfMoves.moves[bestIndex];
 	}

@@ -25,7 +25,7 @@ class RiskMinimaizer implements EvaluationMethod
 		var listOfMoves = GameContext.instance.generateListOfMovesForCreature(GameContext.instance.currentCreature);
 		
 		var valueMin = 10000000.0;
-		var indexMin = 0;
+		var indexMin = -1;
 		var index = 0;
 		
 		for (move in listOfMoves.moves)

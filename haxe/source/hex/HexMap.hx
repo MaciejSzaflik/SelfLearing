@@ -13,6 +13,7 @@ import libnoise.generator.Perlin;
 import libnoise.QualityMode;
 import source.BoardMap;
 import utilites.MathUtil;
+using flixel.util.FlxSpriteUtil;
 
 class HexMap extends BoardMap
 {
@@ -220,8 +221,6 @@ class HexMap extends BoardMap
 		var sprite = new FlxSprite(0, 0);
 		backgroundSprite.makeGraphic(FlxG.width, FlxG.height, 0x00000000);
 		
-		
-		
 		for (hex in hexes)
 		{	
 			var value = graphConnections.GetNumberOfConnections(hex.getIndex());
@@ -234,11 +233,11 @@ class HexMap extends BoardMap
 				value = graphConnections.subGraph.GetNumberOfConnections(hex.getIndex());
 				sprite.loadGraphic("assets/images/hex_water_"+ value +".png", false, 51, 51);
 			}
-			sprite.scale.set((hexSize-1) / 51.0, (hexSize-1) / 51.0);
-			var x = Std.int(hex.center.x - hexSize / 2);
-			var y = Std.int(hex.center.y - hexSize / 2);
-			
 
+			sprite.setPosition(hex.center.x - 51 / 2, hex.center.y - 51 / 2);
+			sprite.scale.set((hexSize-1) / 51.0, (hexSize-1) / 51.0);
+			var x = Std.int(sprite.getPosition().x);
+			var y = Std.int(sprite.getPosition().y);
 			backgroundSprite.stamp(sprite, x, y);
 		}
 		sprite.destroy();

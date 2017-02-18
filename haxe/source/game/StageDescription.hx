@@ -14,6 +14,7 @@ class StageDescription
 	public var mapCols:Int;
 	public var mapHexSize:Float;
 	public var waterLevel:Float;
+	public static var scaleFactor:Float;
 	
 	public function new() 
 	{
@@ -22,10 +23,11 @@ class StageDescription
 	
 	public function InitTestStage()
 	{
-		mapRows = 15;
-		mapCols = 16;
-		mapHexSize = 51;
-		waterLevel = 0.55;
+		mapRows = 8;
+		mapCols = 8;
+		mapHexSize = 80;
+		waterLevel = 0.65;
+		scaleFactor = (mapHexSize-1) / 51.0;
 	}
 	
 }
