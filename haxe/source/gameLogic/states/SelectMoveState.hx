@@ -240,6 +240,8 @@ class SelectMoveState extends State
 			moveList.checkIfExist(MoveType.Move,input.getKey()) || 
 			attacksInfo.listOfHex.exists(input.coor.toKey()))
 			MainState.getInstance().drawHex(input.hexCenter, 2, ColorTable.POINTER_COLOR);
+			
+		//MainState.getInstance().drawHexesRangeIds(GameContext.instance.map.findRangeNoObstacles(input.coor.toKey(), 2), 2, ColorTable.POINTER_COLOR);
 	}
 	
 	

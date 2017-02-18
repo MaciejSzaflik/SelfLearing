@@ -11,6 +11,8 @@ class HexCoordinates
 	public var y(get, null):Int;
 	public var z(get, null):Int;
 	
+	
+	
 	function get_x():Int
 	{
 		return q;
@@ -39,6 +41,11 @@ class HexCoordinates
 	public function getOddRRow():Int
 	{
 		return z;
+	}
+	
+	public function addAxial(q:Int, r:Int):HexCoordinates
+	{
+		return new HexCoordinates(this.q + q, this.r + r);
 	}
 	
 	static public function fromCube(xValue:Int,zValue:Int):HexCoordinates

@@ -12,6 +12,7 @@ import hex.Hex;
 import libnoise.generator.Perlin;
 import libnoise.QualityMode;
 import source.BoardMap;
+import utilites.MathUtil;
 
 class HexMap extends BoardMap
 {
@@ -166,6 +167,27 @@ class HexMap extends BoardMap
 				toReturn.set(value, value);
 		}
 		return toReturn;
+	}
+	
+	public function findRangeNoObstacles(center:Int, N : Int):Map<Int,Int>
+	{
+		
+		var results = new Map<Int,Int>();
+		if (!hexes.exists(center))
+			return results;
+		
+		var coor = hexes.get(center).getCoor();
+				
+		for (dx in -N...N+1)
+		{
+			for (dy in MathUtil.max(-N,-dx-N)...MathUtil.min(N,-dx+N)+1)
+			{
+				var key = coor.addAxial(dx, -dx - dy).toKey();
+				if(hexes.exists(key))
+					results[key] = key;
+			}
+		}
+		return results;
 	}
 	
 	public function getRange(index:Int,rangeSize:Int,checkPassble:Bool):Map<Int,Int>

@@ -106,6 +106,7 @@ class MainState extends FlxUIState
 			debugTexts[hex] = new FlxText(point.x, point.y, 30, "0");
 			add(debugTexts[hex]);
 		}
+		EnableDebugRisk(false);
 	}
 	
 	private function CreateUIQueue()
@@ -142,6 +143,9 @@ class MainState extends FlxUIState
 	
 	private function ShowRiskByDistance()
 	{
+		if (!debugEnabled)
+			return;
+		
 		ThreadProvider.instance.AddTask(function(){
 			getDrawer().clear(3);
 			var boardEvaluation = new RiskByDistance();
@@ -234,7 +238,6 @@ class MainState extends FlxUIState
 	private function drawMap(drawDebug:Bool):Void
 	{
 		getHexMap().createBackground();
-		//getDrawer().drawHexMap(getHexMap(), 0xffAAAA77, 0x00000000, 0);
 		if(drawDebug)
 			drawDebugGraph(0);
 	}
@@ -329,10 +332,12 @@ class MainState extends FlxUIState
 		{
 			if (name == FlxUITypedButton.CLICK_EVENT)
 			{
-				if(!isButtonMainInterface(params.toString()))
-					GameContext.instance.stateMachine.handleButtonInput(params.toString());
+				if (!isButtonMainInterface(params[0].toString()))
+				{
+					GameContext.instance.stateMachine.handleButtonInput(params[0].toString());
+				}
 				else
-					handleButtonClick(params.toString());
+					handleButtonClick(params[0].toString());
 			}
 		}
 	}
@@ -348,11 +353,26 @@ class MainState extends FlxUIState
 		if (buttonName == "back")
 			GameContext.instance.undoNextAction();
 		else if (buttonName == "forward")
+			EnableDebugRisk(!debugEnabled);
+	}
+	
+	private var debugEnabled:Bool = false;
+	private function EnableDebugRisk(enable:Bool)
+	{
+		debugEnabled = enable;
+		for (text in debugTexts)
 		{
-			getDrawer().clear(0);
-			getHexMap().DestroyBackground();
-			this.hexMap = null;
-			drawMap(true);
+			if(enable)
+				text.revive();
+			else
+				text.kill();
+		}
+		for (hex in debugHexes)
+		{
+			if(enable)
+				hex.revive();
+			else
+				hex.kill();
 		}
 	}
 }

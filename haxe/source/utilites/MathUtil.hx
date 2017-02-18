@@ -29,6 +29,16 @@ class MathUtil
 		return Math.max(Math.min(value, max), min);
 	}
 	
+	static inline public function max(a:Int, b:Int)
+	{
+		return a > b ? a : b;
+	}
+	
+	static inline public function min(a:Int, b:Int)
+	{
+		return a > b ? b : a;
+	}
+	
 	public function new() 
 	{
 		

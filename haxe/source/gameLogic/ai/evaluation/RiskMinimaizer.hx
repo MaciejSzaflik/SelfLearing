@@ -45,7 +45,6 @@ class RiskMinimaizer implements EvaluationMethod
 			index++;
 			GameContext.instance.undoNextAction();
 		}
-		trace(indexMin);
 		result.tryToSetBestIndex(indexMin);
 		return result;
 
