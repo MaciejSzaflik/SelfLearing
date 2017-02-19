@@ -123,8 +123,8 @@ class MainState extends FlxUIState
 	{
 		var player1 = new GamePlayer(0, CreateDubugCreatureList(3), ColorTable.PLAYER1_COLOR, PlayerType.Human,true);
 		var player2 = new GamePlayer(1, CreateDubugCreatureList(3), ColorTable.PLAYER2_COLOR, PlayerType.Human,false);
-		//player2.setAI(new BestMove(new RiskMinimaizer()));
-		player1.setAI(new BestMove(new KillTheWeakest(true)));
+		player2.setAI(new BestMove(new RiskMinimaizer()));
+		//player1.setAI(new BestMove(new KillTheWeakest(true)));
 		//player2.setAI(new RandomAI());
 		GameContext.instance.Init(getHexMap(), [player1, player2]);
 		CreateUIQueue();
