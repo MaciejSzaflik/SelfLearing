@@ -19,9 +19,11 @@ import gameLogic.Input;
 import gameLogic.GamePlayer;
 import gameLogic.PlayerType;
 import gameLogic.ai.BestMove;
+import gameLogic.ai.EnemyQueue;
 import gameLogic.ai.MinMax;
 import gameLogic.ai.RandomAI;
 import gameLogic.ai.evaluation.KillTheWeakest;
+import gameLogic.ai.evaluation.RewardBasedEvaluation;
 import gameLogic.ai.evaluation.RiskByDistance;
 import gameLogic.ai.evaluation.RiskMinimaizer;
 import gameLogic.ai.evaluation.TotalHp;
@@ -121,11 +123,12 @@ class MainState extends FlxUIState
 
 	private function CreateGameContex()
 	{
-		var player1 = new GamePlayer(0, CreateDubugCreatureList(3), ColorTable.PLAYER1_COLOR, PlayerType.Human,true);
-		var player2 = new GamePlayer(1, CreateDubugCreatureList(3), ColorTable.PLAYER2_COLOR, PlayerType.Human,false);
-		player2.setAI(new BestMove(new RiskMinimaizer()));
+		var player1 = new GamePlayer(0, CreateDubugCreatureList(40), ColorTable.PLAYER1_COLOR, PlayerType.Human,true);
+		var player2 = new GamePlayer(1, CreateDubugCreatureList(40), ColorTable.PLAYER2_COLOR, PlayerType.Human,false);
+		player2.setAI(new BestMove(new RewardBasedEvaluation()));
+		player1.setAI(new BestMove(new RewardBasedEvaluation()));
 		//player1.setAI(new BestMove(new KillTheWeakest(true)));
-		//player2.setAI(new RandomAI());
+		player2.setAI(new EnemyQueue(1));
 		GameContext.instance.Init(getHexMap(), [player1, player2]);
 		CreateUIQueue();
 		GameContext.instance.stateMachine.addNewStateChangeListener(function(state:String)
@@ -183,7 +186,7 @@ class MainState extends FlxUIState
 		var i = 0;
 		while (i < count)
 		{
-			var creatureDefinition = GameConfiguration.instance.creatures.get(Random.int(0, 3));
+			var creatureDefinition = GameConfiguration.instance.creatures.get(Random.int(0, 0));
 			var creature = Creature.fromDefinition(creatureDefinition,Random.int(10,12));
 			creatureList.push(creature);
 			creature.addCreatureToState(this);
