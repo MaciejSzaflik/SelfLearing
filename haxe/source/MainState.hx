@@ -123,10 +123,10 @@ class MainState extends FlxUIState
 
 	private function CreateGameContex()
 	{
-		var player1 = new GamePlayer(0, CreateDubugCreatureList(5), ColorTable.PLAYER1_COLOR, PlayerType.Human,true);
-		var player2 = new GamePlayer(1, CreateDubugCreatureList(5), ColorTable.PLAYER2_COLOR, PlayerType.Human,false);
-		//player2.setAI(new BestMove(new RewardBasedEvaluation()));
-		//player1.setAI(new BestMove(new RewardBasedEvaluation()));
+		var player1 = new GamePlayer(0, DebugArmy(), ColorTable.PLAYER1_COLOR, PlayerType.Human,true);
+		var player2 = new GamePlayer(1, DebugArmy(), ColorTable.PLAYER2_COLOR, PlayerType.Human,false);
+		//player2.setAI(new BestMove(new KillTheWeakest(true)));
+		player1.setAI(new BestMove(new KillTheWeakest(true)));
 		//player1.setAI(new BestMove(new KillTheWeakest(true)));
 		GameContext.instance.Init(getHexMap(), [player1, player2]); 
 		player2.setAI(new EnemyQueue(1));
@@ -181,13 +181,42 @@ class MainState extends FlxUIState
 		return creatureList;
 	}
 	
+	
+	private function DebugArmy():Array<Creature>
+	{
+		var creatureList = new Array<Creature>();
+		
+		var knightDefinition = GameConfiguration.instance.creatures.get(0);
+		var archerDefinition = GameConfiguration.instance.creatures.get(1);
+		
+		var knight = Creature.fromDefinition(knightDefinition,15);
+		creatureList.push(knight);
+		knight.addCreatureToState(this);
+		knight = Creature.fromDefinition(knightDefinition,15);
+		creatureList.push(knight);
+		knight.addCreatureToState(this);
+		knight = Creature.fromDefinition(knightDefinition,15);
+		creatureList.push(knight);
+		knight.addCreatureToState(this);
+		
+		
+		var archer = Creature.fromDefinition(archerDefinition,10);
+		creatureList.push(archer);
+		archer.addCreatureToState(this);
+		archer = Creature.fromDefinition(archerDefinition,10);
+		creatureList.push(archer);
+		archer.addCreatureToState(this);
+		
+		return creatureList;
+	}
+	
 	private function CreateDubugCreatureList(count : Int):Array<Creature>
 	{
 		var creatureList = new Array<Creature>();
 		var i = 0;
 		while (i < count)
 		{
-			var creatureDefinition = GameConfiguration.instance.creatures.get(Random.int(0, 0));
+			var creatureDefinition = GameConfiguration.instance.creatures.get(Random.int(0, 1));
 			var creature = Creature.fromDefinition(creatureDefinition,Random.int(10,12));
 			creatureList.push(creature);
 			creature.addCreatureToState(this);

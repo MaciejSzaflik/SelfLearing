@@ -175,6 +175,11 @@ class Creature
 		return basicValue;
 	}
 	
+	public function getEmptyNeighbours():Array<Int>
+	{
+		return GameContext.instance.map.getNeighborsArray(getTileId());
+	}
+	
 	public function getEnemyNeighbours():PossibleAttacksInfo
 	{
 		return GameContext.instance.getEnemiesInRange(getTileId(), 1, idPlayerId);

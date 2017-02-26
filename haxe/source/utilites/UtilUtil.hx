@@ -14,4 +14,14 @@ class UtilUtil
 	   return ret; 
 	}
 	
+	public static function getIndexOf<T> (array:Array < T > , value:T):Int {
+		
+		for (i in 0...array.length)
+		{
+			if (array[i] == value) 
+				return i;
+		}
+		return -1;
+	}
+	
 }

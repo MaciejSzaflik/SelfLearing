@@ -147,6 +147,11 @@ class HexMap extends BoardMap
 		return listOfPoints;
 	}
 	
+	public function getPathTiles(start:Int, ends:Array<Int>):Array<Int>
+	{
+		return pathfinder.findPathMultipleEnds(start, ends);
+	}
+	
 	public function getPathCenters(start:Int, end:Int):List<FlxPoint>
 	{
 		var centers = new List<FlxPoint>();
@@ -157,6 +162,17 @@ class HexMap extends BoardMap
 				centers.add(hexes.get(vert).center);
 		}
 		return centers;
+	}
+	
+	public function getNeighborsArray(index,ignorePassable : Bool = false):Array<Int>
+	{
+		var toReturn = new Array<Int>();
+		for (value in graphConnections.getConnected(index))
+		{
+			if(graphConnections.isThisVerPassable(value) || ignorePassable)
+				toReturn.push(value);
+		}
+		return toReturn;
 	}
 	
 	public function getNeighbors(index,ignorePassable : Bool = false):Map<Int,Int>

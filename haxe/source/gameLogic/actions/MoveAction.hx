@@ -44,6 +44,7 @@ class MoveAction extends Action
 			return;
 		}
 		var checkpoints = GameContext.instance.map.getPathCenters(from, moveTo);
+		trace(checkpoints.length);
 		if (checkpoints == null)
 		{
 			endWithoutAnimation();
