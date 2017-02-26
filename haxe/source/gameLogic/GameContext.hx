@@ -260,10 +260,25 @@ class GameContext
 		var listOfMoves = new ListOfMoves();
 		var range =  map.getRange(creature.getTileId(), creature.range, true);
 		for (tileId in range)
-		{
 			listOfMoves.addMove(new MoveData(creature,MoveType.Move, tileId));
 			
-		}
+		getCreatureAttackTargets(creature, listOfMoves, range);
+		return listOfMoves;
+	}
+	
+	public function generateListOfMoveMoves(creature:Creature):ListOfMoves
+	{
+		var listOfMoves = new ListOfMoves();
+		var range =  map.getRange(creature.getTileId(), creature.range, true);
+		for (tileId in range)
+			listOfMoves.addMove(new MoveData(creature,MoveType.Move, tileId));
+		return listOfMoves;
+	}
+	
+	public function generateListOfAttackMoves(creature:Creature):ListOfMoves
+	{
+		var listOfMoves = new ListOfMoves();
+		var range =  map.getRange(creature.getTileId(), creature.range, true);
 		getCreatureAttackTargets(creature, listOfMoves, range);
 		return listOfMoves;
 	}

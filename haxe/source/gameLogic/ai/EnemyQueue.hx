@@ -1,5 +1,6 @@
 package gameLogic.ai;
 import game.Creature;
+import gameLogic.moves.MoveData;
 
 /**
  * ...
@@ -7,8 +8,11 @@ import game.Creature;
  */
 class EnemyQueue extends ArtificialInteligence
 {
+	private static inline var rangerMultiplayer = 2.0;
+	
 	public var enemies : Array<Creature>;
 	public var enemiesValues : Map<Int,Float>;
+	
 	public function new(playerId : Int) 
 	{
 		super();
@@ -23,6 +27,11 @@ class EnemyQueue extends ArtificialInteligence
 		UpdateValues();
 	}
 	
+	override public function generateMove():MoveData 
+	{
+		return super.generateMove();
+	}
+	
 	public function UpdateValues()
 	{
 		for (creature in enemies)
@@ -33,12 +42,13 @@ class EnemyQueue extends ArtificialInteligence
 		{
 			return Std.int(enemiesValues.get(x.id) - enemiesValues.get(y.id));
 		});		
-		
 	}
 	
 	private function CalculateCreatureAIValue(creature : Creature) : Float
 	{
-		return 0.0;
+		var multipler = creature.attackRange > 1 ? rangerMultiplayer : 1;
+		
+		return (creature.calculateAttack() / creature.totalHealth)*multipler;
 	}
 	
 	

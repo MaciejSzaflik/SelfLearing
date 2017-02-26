@@ -123,16 +123,17 @@ class MainState extends FlxUIState
 
 	private function CreateGameContex()
 	{
-		var player1 = new GamePlayer(0, CreateDubugCreatureList(40), ColorTable.PLAYER1_COLOR, PlayerType.Human,true);
-		var player2 = new GamePlayer(1, CreateDubugCreatureList(40), ColorTable.PLAYER2_COLOR, PlayerType.Human,false);
-		player2.setAI(new BestMove(new RewardBasedEvaluation()));
-		player1.setAI(new BestMove(new RewardBasedEvaluation()));
+		var player1 = new GamePlayer(0, CreateDubugCreatureList(5), ColorTable.PLAYER1_COLOR, PlayerType.Human,true);
+		var player2 = new GamePlayer(1, CreateDubugCreatureList(5), ColorTable.PLAYER2_COLOR, PlayerType.Human,false);
+		//player2.setAI(new BestMove(new RewardBasedEvaluation()));
+		//player1.setAI(new BestMove(new RewardBasedEvaluation()));
 		//player1.setAI(new BestMove(new KillTheWeakest(true)));
+		GameContext.instance.Init(getHexMap(), [player1, player2]); 
 		player2.setAI(new EnemyQueue(1));
-		GameContext.instance.Init(getHexMap(), [player1, player2]);
 		CreateUIQueue();
 		GameContext.instance.stateMachine.addNewStateChangeListener(function(state:String)
 		{
+			trace(state);
 			currentStateText.text = state;
 		});
 		

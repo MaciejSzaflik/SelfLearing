@@ -35,7 +35,6 @@ class RewardBasedEvaluation implements EvaluationMethod
 	{
 		var result = new EvaluationResult(listOfMoves);
 		this.currentCreature = GameContext.instance.currentCreature;
-		var listOfMoves = GameContext.instance.generateListOfMovesForCreature(currentCreature);
 		
 		var valueMax = -10000000.0;
 		var indexMin = -1;
