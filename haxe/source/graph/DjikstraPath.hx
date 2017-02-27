@@ -74,6 +74,9 @@ class DjikstraPath implements Pathfinder
 			}
 			else
 				current = null;
+			
+			if (current == -1)
+				return null;
 		}	
 		path.reverse();
 		return path;

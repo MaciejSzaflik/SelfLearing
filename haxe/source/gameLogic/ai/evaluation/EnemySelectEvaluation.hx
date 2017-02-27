@@ -31,9 +31,7 @@ class EnemySelectEvaluation implements EvaluationMethod
 		var distanceToCreature;
 		var result = new EvaluationResult(listOfMoves);
 		this.currentCreature = GameContext.instance.currentCreature;
-		
 		var pathToScore = tryToFindAPath();
-		
 		var index = 0;
 		for (move in listOfMoves.moves)
 		{
