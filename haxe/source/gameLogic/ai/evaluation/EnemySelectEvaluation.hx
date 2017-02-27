@@ -1,6 +1,7 @@
 package gameLogic.ai.evaluation;
 import game.Creature;
 import gameLogic.actions.Action;
+import gameLogic.actions.ActionFactory;
 import gameLogic.ai.EnemyQueue;
 import gameLogic.moves.ListOfMoves;
 import gameLogic.moves.MoveData;
@@ -51,10 +52,13 @@ class EnemySelectEvaluation implements EvaluationMethod
 			{
 				var enemyValue = enemyQueue.enemiesValues.get(move.affected.id);
 				var index = enemyQueue.enemies.length - UtilUtil.getIndexOf(enemyQueue.enemies, move.affected) + 1;
+				var bonus = 0;
+				if (currentCreature.isRanger)
+					bonus += currentCreature.getTileId() == move.tileId ? 500 : -500;
 				
 				value = Std.int(enemyValue * index * rewardForEnemyPosition);
 			}
-			
+			trace(move.type + " " + value);
 			result.evaluationResults[index] = value;
 			result.tryToSetBestIndex(index);
 			index++;
