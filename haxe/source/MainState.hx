@@ -126,10 +126,10 @@ class MainState extends FlxUIState
 		var player1 = new GamePlayer(0, DebugArmy(), ColorTable.PLAYER1_COLOR, PlayerType.Human,true);
 		var player2 = new GamePlayer(1, DebugArmy(), ColorTable.PLAYER2_COLOR, PlayerType.Human,false);
 		//player2.setAI(new BestMove(new KillTheWeakest(true)));
-		player1.setAI(new BestMove(new KillTheWeakest(true)));
+		//player1.setAI(new BestMove(new KillTheWeakest(false)));
 		//player1.setAI(new BestMove(new KillTheWeakest(true)));
 		GameContext.instance.Init(getHexMap(), [player1, player2]); 
-		player2.setAI(new EnemyQueue(1));
+		//player2.setAI(new EnemyQueue(1));
 		CreateUIQueue();
 		GameContext.instance.stateMachine.addNewStateChangeListener(function(state:String)
 		{
@@ -188,6 +188,7 @@ class MainState extends FlxUIState
 		
 		var knightDefinition = GameConfiguration.instance.creatures.get(0);
 		var archerDefinition = GameConfiguration.instance.creatures.get(1);
+		var priestDefinition = GameConfiguration.instance.creatures.get(2);
 		
 		var knight = Creature.fromDefinition(knightDefinition,15);
 		creatureList.push(knight);
@@ -198,9 +199,18 @@ class MainState extends FlxUIState
 		knight = Creature.fromDefinition(knightDefinition,15);
 		creatureList.push(knight);
 		knight.addCreatureToState(this);
+		knight = Creature.fromDefinition(knightDefinition,15);
+		creatureList.push(knight);
+		knight.addCreatureToState(this);
+		knight = Creature.fromDefinition(priestDefinition,15);
+		creatureList.push(knight);
+		knight.addCreatureToState(this);
 		
 		
 		var archer = Creature.fromDefinition(archerDefinition,10);
+		creatureList.push(archer);
+		archer.addCreatureToState(this);
+		archer = Creature.fromDefinition(archerDefinition,10);
 		creatureList.push(archer);
 		archer.addCreatureToState(this);
 		archer = Creature.fromDefinition(archerDefinition,10);

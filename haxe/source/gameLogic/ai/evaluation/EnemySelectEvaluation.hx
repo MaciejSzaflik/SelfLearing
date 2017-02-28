@@ -56,7 +56,7 @@ class EnemySelectEvaluation implements EvaluationMethod
 				if (currentCreature.isRanger)
 					bonus += currentCreature.getTileId() == move.tileId ? 500 : -500;
 				
-				value = Std.int(enemyValue * index * rewardForEnemyPosition);
+				value = Std.int(enemyValue * index * rewardForEnemyPosition) + bonus;
 			}
 			trace(move.type + " " + value);
 			result.evaluationResults[index] = value;

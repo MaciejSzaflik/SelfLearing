@@ -68,7 +68,7 @@ class AttackAction extends Action
 				doSimpleAttackAnimation(defender, performer, -1, null);
 				doSimpleAttackAnimation(performer, defender, 1, function()
 				{				
-					attack(defender, performer);
+					defenderAttack = attack(defender, performer);
 					defender.contrattackCountter++;
 					if (onFinish != null)
 						onFinish();
@@ -119,12 +119,11 @@ class AttackAction extends Action
 		super.resetAction();
 		defender.recalculateStackSize(defender.totalHealth + attackerAttack.attackPower);
 		defender.lostHitPoints -= attackerAttack.attackPower;
-			if (defenderAttack != null)
+		if (defenderAttack != null)
 		{
 			defender.contrattackCountter--;
-			performer.recalculateStackSize(performer.currentHealth + defenderAttack.attackPower);
+			performer.recalculateStackSize(performer.totalHealth + defenderAttack.attackPower);
 			performer.lostHitPoints -= defenderAttack.attackPower;
-			
 			if (!defenderAttack.isAlive)
 				GameContext.instance.resurectCreature(performer,defenderAttack.placeInQueue);
 		}
