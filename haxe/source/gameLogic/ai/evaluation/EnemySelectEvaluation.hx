@@ -88,6 +88,4 @@ class EnemySelectEvaluation implements EvaluationMethod
 		}
 		return toReturn;
 	}
-	
-	
 }

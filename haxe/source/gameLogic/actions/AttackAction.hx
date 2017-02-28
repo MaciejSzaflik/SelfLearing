@@ -127,10 +127,8 @@ class AttackAction extends Action
 			if (!defenderAttack.isAlive)
 				GameContext.instance.resurectCreature(performer,defenderAttack.placeInQueue);
 		}
-		
 		if (!attackerAttack.isAlive)
 			GameContext.instance.resurectCreature(defender, attackerAttack.placeInQueue);
-		
 	}
 	
 	

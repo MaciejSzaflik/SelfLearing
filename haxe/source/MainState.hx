@@ -22,11 +22,13 @@ import gameLogic.ai.BestMove;
 import gameLogic.ai.EnemyQueue;
 import gameLogic.ai.MinMax;
 import gameLogic.ai.RandomAI;
+import gameLogic.ai.evaluation.EvaluationResult;
 import gameLogic.ai.evaluation.KillTheWeakest;
 import gameLogic.ai.evaluation.RewardBasedEvaluation;
 import gameLogic.ai.evaluation.RiskByDistance;
 import gameLogic.ai.evaluation.RiskMinimaizer;
 import gameLogic.ai.evaluation.TotalHp;
+import gameLogic.moves.MoveType;
 import haxe.Timer;
 import hex.HexMap;
 import hex.HexTopping;
@@ -105,7 +107,7 @@ class MainState extends FlxUIState
 		for (hex in getHexMap().getGraph().getVertices().keys())
 		{
 			var point = getHexMap().getHexCenter(hex);
-			debugHexes[hex] = getDrawer().getDebugHex(point, Std.int(getHexMap().hexSize), 0x70FFFF00);
+			debugHexes[hex] = getDrawer().getDebugHex(point, Std.int(getHexMap().hexSize), 0x05FFFF00);
 			debugTexts[hex] = new FlxText(point.x, point.y, 30, "0");
 			add(debugTexts[hex]);
 		}
@@ -129,7 +131,7 @@ class MainState extends FlxUIState
 		//player1.setAI(new BestMove(new KillTheWeakest(false)));
 		//player1.setAI(new BestMove(new KillTheWeakest(true)));
 		GameContext.instance.Init(getHexMap(), [player1, player2]); 
-		//player2.setAI(new EnemyQueue(1));
+		player2.setAI(new EnemyQueue(1));
 		CreateUIQueue();
 		GameContext.instance.stateMachine.addNewStateChangeListener(function(state:String)
 		{
@@ -387,7 +389,7 @@ class MainState extends FlxUIState
 		}
 	}
 	
-	private static var mainInterfaceButtons:Array<String> = ["back", "forward"];
+	private static var mainInterfaceButtons:Array<String> = ["back", "debug", "eval_1", "eval_2"];
 	private function isButtonMainInterface(buttonName:String):Bool
 	{
 		return mainInterfaceButtons.indexOf(buttonName) != -1;
@@ -397,11 +399,63 @@ class MainState extends FlxUIState
 	{
 		if (buttonName == "back")
 			GameContext.instance.undoNextAction();
-		else if (buttonName == "forward")
+		else if (buttonName == "debug")
 			EnableDebugRisk(!debugEnabled);
+		else if (buttonName == "eval_1")
+		{
+			var result = new RewardBasedEvaluation().evaluateMoves(GameContext.instance.generateMovesForCurrentCreature());
+			EvalCurrentSituation(!evalShown,result);
+		}
+		else if (buttonName == "eval_2")
+		{
+			EvalCurrentSituation(!evalShown, null);
+		}
 	}
 	
 	private var debugEnabled:Bool = false;
+	private var evalShown:Bool = false;
+	private function EvalCurrentSituation(enable:Bool, evaluation:EvaluationResult)
+	{
+		evalShown = enable;
+		for (text in debugTexts)
+		{
+			if (enable)
+			{
+				text.revive();
+				text.text = "";
+			}
+			else
+				text.kill();
+		}
+		
+		for (hex in debugHexes)
+		{
+			if (enable)
+			{
+				hex.revive();
+				hex.color = FlxColor.WHITE;
+			}
+			else
+				hex.kill();
+		}
+		
+		for (i in 0...evaluation.evaluationResults.length)
+		{
+			var moveData = evaluation.listOfMoves.moves[i];
+			if (moveData.type == MoveType.Move)
+			{
+				debugHexes[moveData.tileId].color = FlxColor.PURPLE;
+				debugTexts[moveData.tileId].text = "M:" + evaluation.evaluationResults[i];
+			}
+			else if(moveData.type == MoveType.Attack)
+			{
+				var tile = moveData.affected.getTileId();
+				debugHexes[moveData.tileId].color = FlxColor.YELLOW;
+				debugHexes[tile].color = FlxColor.ORANGE;
+				debugTexts[tile].text = "A:" + evaluation.evaluationResults[i];
+			}
+		}
+	}
 	private function EnableDebugRisk(enable:Bool)
 	{
 		debugEnabled = enable;

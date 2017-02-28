@@ -28,12 +28,20 @@
 		<param type="string" value="ability"/>
 </button>
 
-<button x="main_panel.right-50"  width="40" y="bottom_panel.center-10" id="forward_btn" label="F">
-		<param type="string" value="forward"/>
+<button x="main_panel.right-50"  width="40" y="bottom_panel.center-10" id="forward_btn" label="D">
+		<param type="string" value="debug"/>
 </button>	
 	
 <button x="forward_btn.left-60" width="40"  y="bottom_panel.center-10" id="back_btn" label="B">
 		<param type="string" value="back"/>
+</button>
+	
+<button x="back_btn.left-40" width="40"  y="bottom_panel.center-10" id="eval_1_btn" label="e1">
+		<param type="string" value="eval_1"/>
+</button>
+	
+<button x="eval_1_btn.left-40" width="40"  y="bottom_panel.center-10" id="eval_2_btn" label="e2">
+		<param type="string" value="eval_2"/>
 </button>
 
 

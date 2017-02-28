@@ -54,7 +54,4 @@ class EnemyQueue extends ArtificialInteligence
 		
 		return (creature.calculateAttack() / creature.totalHealth)*multipler;
 	}
-	
-	
-	
 }
