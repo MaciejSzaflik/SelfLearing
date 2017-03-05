@@ -108,7 +108,7 @@ class MainState extends FlxUIState
 		{
 			var point = getHexMap().getHexCenter(hex);
 			debugHexes[hex] = getDrawer().getDebugHex(point, Std.int(getHexMap().hexSize), 0x05FFFF00);
-			debugTexts[hex] = new FlxText(point.x, point.y, 30, "0");
+			debugTexts[hex] = new FlxText(point.x - 10, point.y, 40, "0");
 			add(debugTexts[hex]);
 		}
 		EnableDebugRisk(false);

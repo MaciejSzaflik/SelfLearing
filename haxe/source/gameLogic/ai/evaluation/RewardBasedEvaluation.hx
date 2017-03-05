@@ -3,6 +3,8 @@ import data.CreatureDefinition;
 import game.Creature;
 import gameLogic.actions.ActionFactory;
 import gameLogic.moves.ListOfMoves;
+import gameLogic.moves.MoveData;
+import gameLogic.moves.MoveType;
 import hex.HexCoordinates;
 
 /**
@@ -11,18 +13,20 @@ import hex.HexCoordinates;
  */
 class RewardBasedEvaluation implements EvaluationMethod
 {
-	public static inline var ALIVE_REWARD = 100.0;
-	public static inline var ENEMY_HEALTH_REWARD = 200.0;
+	public static inline var ALIVE_REWARD = 30.0;
+	public static inline var ENEMY_HEALTH_REWARD = 20.0;
 	public static inline var ATTACK_POSSIBILTY_REWARD = 10.0;
-	public static inline var SELF_HEALTH_REWARD = 100.0;
-	public static inline var ENEMY_COUNT_REWARD = -50.0;
-	public static inline var ATTACK_ME_RISK_REWARD = -10.0;
+	public static inline var SELF_HEALTH_REWARD = 10.0;
+	public static inline var ENEMY_COUNT_REWARD = -15.0;
+	public static inline var ATTACK_ME_RISK_REWARD = -2.0;
+	public static inline var MELLE_ATTACK_REWARD = 10;
+	public static inline var RANGER_ATTACK_REWARD = 30;
 	
 	public static inline var DISTANCE_TO_ENEMY_REWARD_MELEE = 1;
 	public static inline var DISTANCE_TO_ENEMY_REWARD_RANGER = 1;
 	
-	public static inline var NEIGHBOURS_REWARD_MELEE = 10;
-	public static inline var NEIGHBOURS_REWARD_RANGER = -10;
+	public static inline var NEIGHBOURS_REWARD_MELEE = 4;
+	public static inline var NEIGHBOURS_REWARD_RANGER = -4;
 	
 	
 	public function new()
@@ -55,6 +59,8 @@ class RewardBasedEvaluation implements EvaluationMethod
 			moveValue+= enemiesInAttackRange(enemies);
 			moveValue+= enemiesThatCanAttackMe(enemies);
 			moveValue+= enemyNeighbours();
+			moveValue+= byMoveType(move);
+			
 			result.evaluationResults.set(index, Std.int(moveValue));
 			if (moveValue > valueMax)
 			{
@@ -68,6 +74,18 @@ class RewardBasedEvaluation implements EvaluationMethod
 		result.tryToSetBestIndex(indexMin);
 		return result;
 
+	}
+	
+	private function byMoveType(moveData:MoveData) : Float
+	{
+		if (moveData.type == MoveType.Attack)
+		{
+			if (moveData.affected.isRanger)
+				return RANGER_ATTACK_REWARD;
+			else
+				return MELLE_ATTACK_REWARD;
+		}
+		return 0;
 	}
 	
 	private function calculateEnemyHealth(enemies: Array<Creature>)
@@ -90,8 +108,8 @@ class RewardBasedEvaluation implements EvaluationMethod
 	
 	private function totalEnemyHealthCalc(totalEnemyPast:Float,enemies: Array<Creature>) : Float
 	{
-		var proc = calculateEnemyHealth(enemies) / totalEnemyPast;
-		return (proc < 1) ? ENEMY_HEALTH_REWARD * proc : -ENEMY_HEALTH_REWARD * proc;
+		var proc =  (totalEnemyPast - calculateEnemyHealth(enemies))/totalEnemyPast;
+		return ENEMY_HEALTH_REWARD * proc;
 	}
 	
 	private function enemyCount(enemies: Array<Creature>) : Float
