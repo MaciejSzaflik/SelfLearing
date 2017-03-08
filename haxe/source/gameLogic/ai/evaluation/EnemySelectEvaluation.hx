@@ -22,7 +22,11 @@ class EnemySelectEvaluation implements EvaluationMethod
 	var moveToCost : Map<MoveData,Float>;
 	var selectedEnemy : Int;
 	
-	public function new(enemyQueue : EnemyQueue) 
+	public function new() 
+	{
+	}
+	
+	public function SetEnemyQueue(enemyQueue : EnemyQueue) 
 	{
 		this.enemyQueue = enemyQueue;
 	}
@@ -32,21 +36,14 @@ class EnemySelectEvaluation implements EvaluationMethod
 		var distanceToCreature;
 		var result = new EvaluationResult(listOfMoves);
 		this.currentCreature = GameContext.instance.currentCreature;
-		var pathToScore = tryToFindAPath();
+		var pathToScore = tryToFindAPath(enemyQueue.enemies);
 		var index = 0;
 		for (move in listOfMoves.moves)
 		{
 			var value = 0;
 			if (move.type == MoveType.Move)
 			{
-				if (pathToScore.exists(move.tileId))
-				{
-					var distanceToChar =  GameContext.instance.map.getManhatanDistance(currentCreature.getTileId(), move.tileId);
-					var attackRangeBonus = distanceToChar <= currentCreature.attackRange ? 2.5 : 1.0;
-					if (currentCreature.isRanger && distanceToChar == 1)
-						attackRangeBonus = 0.25;
-					value =  Std.int(pathToScore.get(move.tileId) * 10 * attackRangeBonus);
-				}
+				value = scoreMove(pathToScore,move);
 			}
 			else if(move.type == MoveType.Attack)
 			{
@@ -58,7 +55,6 @@ class EnemySelectEvaluation implements EvaluationMethod
 				
 				value = Std.int(enemyValue * index * rewardForEnemyPosition) + bonus;
 			}
-			trace(move.type + " " + value);
 			result.evaluationResults[index] = value;
 			result.tryToSetBestIndex(index);
 			index++;
@@ -68,11 +64,25 @@ class EnemySelectEvaluation implements EvaluationMethod
 		
 	}
 	
-	public function tryToFindAPath() : Map<Int,Int>
+	public function scoreMove(pathToScore: Map<Int,Int>,move : MoveData) : Int
+	{
+		if (pathToScore.exists(move.tileId))
+		{
+			var distanceToChar =  GameContext.instance.map.getManhatanDistance(currentCreature.getTileId(), move.tileId);
+			var attackRangeBonus = distanceToChar <= currentCreature.attackRange ? 2.5 : 1.0;
+			if (currentCreature.isRanger && distanceToChar == 1)
+				attackRangeBonus = 0.25;
+			return Std.int(pathToScore.get(move.tileId) * 10 * attackRangeBonus);
+		}
+		else
+			return 0;
+	}
+	
+	public function tryToFindAPath(enemies : Array<Creature>) : Map<Int,Int>
 	{
 		var toReturn = new Map<Int,Int>();
 		var index = 0;
-		for (enemy in enemyQueue.enemies)
+		for (enemy in enemies)
 		{
 			var path = GameContext.instance.map.getPathTiles(currentCreature.getTileId(),enemy.getEmptyNeighbours());
 			if (path != null)

@@ -2,6 +2,7 @@ package gameLogic.ai.evaluation;
 import data.CreatureDefinition;
 import game.Creature;
 import gameLogic.actions.ActionFactory;
+import gameLogic.ai.evaluation.EvaluationResult;
 import gameLogic.moves.ListOfMoves;
 import gameLogic.moves.MoveData;
 import gameLogic.moves.MoveType;
@@ -11,31 +12,24 @@ import hex.HexCoordinates;
  * ...
  * @author ...
  */
-class RewardBasedEvaluation implements EvaluationMethod
+class RewardBasedEvaluation extends EnemySelectEvaluation
 {
 	public static inline var ALIVE_REWARD = 30.0;
 	public static inline var ENEMY_HEALTH_REWARD = 20.0;
 	public static inline var ATTACK_POSSIBILTY_REWARD = 10.0;
 	public static inline var SELF_HEALTH_REWARD = 10.0;
-	public static inline var ENEMY_COUNT_REWARD = -15.0;
+	public static inline var ENEMY_COUNT_REWARD = -150.0;
 	public static inline var ATTACK_ME_RISK_REWARD = -2.0;
-	public static inline var MELLE_ATTACK_REWARD = 10;
-	public static inline var RANGER_ATTACK_REWARD = 30;
+	public static inline var MELLE_ATTACK_REWARD = 100;
+	public static inline var RANGER_ATTACK_REWARD = 300;
 	
 	public static inline var DISTANCE_TO_ENEMY_REWARD_MELEE = 1;
 	public static inline var DISTANCE_TO_ENEMY_REWARD_RANGER = 1;
 	
-	public static inline var NEIGHBOURS_REWARD_MELEE = 4;
-	public static inline var NEIGHBOURS_REWARD_RANGER = -4;
+	public static inline var NEIGHBOURS_REWARD_MELEE = 40;
+	public static inline var NEIGHBOURS_REWARD_RANGER = -40;
 	
-	
-	public function new()
-	{
-		
-	}
-	
-	var currentCreature: Creature;
-	public function evaluateMoves(listOfMoves:ListOfMoves):EvaluationResult
+	override public function evaluateMoves(listOfMoves:ListOfMoves):EvaluationResult 
 	{
 		var result = new EvaluationResult(listOfMoves);
 		this.currentCreature = GameContext.instance.currentCreature;
@@ -46,13 +40,17 @@ class RewardBasedEvaluation implements EvaluationMethod
 		
 		var totalEnemyHealth = calculateEnemyHealth(GameContext.instance.getEnemies(currentCreature.getTileId()));
 		var creaureHealth = currentCreature.totalHealth;
+		var pathToScore = tryToFindAPath(enemyQueue.enemies);
 		
 		for (move in listOfMoves.moves)
 		{
+			var moveValue = 0.0;
+			if (move.type == MoveType.Move)
+				moveValue += scoreMove(pathToScore,move);
+			
 			var action = ActionFactory.actionFromMoveData(move, null);
 			action.performAction();
 			var enemies = GameContext.instance.getEnemies(currentCreature.getTileId());
-			var moveValue = 0.0;
 			moveValue+= aliveCheck();
 			moveValue+= totalEnemyHealthCalc(totalEnemyHealth, enemies);
 			moveValue+= enemyCount(enemies);

@@ -22,6 +22,7 @@ import gameLogic.ai.BestMove;
 import gameLogic.ai.EnemyQueue;
 import gameLogic.ai.MinMax;
 import gameLogic.ai.RandomAI;
+import gameLogic.ai.evaluation.EnemySelectEvaluation;
 import gameLogic.ai.evaluation.EvaluationResult;
 import gameLogic.ai.evaluation.KillTheWeakest;
 import gameLogic.ai.evaluation.RewardBasedEvaluation;
@@ -131,7 +132,8 @@ class MainState extends FlxUIState
 		//player1.setAI(new BestMove(new KillTheWeakest(false)));
 		//player1.setAI(new BestMove(new KillTheWeakest(true)));
 		GameContext.instance.Init(getHexMap(), [player1, player2]); 
-		player2.setAI(new EnemyQueue(1));
+		player2.setAI(new EnemyQueue(1, new EnemySelectEvaluation()));
+		player1.setAI(new EnemyQueue(1, new RewardBasedEvaluation()));
 		CreateUIQueue();
 		GameContext.instance.stateMachine.addNewStateChangeListener(function(state:String)
 		{
@@ -403,12 +405,15 @@ class MainState extends FlxUIState
 			EnableDebugRisk(!debugEnabled);
 		else if (buttonName == "eval_1")
 		{
-			var result = new RewardBasedEvaluation().evaluateMoves(GameContext.instance.generateMovesForCurrentCreature());
+			var a1 = new EnemyQueue(GameContext.instance.currentPlayerIndex, new EnemySelectEvaluation());	
+			var result = a1.getEvaluationResult();
 			EvalCurrentSituation(!evalShown,result);
 		}
 		else if (buttonName == "eval_2")
 		{
-			EvalCurrentSituation(!evalShown, null);
+			var a1 = new EnemyQueue(GameContext.instance.currentPlayerIndex, new RewardBasedEvaluation());	
+			var result = a1.getEvaluationResult();
+			EvalCurrentSituation(!evalShown,result);
 		}
 	}
 	

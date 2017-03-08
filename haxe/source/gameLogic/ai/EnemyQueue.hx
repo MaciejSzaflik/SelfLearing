@@ -1,6 +1,7 @@
 package gameLogic.ai;
 import game.Creature;
 import gameLogic.ai.evaluation.EnemySelectEvaluation;
+import gameLogic.ai.evaluation.EvaluationResult;
 import gameLogic.moves.MoveData;
 
 /**
@@ -15,12 +16,13 @@ class EnemyQueue extends ArtificialInteligence
 	public var enemiesValues : Map<Int,Float>;
 	private var evaluator : EnemySelectEvaluation;
 	
-	public function new(playerId : Int) 
+	public function new(playerId : Int, evaluator : EnemySelectEvaluation) 
 	{
 		super();
 		enemies = new Array<Creature>();
 		enemiesValues = new Map<Int,Float>();
-		evaluator = new EnemySelectEvaluation(this);
+		this.evaluator = evaluator;
+		this.evaluator.SetEnemyQueue(this);
 		
 		for (creature in GameContext.instance.getEnemies(playerId))
 		{
@@ -31,9 +33,14 @@ class EnemyQueue extends ArtificialInteligence
 	
 	override public function generateMove():MoveData 
 	{
+		return getEvaluationResult().getBestMove();
+	}
+	
+	public function getEvaluationResult() : EvaluationResult
+	{
 		UpdateValues();
 		var listOfMoves = GameContext.instance.generateMovesForCurrentCreature();
-		return evaluator.evaluateMoves(listOfMoves).getBestMove();
+		return evaluator.evaluateMoves(listOfMoves);
 	}
 	
 	public function UpdateValues()
