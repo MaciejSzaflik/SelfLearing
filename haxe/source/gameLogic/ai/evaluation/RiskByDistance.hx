@@ -4,6 +4,7 @@ import game.CreatureSprite;
 import gameLogic.ai.evaluation.RiskValues;
 import hex.HexCoordinates;
 import hex.HexMap;
+import thx.Tuple.Tuple2;
 import utilites.MathUtil;
 
 /**
@@ -22,6 +23,40 @@ class RiskByDistance implements EvaluatueBoard
 		
 	}
 	var dmgToCreature : Map<Int,Int>;
+	
+	public function evaluateState(myId : Int, enemyId : Int):Tuple2<Float,Float>
+	{
+		var sumForMe:Float = 0;
+		var sumForThem:Float = 0;
+		dmgToCreature = new Map<Int,Int>();
+		
+		for (hex in GameContext.instance.map.getGraph().getVertices().keys())
+		{
+			var coor = GameContext.instance.map.getHexByIndex(hex).getCoor();
+			
+			sumForThem = forEachCreature(enemyId,coor);
+			sumForMe = forEachCreature(myId,coor);
+		}
+		return new Tuple2(sumForMe, sumForThem);
+	}
+	
+	private function forEachCreature(playerId : Int, coor : HexCoordinates) : Float
+	{
+		var sum : Float = 0;
+		for (enemy in GameContext.instance.mapOfPlayers.get(playerId).creatures)
+			{	
+				if (enemy.currentCordinates == null)
+					continue;
+				
+				if(!enemy.isRanger)
+					sum += calculateMeleeValue(enemy,HexCoordinates.getManhatanDistance(enemy.currentCordinates, coor));
+				else
+					sum += calculateRangerValue(enemy,HexCoordinates.getManhatanDistance(enemy.currentCordinates, coor));
+			}	
+			
+		return sum;
+	}
+	
 	public function evaluateBoard(map : HexMap, creature : Creature, enemyCreatures : Array<Creature>):RiskValues
 	{
 		var values = new RiskValues();

@@ -128,23 +128,25 @@ class MainState extends FlxUIState
 	{
 		var player1 = new GamePlayer(0, DebugArmy(), ColorTable.PLAYER1_COLOR, PlayerType.Human,true);
 		var player2 = new GamePlayer(1, DebugArmy(), ColorTable.PLAYER2_COLOR, PlayerType.Human,false);
-		//player2.setAI(new BestMove(new KillTheWeakest(true)));
-		//player1.setAI(new BestMove(new KillTheWeakest(false)));
-		//player1.setAI(new BestMove(new KillTheWeakest(true)));
 		GameContext.instance.Init(getHexMap(), [player1, player2]); 
 		player2.setAI(new EnemyQueue(1, new EnemySelectEvaluation()));
 		player1.setAI(new EnemyQueue(1, new RewardBasedEvaluation()));
 		CreateUIQueue();
 		GameContext.instance.stateMachine.addNewStateChangeListener(function(state:String)
 		{
-			trace(state);
+			var evaluator : RiskByDistance = new RiskByDistance();
+			var result = evaluator.evaluateState(0, 1);
 			currentStateText.text = state;
+			evaluationPlayer1.text = "Pl1: " + result._0;
+			evaluationPlayer2.text = "Pl1: " + result._1;
+
 		});
 		
 		GameContext.instance.stateMachine.addNewStateChangeListener(function(state:String)
 		{
 			if(state == "Select Move")
 				ShowRiskByDistance();
+				
 		});
 				
 		GameContext.instance.Start();

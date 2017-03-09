@@ -38,7 +38,6 @@ class MinMax extends ArtificialInteligence
 			return;
 		
 		var listOfMoves = GameContext.instance.generateListOfMovesForCreature(creature);
-		//evaluate
 		var newNode = new MinMaxNode( -1, leadingMove, listOfMoves);
 		var index = currentRoot.addChild(newNode);
 		newNode.vertId = index;
