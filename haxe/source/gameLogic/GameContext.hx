@@ -168,6 +168,11 @@ class GameContext
 		return new PossibleAttacksInfo(attackTargets,attackCenters,attackHexesIds);
 	}
 	
+	public function getEnemyId(id : Int) : Int
+	{
+		return id == 0 ? 1 : 0;
+	}
+	
 	public function getCreaturesInRange(rangeCenter:Int, rangeSize:Int, playerId:Int, checkPlayer:Bool = false):PossibleAttacksInfo
 	{
 		var rangeInformation = map.getRange(rangeCenter, rangeSize, false);

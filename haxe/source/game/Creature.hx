@@ -47,7 +47,7 @@ class Creature
 	private var _stackCounter:Int;
 	public var stackCounter(get, set):Int;
 	
-	public var _idPlayerId:Int;
+	private var _idPlayerId:Int;
 	public var idPlayerId(get, set):Int;
 	public var definitionId:Int;
 	
