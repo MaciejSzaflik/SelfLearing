@@ -87,11 +87,14 @@ class MinMaxNode
 	public var moveData : MoveData;
 	public var listOfMoves : ListOfMoves;
 	public var vertId : Int;
+	public var nodeValue : Float;
+	public var playerId : Int;
 	
-	public function new(vertId : Int, moveData : MoveData, listOfMoves : ListOfMoves)
+	public function new(vertId : Int, moveData : MoveData, listOfMoves : ListOfMoves, value : Float = 0)
 	{
 		this.moveData = moveData;
 		this.vertId = vertId;
 		this.listOfMoves = listOfMoves;
+		this.nodeValue = value;
 	}
 }

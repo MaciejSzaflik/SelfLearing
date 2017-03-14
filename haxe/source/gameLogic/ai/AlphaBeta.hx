@@ -1,5 +1,12 @@
 package gameLogic.ai;
+import haxe.Timer;
+import game.Creature;
+import gameLogic.actions.ActionFactory;
 import gameLogic.ai.MinMax.MinMaxNode;
+import gameLogic.ai.evaluation.EvaluatueBoard;
+import gameLogic.ai.tree.TreeVertex;
+import gameLogic.moves.MoveData;
+import utilites.UtilUtil;
 
 /**
  * ...
@@ -10,12 +17,12 @@ class AlphaBeta extends ArtificialInteligence
 	private var evaluationMethod:EvaluatueBoard;
 	private var maxDepth:Int;
 	private var howManyUndo:Int;
-	private var alpha;
-	private var beta;
-	private var maximazingPlayer;
-	private var bestnode;
+	private var alpha : Float;
+	private var beta : Float;
+	private var maximazingPlayer : Int;
+	private var bestnode : TreeVertex<MinMaxNode>;
 	
-	public function new(depth:Int ,evaluationMethod:EvaluatueBoard) 
+	public function new(depth:Int ,evaluationMethod:EvaluatueBoard = null) 
 	{
 		this.evaluationMethod = evaluationMethod;
 		maxDepth = depth;
@@ -34,11 +41,9 @@ class AlphaBeta extends ArtificialInteligence
 		return treeRoot;
 	}
 	
-	
-	
-	private function alphaBeta(node:MinMaxNode, alpha:Float, beta:Float, maximisingPlayer:Int, depth:Int) : Float;
+	private function alphaBeta(node:MinMaxNode, alpha:Float, beta:Float, maximisingPlayer:Int, depth:Int) : Float
 	{
-		var bestValue : Float : 0;
+		var bestValue : Float = 0;
 		if (depth == maxDepth)
 		{
 			var action = ActionFactory.actionFromMoveData(node.moveData, null);
@@ -48,16 +53,43 @@ class AlphaBeta extends ArtificialInteligence
 			node.nodeValue = evalResult._0 * (1 / evalResult._1);
 			bestValue = node.nodeValue;
 		}
-		else
-		{
-			if()
-		}
-		
 		
 		return bestValue;
 		
 	}
 	
+	public static function valueAlfaBeta(node : TreeVertex<SimpleNode>,alpha,beta) : Int
+	{
+		var bestValue : Int;
+		if (node.childrenCount() == 0)
+		{
+			bestValue = node.value.value;
+		}
+		else if (node.value.maximazingPlayer) 
+		{
+			bestValue = alpha;
+			for (child in node.children) {
+				var childValue = valueAlfaBeta(child, bestValue, beta);
+				bestValue = Std.int(Math.max(bestValue, childValue));
+				if (beta <= bestValue) {
+					break;
+				}
+			}
+		}
+		else
+		{
+			bestValue = beta;
+			for (child in node.children) {
+				var childValue = valueAlfaBeta(child, alpha, bestValue);
+				bestValue = Std.int(Math.min(bestValue, childValue));
+				if (bestValue <= alpha) {
+					break;
+				}
+			}
+		}
+		
+		return bestValue;
+	}
 	
 	private function goToNextLevel(leadingMove: MoveData, currentRoot:TreeVertex<MinMaxNode>, creature:Creature,depth : Int)
 	{
@@ -115,4 +147,21 @@ class AlphaBeta extends ArtificialInteligence
 		trace(generateTree().treeToString() + " " +  (Timer.stamp() - timer));
 		return null;
 	}
+}
+
+
+class SimpleNode
+{
+	public var value : Null<Int>;
+	public var maximazingPlayer : Bool;
+	
+	public function new(value : Null<Int>, maximazingPlayer : Bool)
+	{
+		this.maximazingPlayer = maximazingPlayer;
+		this.value = value;
+	}
+	
+	 public function toString() {
+        return "("+value+","+maximazingPlayer+")";
+    }
 }

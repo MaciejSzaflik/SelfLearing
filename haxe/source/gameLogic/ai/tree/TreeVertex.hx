@@ -1,5 +1,6 @@
 package gameLogic.ai.tree;
 import gameLogic.moves.ListOfMoves;
+import utilites.UtilUtil;
 
 /**
  * ...
@@ -18,11 +19,26 @@ class TreeVertex<T>
 		this.value = value;
 		this.parent = parent;
 		this.children = new Map<Int,TreeVertex<T>>();
+		
+		if (parent != null)
+		{
+			this.parent.addVertexAsChild(this);
+		}
 	}
 	
 	public function getByIndex(index:Int):TreeVertex<T>
 	{
 		return children.get(index);
+	}
+	
+	public function addVertexAsChild(child:TreeVertex<T>)
+	{
+		this.children.set(child.id, child);
+	}
+	
+	public function childrenCount()
+	{
+		return UtilUtil.CountMap(children);
 	}
 	
 	public function addChild(child:T): Int
@@ -42,8 +58,12 @@ class TreeVertex<T>
 				stringBuf.add("\r\n * " + child.treeToString());
 			stringBuf.add("|CE|");
 		}
-		else
-			stringBuf.add("|LEAF|");
+		
+		if (UtilUtil.CountMap(children) == 0)
+		{
+			stringBuf.add("|V: " + value);
+			stringBuf.add(" |LEAF|");
+		}
 		stringBuf.add("\r\n");
 		return stringBuf.toString();
 	}
