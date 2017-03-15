@@ -14,6 +14,13 @@ class UtilUtil
 	   return ret; 
 	}
 	
+	@:generic public static function CountIterable<T>(iterable: Iterable<T>) 
+	{
+	   var ret = 0; 
+	   for (_ in iterable) ret++; 
+	   return ret; 
+	}
+	
 	public static function getIndexOf<T> (array:Array < T > , value:T):Int {
 		
 		for (i in 0...array.length)

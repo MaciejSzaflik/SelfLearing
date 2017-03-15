@@ -25,6 +25,21 @@ class AlphaBetaTest extends TestCase
 		assertEquals(7, AlphaBeta.valueAlfaBeta(generateTree2(),-1000,1000));
 	}
 	
+	public function testGenericTree()
+	{
+		assertEquals(3.0, AlphaBeta.genericAlfaBeta(2, 0, generateTree1(),
+			function(node : SimpleNode) { return node.getValue(); },
+			function(node : SimpleNode) { return node.getPlayerType(); },
+			function(node : TreeVertex<SimpleNode>) { return node.children; },
+			-1000, 1000));
+		
+		assertEquals(7.0, AlphaBeta.genericAlfaBeta(5, 0, generateTree2(),
+			function(node : SimpleNode) { return node.getValue(); },
+			function(node : SimpleNode) { return node.getPlayerType(); },
+			function(node : TreeVertex<SimpleNode>) { return node.children; },
+			-1000, 1000));
+	}
+	
 	
 	public function generateTree1() : TreeVertex<SimpleNode>
 	{

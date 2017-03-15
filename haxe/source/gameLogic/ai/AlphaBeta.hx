@@ -1,4 +1,5 @@
 package gameLogic.ai;
+import haxe.Constraints.Function;
 import haxe.Timer;
 import game.Creature;
 import gameLogic.actions.ActionFactory;
@@ -24,21 +25,9 @@ class AlphaBeta extends ArtificialInteligence
 	
 	public function new(depth:Int ,evaluationMethod:EvaluatueBoard = null) 
 	{
+		super();
 		this.evaluationMethod = evaluationMethod;
 		maxDepth = depth;
-		howManyUndo = 0;
-		super();
-	}
-	
-	private function generateTree():TreeVertex<MinMaxNode>
-	{
-		alpha = -1000000;
-		beta = 1000000;
-		maximazingPlayer = GameContext.instance.currentCreature.idPlayerId;
-		var treeRoot = new TreeVertex<MinMaxNode>(null, null);
-		bestnode = treeRoot;
-		goToNextLevel(null, treeRoot, GameContext.instance.currentCreature, 1);
-		return treeRoot;
 	}
 	
 	private function alphaBeta(node:MinMaxNode, alpha:Float, beta:Float, maximisingPlayer:Int, depth:Int) : Float
@@ -57,6 +46,57 @@ class AlphaBeta extends ArtificialInteligence
 		return bestValue;
 		
 	}
+	
+	
+	public static function genericAlfaBeta<T>(
+		maxDepth : Int, 
+		currentDepth : Int,
+		node : TreeVertex<T>, 
+		getValue : T->Float, 
+		getPlayerType : T -> Bool, 
+		getChildren : TreeVertex<T> -> Iterable<TreeVertex<T>>,
+		alpha : Float,
+		beta : Float) : Float
+	{
+		var bestValue : Float;
+		if (currentDepth == maxDepth)
+		{
+			bestValue = getValue(node.value);
+		}
+		else if (getPlayerType(node.value))
+		{
+			bestValue = alpha;
+			var counter : Int = 0;
+			for (child in getChildren(node)) {
+				counter++;
+				var childValue = genericAlfaBeta(maxDepth,currentDepth+1,child, getValue, getPlayerType, getChildren, bestValue, beta);
+				bestValue = Std.int(Math.max(bestValue, childValue));
+				if (beta <= bestValue) {
+					break;
+				}
+			}
+			if (counter == 0)
+				bestValue = getValue(node.value);
+		}
+		else
+		{
+			bestValue = beta;
+			var counter : Int = 0;
+			for (child in getChildren(node)) {
+				counter++;
+				var childValue = genericAlfaBeta(maxDepth,currentDepth+1,child, getValue, getPlayerType, getChildren, alpha, bestValue);
+				bestValue = Std.int(Math.min(bestValue, childValue));
+				if (bestValue <= alpha) {
+					break;
+				}
+			}
+			if (counter == 0)
+				bestValue = getValue(node.value);
+		}
+		return bestValue;
+	}
+	
+	
 	
 	public static function valueAlfaBeta(node : TreeVertex<SimpleNode>,alpha,beta) : Int
 	{
@@ -91,46 +131,6 @@ class AlphaBeta extends ArtificialInteligence
 		return bestValue;
 	}
 	
-	private function goToNextLevel(leadingMove: MoveData, currentRoot:TreeVertex<MinMaxNode>, creature:Creature,depth : Int)
-	{
-		if (creature == null)
-			return;
-		
-		var bestValue = 0;
-		var listOfMoves = GameContext.instance.generateListOfMovesForCreature(creature);
-		var newNode = new MinMaxNode( -1, leadingMove, listOfMoves);
-		var index = currentRoot.addChild(newNode);
-		newNode.vertId = index;
-		newNode.nodeValue = 0;
-		if (depth >= maxDepth)
-			return
-		else
-		{
-			if (leadingMove != null)
-			{
-				var action = ActionFactory.actionFromMoveData(leadingMove, null);
-				action.performAction();
-				newNode.playerId = action.performer.idPlayerId;
-				var evalResult = evaluationMethod.evaluateState(newNode.playerId, GameContext.instance.getEnemyId(newNode.playerId));
-				newNode.nodeValue = evalResult._0 * (1 / evalResult._1);
-			}
-			
-			
-			
-			
-			var nextCreature = GameContext.instance.getNextCreature();
-			for (moveData in listOfMoves.moves)
-			{
-				goToNextLevel(moveData, currentRoot.getByIndex(index), nextCreature, depth + 1);
-			}
-		}
-		
-		if (leadingMove != null)
-		{
-			GameContext.instance.undoNextAction();
-		}
-	}
-	
 	private function restoreContext()	
 	{
 		GameContext.instance.getNextCreature();
@@ -140,11 +140,8 @@ class AlphaBeta extends ArtificialInteligence
 		howManyUndo = 0;
 	}	
 
-	
 	override public function generateMove():MoveData 
 	{ 
-		var timer = Timer.stamp();
-		trace(generateTree().treeToString() + " " +  (Timer.stamp() - timer));
 		return null;
 	}
 }
@@ -154,6 +151,15 @@ class SimpleNode
 {
 	public var value : Null<Int>;
 	public var maximazingPlayer : Bool;
+	
+	public function getValue() : Float
+	{
+		return value;
+	}
+	public function getPlayerType() : Bool
+	{
+		return maximazingPlayer;
+	}
 	
 	public function new(value : Null<Int>, maximazingPlayer : Bool)
 	{
