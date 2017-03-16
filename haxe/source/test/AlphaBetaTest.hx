@@ -3,6 +3,8 @@ package test;
 import gameLogic.ai.AlphaBeta;
 import gameLogic.ai.AlphaBeta.SimpleNode;
 import gameLogic.ai.MinMax.MinMaxNode;
+import gameLogic.ai.NegaMax;
+import gameLogic.ai.NegaScout;
 import gameLogic.ai.tree.TreeVertex;
 import haxe.unit.TestCase;
 
@@ -19,13 +21,13 @@ class AlphaBetaTest extends TestCase
 		
 	}
 	
-	public function testTestSimpleTree()
+	public function testTestSimpleTreeAlfaBeta()
 	{
 		assertEquals(3, AlphaBeta.valueAlfaBeta(generateTree1(), -1000, 1000));
-		assertEquals(7, AlphaBeta.valueAlfaBeta(generateTree2(),-1000,1000));
+		assertEquals(7, AlphaBeta.valueAlfaBeta(generateTree2(), -1000, 1000));
 	}
 	
-	public function testGenericTree()
+	public function testGenericTreeAlfaBeta()
 	{
 		assertEquals(3.0, AlphaBeta.genericAlfaBeta(2, 0, generateTree1(),
 			function(node : SimpleNode) { return node.getValue(); },
@@ -40,6 +42,40 @@ class AlphaBetaTest extends TestCase
 			-1000, 1000));
 	}
 	
+	public function testTestSimpleTreeNegaScout()
+	{
+		assertEquals(3.0, NegaScout.valueNegaScout(generateTree1(), 2, 0, -1000, 1000));
+		assertEquals(7.0, NegaScout.valueNegaScout(generateTree2(), 2, 0, -1000, 1000));
+	}
+	
+	
+	public function testTestGenericTreeNegaScout()
+	{
+		assertEquals(3.0, NegaScout.genericNegaScout(generateTree1(), 2, 0, -1000, 1000,
+			function(node : SimpleNode) { return node.getValue(); },
+			function(node : TreeVertex<SimpleNode>) { return node.children; }));
+		assertEquals(7.0, NegaScout.genericNegaScout(generateTree2(), 2, 0, -1000, 1000,
+			function(node : SimpleNode) { return node.getValue(); },
+			function(node : TreeVertex<SimpleNode>) { return node.children; }));
+	}
+	
+	public function testTestGenericTreeNegaMax()
+	{
+		assertEquals(3.0, NegaMax.genericNegaMax(generateTree1(), 2, 0, -1000, 1000,
+		function(node : SimpleNode) { return node.getColor(); },
+		function(node : SimpleNode) { return node.getValue(); },
+		function(node : TreeVertex<SimpleNode>) { return node.children; }));
+		assertEquals(7.0, NegaMax.genericNegaMax(generateTree2(), 2, 0, -1000, 1000,
+		function(node : SimpleNode) { return node.getColor(); },
+		function(node : SimpleNode) { return node.getValue(); },
+		function(node : TreeVertex<SimpleNode>) { return node.children; }));
+	}
+	
+	public function testTestSimpleTreeNegaMax()
+	{
+		assertEquals(3.0, NegaMax.valueNegaMax(generateTree1(), 2, 0, -1000, 1000));
+		assertEquals(7.0, NegaMax.valueNegaMax(generateTree2(), 2, 0, -1000, 1000));
+	}
 	
 	public function generateTree1() : TreeVertex<SimpleNode>
 	{

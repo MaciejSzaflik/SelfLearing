@@ -161,6 +161,11 @@ class SimpleNode
 		return maximazingPlayer;
 	}
 	
+	public function getColor() : Int
+	{
+		return maximazingPlayer ? 1 : -1;
+	}
+	
 	public function new(value : Null<Int>, maximazingPlayer : Bool)
 	{
 		this.maximazingPlayer = maximazingPlayer;
