@@ -18,6 +18,7 @@ class NegaScout extends ArtificialInteligence
 	
 	
 	public static function genericNegaScout<T>(node : TreeVertex<T>, maxDepth : Int, depth : Int, alfa : Float, beta : Float,
+		getColor : T->Int,
 		getValue : T->Float, 
 		getChildren : TreeVertex<T> -> Iterable<TreeVertex<T>>) : Float
 	{
@@ -26,13 +27,13 @@ class NegaScout extends ArtificialInteligence
 		var t : Float;
 		
 		if (depth == maxDepth || node.childrenCount() == 0)
-			return getValue(node.value);
+			return getColor(node.value) * getValue(node.value);
 		var index = 0;
 		for (child in getChildren(node))
 		{
-			t = -genericNegaScout(child, maxDepth, depth + 1, -b, -alfa, getValue, getChildren);
+			t = -genericNegaScout(child, maxDepth, depth + 1, -b, -alfa, getColor, getValue, getChildren);
 			if ((t > a) && (t < beta) && index > 0)
-				t = -genericNegaScout(child, maxDepth, depth + 1, -beta, -alfa, getValue, getChildren);
+				t = -genericNegaScout(child, maxDepth, depth + 1, -beta, -alfa, getColor, getValue, getChildren);
 			alfa = Math.max(alfa, t);
 			
 			if (alfa >= beta)
@@ -51,7 +52,7 @@ class NegaScout extends ArtificialInteligence
 		var t : Float;
 		var a : Float = alfa;
 		if (depth == maxDepth || node.childrenCount() == 0)
-			return node.value.getValue();
+			return node.value.getColor() * node.value.getValue();
 		var index = 0;
 		for (child in node.children)
 		{

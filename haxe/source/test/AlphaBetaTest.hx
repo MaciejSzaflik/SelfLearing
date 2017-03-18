@@ -52,9 +52,11 @@ class AlphaBetaTest extends TestCase
 	public function testTestGenericTreeNegaScout()
 	{
 		assertEquals(3.0, NegaScout.genericNegaScout(generateTree1(), 2, 0, -1000, 1000,
+			function(node : SimpleNode) { return node.getColor();},
 			function(node : SimpleNode) { return node.getValue(); },
 			function(node : TreeVertex<SimpleNode>) { return node.children; }));
 		assertEquals(7.0, NegaScout.genericNegaScout(generateTree2(), 2, 0, -1000, 1000,
+			function(node : SimpleNode) { return node.getColor(); },
 			function(node : SimpleNode) { return node.getValue(); },
 			function(node : TreeVertex<SimpleNode>) { return node.children; }));
 	}
