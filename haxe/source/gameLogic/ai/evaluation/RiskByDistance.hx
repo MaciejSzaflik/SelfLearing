@@ -24,6 +24,15 @@ class RiskByDistance implements EvaluatueBoard
 	}
 	var dmgToCreature : Map<Int,Int>;
 	
+	public function evaluateStateSingle(myId : Int, enemyId : Int)
+	{
+		var tup = evaluateState(myId, enemyId);
+		if (tup._1 > 0)
+			return tup._0 / tup._1;
+		else
+			return 10;
+	}
+	
 	public function evaluateState(myId : Int, enemyId : Int):Tuple2<Float,Float>
 	{
 		var sumForMe:Float = 0;

@@ -56,7 +56,8 @@ class AlphaBeta extends ArtificialInteligence
 		getPlayerType : T -> Bool, 
 		getChildren : TreeVertex<T> -> Iterable<TreeVertex<T>>,
 		alpha : Float,
-		beta : Float) : Float
+		beta : Float,
+		beforeReturn : T-> Bool = null) : Float
 	{
 		var bestValue : Float;
 		if (currentDepth == maxDepth)
@@ -69,7 +70,7 @@ class AlphaBeta extends ArtificialInteligence
 			var counter : Int = 0;
 			for (child in getChildren(node)) {
 				counter++;
-				var childValue = genericAlfaBeta(maxDepth,currentDepth+1,child, getValue, getPlayerType, getChildren, bestValue, beta);
+				var childValue = genericAlfaBeta(maxDepth,currentDepth+1,child, getValue, getPlayerType, getChildren, bestValue, beta, beforeReturn);
 				bestValue = Std.int(Math.max(bestValue, childValue));
 				if (beta <= bestValue) {
 					break;
@@ -84,7 +85,7 @@ class AlphaBeta extends ArtificialInteligence
 			var counter : Int = 0;
 			for (child in getChildren(node)) {
 				counter++;
-				var childValue = genericAlfaBeta(maxDepth,currentDepth+1,child, getValue, getPlayerType, getChildren, alpha, bestValue);
+				var childValue = genericAlfaBeta(maxDepth,currentDepth+1,child, getValue, getPlayerType, getChildren, alpha, bestValue, beforeReturn);
 				bestValue = Std.int(Math.min(bestValue, childValue));
 				if (bestValue <= alpha) {
 					break;
@@ -93,6 +94,8 @@ class AlphaBeta extends ArtificialInteligence
 			if (counter == 0)
 				bestValue = getValue(node.value);
 		}
+		if (beforeReturn != null)
+			beforeReturn(node.value);
 		return bestValue;
 	}
 	

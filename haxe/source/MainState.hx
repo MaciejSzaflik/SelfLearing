@@ -18,10 +18,13 @@ import gameLogic.GameContext;
 import gameLogic.Input;
 import gameLogic.GamePlayer;
 import gameLogic.PlayerType;
+import gameLogic.actions.ActionFactory;
+import gameLogic.ai.AlphaBeta;
 import gameLogic.ai.BestMove;
 import gameLogic.ai.EnemyQueue;
 import gameLogic.ai.MinMax;
 import gameLogic.ai.RandomAI;
+import gameLogic.ai.evaluation.BasicBoardEvaluator;
 import gameLogic.ai.evaluation.EnemySelectEvaluation;
 import gameLogic.ai.evaluation.EvaluationResult;
 import gameLogic.ai.evaluation.KillTheWeakest;
@@ -29,6 +32,7 @@ import gameLogic.ai.evaluation.RewardBasedEvaluation;
 import gameLogic.ai.evaluation.RiskByDistance;
 import gameLogic.ai.evaluation.RiskMinimaizer;
 import gameLogic.ai.evaluation.TotalHp;
+import gameLogic.ai.tree.TreeVertex;
 import gameLogic.moves.MoveType;
 import haxe.Timer;
 import hex.HexMap;
@@ -129,12 +133,15 @@ class MainState extends FlxUIState
 		var player1 = new GamePlayer(0, DebugArmy(), ColorTable.PLAYER1_COLOR, PlayerType.Human,true);
 		var player2 = new GamePlayer(1, DebugArmy(), ColorTable.PLAYER2_COLOR, PlayerType.Human,false);
 		GameContext.instance.Init(getHexMap(), [player1, player2]); 
-		player2.setAI(new EnemyQueue(1, new EnemySelectEvaluation()));
-		player1.setAI(new EnemyQueue(1, new RewardBasedEvaluation()));
+		//player2.setAI(new EnemyQueue(1, new EnemySelectEvaluation()));
+		//player1.setAI(new EnemyQueue(1, new RewardBasedEvaluation()));
 		CreateUIQueue();
 		GameContext.instance.stateMachine.addNewStateChangeListener(function(state:String)
 		{
-			var evaluator : RiskByDistance = new RiskByDistance();
+			if (state == "Start Game")
+				return;
+			
+			var evaluator : BasicBoardEvaluator = new BasicBoardEvaluator();
 			var result = evaluator.evaluateState(0, 1);
 			currentStateText.text = state;
 			evaluationPlayer1.text = "Pl1: " + result._0;
@@ -393,7 +400,7 @@ class MainState extends FlxUIState
 		}
 	}
 	
-	private static var mainInterfaceButtons:Array<String> = ["back", "debug", "eval_1", "eval_2"];
+	private static var mainInterfaceButtons:Array<String> = ["back", "debug", "eval_1", "eval_2","eval_3"];
 	private function isButtonMainInterface(buttonName:String):Bool
 	{
 		return mainInterfaceButtons.indexOf(buttonName) != -1;
@@ -416,6 +423,50 @@ class MainState extends FlxUIState
 			var a1 = new EnemyQueue(GameContext.instance.currentPlayerIndex, new RewardBasedEvaluation());	
 			var result = a1.getEvaluationResult();
 			EvalCurrentSituation(!evalShown,result);
+		}
+		else if (buttonName == "eval_3")
+		{
+			var boardEvaluator : BasicBoardEvaluator = new BasicBoardEvaluator();
+			var minimaxNode = new MinMaxNode(0, null, null);
+
+			var treeVertex = new TreeVertex<MinMaxNode>();
+			treeVertex.value = minimaxNode;
+			treeVertex.value.playerId = GameContext.instance.currentPlayerIndex;
+			var playerId = GameContext.instance.currentPlayerIndex;
+			var enemyPlayerId =  GameContext.instance.currentPlayerIndex == 0 ? 1 : 0;
+			
+			
+			var totalTimer = 0;
+			var moveGenerationTimer = 0;
+			var evaluationTimer = 0;
+			
+			var result = AlphaBeta.genericAlfaBeta(2, 0, treeVertex,
+				function(node : MinMaxNode) { 
+					var action = ActionFactory.actionFromMoveData(node.moveData, null);
+					action.performAction();
+					
+					var value = boardEvaluator.evaluateStateSingle(playerId, enemyPlayerId);
+					
+					GameContext.instance.undoNextAction();
+					return value;
+				},
+				function(node : MinMaxNode) {
+					return node.playerId == playerId;
+				},
+				function(vertex : TreeVertex<MinMaxNode>){
+					if (vertex.value.moveData != null)
+					{
+						var action = ActionFactory.actionFromMoveData(vertex.value.moveData, null);
+						action.performAction();
+					}
+					return GameContext.instance.generateTreeVertexListMoves(vertex);
+					
+				}, -1000000, 1000000,
+				function(node : MinMaxNode) { 
+					return GameContext.instance.undoNextAction();
+				});
+				
+			trace(result);
 		}
 	}
 	

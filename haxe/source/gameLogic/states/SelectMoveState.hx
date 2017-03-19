@@ -36,6 +36,7 @@ class SelectMoveState extends State
 		this.stateName = "Select Move";
 		super(stateMachine);
 		clearAll();
+		GameContext.instance.currentPlayerIndex = creature.idPlayerId;
 		selectedCreature = creature;
 		isHuman = GameContext.instance.typeOfCurrentPlayer() == PlayerType.Human;
 		if(isHuman)

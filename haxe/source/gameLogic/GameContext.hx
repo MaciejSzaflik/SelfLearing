@@ -4,6 +4,7 @@ import flixel.math.FlxPoint;
 import game.Creature;
 import gameLogic.ActionLog;
 import gameLogic.actions.Action;
+import gameLogic.ai.MinMax.MinMaxNode;
 import gameLogic.ai.tree.TreeVertex;
 import gameLogic.moves.ListOfMoves;
 import gameLogic.moves.MoveData;
@@ -133,6 +134,11 @@ class GameContext
 		stateMachine.init();
 	}
 	
+	public function getPlayerCreatures(playerId:Int):Array<Creature>
+	{
+		return mapOfPlayers.get(playerId).creatures;
+	}
+	
 	public function getEnemies(playerId:Int):Array<Creature>
 	{
 		var enemies = new Array<Creature>();
@@ -228,10 +234,8 @@ class GameContext
 	
 	private function addRangerAttacks(creature:Creature, listOfMoves:ListOfMoves, rangeInformation:Map<Int,Int>, enemies:Array<Creature>)
 	{
-		trace(creature.isRanger + " " + creature.moved );
 		if (creature.isRanger && !creature.moved)
 		{
-			trace(creature.getEnemyNeighbours().lenght);
 			if (creature.getEnemyNeighbours().lenght > 0)
 				return;
 			
@@ -241,7 +245,6 @@ class GameContext
 			{
 				if (range.exists(enemy.getTileId()))
 				{
-					trace("adding ranger attack");
 					listOfMoves.addMove(MoveData.createAttackMove(creature, MoveType.Attack, creature.getTileId(), enemy));
 				}
 			}
@@ -260,14 +263,27 @@ class GameContext
 		return generateListOfMovesForCreature(currentCreature);
 	}
 	
+	public function generateTreeVertexListMoves(root : TreeVertex<MinMaxNode>) : List<TreeVertex<MinMaxNode>>
+	{
+		var toReturn : List<TreeVertex<MinMaxNode>> = new List<TreeVertex<MinMaxNode>>();
+		for (move in generateListOfMovesForCreature(currentCreature).moves)
+		{
+			var node : MinMaxNode = new MinMaxNode(0, move, null);
+			node.playerId = currentCreature.idPlayerId;
+			toReturn.add(new TreeVertex<MinMaxNode>(root,node));
+		}
+		return toReturn;
+	}
+	
+	
 	public function generateListOfMovesForCreature(creature:Creature):ListOfMoves
 	{
 		var listOfMoves = new ListOfMoves();
 		var range =  map.getRange(creature.getTileId(), creature.range, true);
+		getCreatureAttackTargets(creature, listOfMoves, range);
 		for (tileId in range)
 			listOfMoves.addMove(new MoveData(creature,MoveType.Move, tileId));
 			
-		getCreatureAttackTargets(creature, listOfMoves, range);
 		return listOfMoves;
 	}
 	
@@ -338,7 +354,8 @@ class GameContext
 	{
 		var backedAction = actionLog.goBack();
 		if (backedAction == null)
-			return;
+			return false;
+		return true;
 		
 		//inititativeQueue.putCreatureOnTop(currentCreature);	
 			

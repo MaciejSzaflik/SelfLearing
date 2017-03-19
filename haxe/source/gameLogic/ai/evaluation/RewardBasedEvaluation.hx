@@ -53,10 +53,10 @@ class RewardBasedEvaluation extends EnemySelectEvaluation
 			var enemies = GameContext.instance.getEnemies(currentCreature.getTileId());
 			moveValue+= aliveCheck();
 			moveValue+= totalEnemyHealthCalc(totalEnemyHealth, enemies);
-			moveValue+= enemyCount(enemies);
-			moveValue+= enemiesInAttackRange(enemies);
-			moveValue+= enemiesThatCanAttackMe(enemies);
-			moveValue+= enemyNeighbours();
+			moveValue+= enemyCount(enemies.length);
+			moveValue+= enemiesInAttackRange(currentCreature,enemies);
+			moveValue+= enemiesThatCanAttackMe(currentCreature,enemies);
+			moveValue+= enemyNeighbours(currentCreature);
 			moveValue+= byMoveType(move);
 			
 			result.evaluationResults.set(index, Std.int(moveValue));
@@ -86,7 +86,19 @@ class RewardBasedEvaluation extends EnemySelectEvaluation
 		return 0;
 	}
 	
-	private function calculateEnemyHealth(enemies: Array<Creature>)
+	public static function GetEvaluation(playerId: Int)
+	{
+		var value : Float = 0;
+		var enemies = GameContext.instance.getEnemies(playerId);
+		var our = GameContext.instance.getPlayerCreatures(playerId);
+		value += calculateEnemyHealth(our);
+		value += enemyCount(enemies.length);
+		value += enemiesAtRangeTotal(our, enemies);
+		value += enemyNeighboursTotal(our);
+		return value;
+	}
+	
+	public static function calculateEnemyHealth(enemies: Array<Creature>) : Float
 	{
 		var totalHealth = 0.0;
 		for (enemy in enemies)
@@ -95,6 +107,39 @@ class RewardBasedEvaluation extends EnemySelectEvaluation
 		}
 		return totalHealth;
 	}
+	
+	public static function enemyCount(enemyCount : Int) : Float
+	{
+		return enemyCount*ENEMY_COUNT_REWARD;
+	}
+	
+	public static function enemiesAtRangeTotal(ourCreatures : Array<Creature>, enemies: Array<Creature>) : Float
+	{
+		var total : Float = 0;
+		for (creature in ourCreatures)
+		{
+			total += enemiesInAttackRange(creature, enemies);
+		}
+		return total;
+	}
+	
+	
+	public static function enemyNeighboursTotal(ourCreatures : Array<Creature>) : Float
+	{
+		var total : Float = 0;
+		for (creature in ourCreatures)
+		{
+			total += enemyNeighbours(creature);
+		}
+		return total;
+	}
+	
+	
+	private static function enemyNeighbours(creature : Creature) : Float
+	{
+		return creature.getEnemyNeighbours().lenght * (creature.isRanger? NEIGHBOURS_REWARD_RANGER : NEIGHBOURS_REWARD_MELEE);
+	}
+	
 	
 	private function aliveCheck() : Float
 	{
@@ -110,16 +155,12 @@ class RewardBasedEvaluation extends EnemySelectEvaluation
 		return ENEMY_HEALTH_REWARD * proc;
 	}
 	
-	private function enemyCount(enemies: Array<Creature>) : Float
-	{
-		return enemies.length*ENEMY_COUNT_REWARD;
-	}
 	
-	private function enemiesInAttackRange(enemies: Array<Creature>) : Float
+	private static function enemiesInAttackRange(current: Creature, enemies: Array<Creature>) : Float
 	{
 		var range = GameContext.instance.map.findRangeNoObstacles(
-			currentCreature.getTileId(),
-			currentCreature.attackRange);
+			current.getTileId(),
+			current.attackRange);
 		
 		var countOfEnemies = 0;
 		
@@ -132,7 +173,7 @@ class RewardBasedEvaluation extends EnemySelectEvaluation
 		return countOfEnemies*ATTACK_POSSIBILTY_REWARD;
 	}
 	
-	private function enemiesThatCanAttackMe(enemies: Array<Creature>) : Float
+	private static function enemiesThatCanAttackMe(current: Creature, enemies: Array<Creature>) : Float
 	{
 		var countOfEnemies = 0;
 		for (enemy in enemies)
@@ -142,11 +183,11 @@ class RewardBasedEvaluation extends EnemySelectEvaluation
 			{
 				enemyRange+= enemy.range;
 			}
-			var distance = HexCoordinates.getManhatanDistance(currentCreature.currentCordinates,enemy.currentCordinates);
+			var distance = HexCoordinates.getManhatanDistance(current.currentCordinates,enemy.currentCordinates);
 			if(enemyRange >= distance)
 				countOfEnemies++;
 		}
-		return countOfEnemies* (currentCreature.isRanger? DISTANCE_TO_ENEMY_REWARD_RANGER : DISTANCE_TO_ENEMY_REWARD_MELEE);
+		return countOfEnemies* (current.isRanger? DISTANCE_TO_ENEMY_REWARD_RANGER : DISTANCE_TO_ENEMY_REWARD_MELEE);
 	}
 	
 	private function selfHealthy(myPastHealth:Int) : Float
@@ -160,10 +201,7 @@ class RewardBasedEvaluation extends EnemySelectEvaluation
 		return 0;
 	}
 	
-	private function enemyNeighbours() : Float
-	{
-		return currentCreature.getEnemyNeighbours().lenght * (currentCreature.isRanger? NEIGHBOURS_REWARD_RANGER : NEIGHBOURS_REWARD_MELEE);
-	}
+	
 
 	
 }

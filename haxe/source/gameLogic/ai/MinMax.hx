@@ -89,6 +89,10 @@ class MinMaxNode
 	public var vertId : Int;
 	public var nodeValue : Float;
 	public var playerId : Int;
+	public function getEnemyId() : Int
+	{
+		return playerId == 0 ? 1 : 0;
+	}
 	
 	public function new(vertId : Int, moveData : MoveData, listOfMoves : ListOfMoves, value : Float = 0)
 	{

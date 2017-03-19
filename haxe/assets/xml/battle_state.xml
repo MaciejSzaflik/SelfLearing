@@ -43,6 +43,10 @@
 <button x="eval_1_btn.left-40" width="40"  y="bottom_panel.center-10" id="eval_2_btn" label="e2">
 		<param type="string" value="eval_2"/>
 </button>
+	
+<button x="eval_2_btn.left-40" width="40"  y="bottom_panel.center-10" id="eval_3_btn" label="e3">
+		<param type="string" value="eval_3"/>
+</button>
 
 
 	
