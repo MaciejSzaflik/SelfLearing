@@ -436,36 +436,48 @@ class MainState extends FlxUIState
 			var enemyPlayerId =  GameContext.instance.currentPlayerIndex == 0 ? 1 : 0;
 			
 			
-			var totalTimer = 0;
-			var moveGenerationTimer = 0;
-			var evaluationTimer = 0;
-			
+			var totalTimer = Timer.stamp();
+			var moveGenerationTimer : Float = 0;
+			var evaluationTimer : Float = 0;
 			var result = AlphaBeta.genericAlfaBeta(2, 0, treeVertex,
 				function(node : MinMaxNode) { 
+					var time = Timer.stamp();
 					var action = ActionFactory.actionFromMoveData(node.moveData, null);
 					action.performAction();
-					
+					node.wasLeaf = true;
 					var value = boardEvaluator.evaluateStateSingle(playerId, enemyPlayerId);
 					
 					GameContext.instance.undoNextAction();
+					evaluationTimer += Timer.stamp() - time;
 					return value;
 				},
 				function(node : MinMaxNode) {
 					return node.playerId == playerId;
 				},
 				function(vertex : TreeVertex<MinMaxNode>){
+					var time = Timer.stamp();
 					if (vertex.value.moveData != null)
 					{
 						var action = ActionFactory.actionFromMoveData(vertex.value.moveData, null);
 						action.performAction();
+						GameContext.instance.inititativeQueue.getNextCreature();
 					}
-					return GameContext.instance.generateTreeVertexListMoves(vertex);
+					var toReturn = GameContext.instance.generateTreeVertexListMoves(vertex);
+					moveGenerationTimer += Timer.stamp() - time;
+					return toReturn;
 					
 				}, -1000000, 1000000,
 				function(node : MinMaxNode) { 
+					if (node.moveData == null)
+						return false;
+					
+					//if(!node.wasLeaf )
+					//	GameContext.instance.inititativeQueue.putCreatureOnTop(node.moveData.performer);
 					return GameContext.instance.undoNextAction();
 				});
-				
+			trace("Total time: " + (Timer.stamp() - totalTimer));
+			trace("Move generation time: " + moveGenerationTimer);
+			trace("Evaluation time: " + evaluationTimer);
 			trace(result);
 		}
 	}
