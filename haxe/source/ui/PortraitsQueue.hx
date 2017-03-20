@@ -5,7 +5,7 @@ import flixel.group.FlxGroup;
 import flixel.math.FlxPoint;
 import game.Creature;
 import gameLogic.GameContext;
-import gameLogic.InitiativeQueue;
+import gameLogic.queue.CreatureQueue;
 import source.SpriteFactory;
 
 /**
@@ -19,12 +19,12 @@ class PortraitsQueue
 	private var maxSize:Int;
 	
 	private var sizeOfPortrait:Int;
-	private var logicData:InitiativeQueue;
+	private var logicData:CreatureQueue;
 	
 	private var currentPortrait:FlxSprite;
 	private var positionOfPortrait:FlxPoint;
 	
-	public function new(logicData:InitiativeQueue,frame:FlxUI9SliceSprite,portraitFrame:FlxUI9SliceSprite,posibbleSize:Float,sizeOfPortrait:Int) 
+	public function new(logicData:CreatureQueue,frame:FlxUI9SliceSprite,portraitFrame:FlxUI9SliceSprite,posibbleSize:Float,sizeOfPortrait:Int) 
 	{
 		this.logicData = logicData;
 		this.sizeOfPortrait = sizeOfPortrait;

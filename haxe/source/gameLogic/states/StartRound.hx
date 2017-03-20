@@ -24,7 +24,7 @@ class StartRound extends State
 	
 	private function resertOnTurnEffects()
 	{
-		for (creature in GameContext.instance.inititativeQueue.queue)
+		for (creature in GameContext.instance.inititativeQueue.getQueueIterator())
 		{
 			creature.waited = false;
 		}

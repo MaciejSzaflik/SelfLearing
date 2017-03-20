@@ -9,6 +9,8 @@ import gameLogic.ai.tree.TreeVertex;
 import gameLogic.moves.ListOfMoves;
 import gameLogic.moves.MoveData;
 import gameLogic.moves.MoveType;
+import gameLogic.queue.CreatureQueue;
+import gameLogic.queue.InitiativeQueue;
 import gameLogic.states.SelectMoveState;
 import hex.BoardShape;
 import hex.Hex;
@@ -42,7 +44,7 @@ class GameContext
 	public var mapOfPlayers:Map<Int,GamePlayer>;
 	public var currentPlayerIndex(get, set):Int;
 	public var tileToCreature:Map<Int,Creature>;
-	public var inititativeQueue:InitiativeQueue;
+	public var inititativeQueue:CreatureQueue;
 	public var currentCreature:Creature;
 	public var stateMachine:GameStateMachine;
 	public var actionLog:ActionLog;
@@ -105,7 +107,7 @@ class GameContext
 	
 	public function getSizeOfQueue():Int
 	{
-		return inititativeQueue.queue.length;
+		return inititativeQueue.getSizeOfQueue();
 	}
 	
 	public function getPositionOnMapOddR(x:Int, y:Int):FlxPoint

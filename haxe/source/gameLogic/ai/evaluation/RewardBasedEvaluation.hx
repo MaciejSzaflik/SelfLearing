@@ -93,8 +93,8 @@ class RewardBasedEvaluation extends EnemySelectEvaluation
 		var our = GameContext.instance.getPlayerCreatures(playerId);
 		value += calculateEnemyHealth(our);
 		value += enemyCount(enemies.length);
-		value += enemiesAtRangeTotal(our, enemies);
-		value += enemyNeighboursTotal(our);
+		//value += enemiesAtRangeTotal(our, enemies);
+		//value += enemyNeighboursTotal(our);
 		return value;
 	}
 	

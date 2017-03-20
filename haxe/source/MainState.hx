@@ -439,14 +439,15 @@ class MainState extends FlxUIState
 			var totalTimer = Timer.stamp();
 			var moveGenerationTimer : Float = 0;
 			var evaluationTimer : Float = 0;
-			var result = AlphaBeta.genericAlfaBeta(2, 0, treeVertex,
+			var nodesVistied : Int = 0;
+			var result = AlphaBeta.genericAlfaBeta(3, 0, treeVertex,
 				function(node : MinMaxNode) { 
 					var time = Timer.stamp();
 					var action = ActionFactory.actionFromMoveData(node.moveData, null);
 					action.performAction();
 					node.wasLeaf = true;
 					var value = boardEvaluator.evaluateStateSingle(playerId, enemyPlayerId);
-					
+					nodesVistied++;
 					GameContext.instance.undoNextAction();
 					evaluationTimer += Timer.stamp() - time;
 					return value;
@@ -478,6 +479,7 @@ class MainState extends FlxUIState
 			trace("Total time: " + (Timer.stamp() - totalTimer));
 			trace("Move generation time: " + moveGenerationTimer);
 			trace("Evaluation time: " + evaluationTimer);
+			trace("Nodes visited: " + nodesVistied);
 			trace(result);
 		}
 	}
