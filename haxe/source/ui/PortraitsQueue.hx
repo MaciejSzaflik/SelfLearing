@@ -3,6 +3,7 @@ import flixel.FlxSprite;
 import flixel.addons.ui.FlxUI9SliceSprite;
 import flixel.group.FlxGroup;
 import flixel.math.FlxPoint;
+import flixel.util.FlxColor;
 import game.Creature;
 import gameLogic.GameContext;
 import gameLogic.queue.CreatureQueue;
@@ -72,7 +73,8 @@ class PortraitsQueue
 		var i = 0;
 		while (i < maxSize)
 		{
-			var creature = logicData.getInOrder(i);
+			var creature = logicData.getInOrder(i + 1);
+			
 			if (creature != null)
 			{
 				var portrait = portraitGroup.recycle();
@@ -87,7 +89,12 @@ class PortraitsQueue
 					portrait.loadGraphic(SpriteFactory.instance.getPortraitPath(creature.name), false, 64, 64);
 				}
 				portrait.setPosition(frame.getPosition().x + 4, frame.getPosition().y + 4 + 64 * i);
+			
 				portrait.color = GameContext.instance.mapOfPlayers.get(creature.idPlayerId).color;
+				if (i >= logicData.getSizeOfQueue() - logicData.getCurrentPosition() - 1)
+				{
+					portrait.color = 0xFF00FFCC;
+				}
 				
 			}
 			i++;

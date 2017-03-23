@@ -37,7 +37,16 @@ class CreatureQueue
 		return 0;
 	}
 	
+	public function getCurrentPosition() : Int
+	{
+		return 0;
+	}
+	
 	public function putCreatureOnQueueBottom(creature:Creature)
+	{
+	}
+	
+	public function MakeCreatureWait(creature:Creature)
 	{
 	}
 	

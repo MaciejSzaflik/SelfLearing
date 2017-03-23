@@ -206,7 +206,7 @@ class MainState extends FlxUIState
 		var knight = Creature.fromDefinition(knightDefinition,15);
 		creatureList.push(knight);
 		knight.addCreatureToState(this);
-		knight = Creature.fromDefinition(knightDefinition,15);
+		/*knight = Creature.fromDefinition(knightDefinition,15);
 		creatureList.push(knight);
 		knight.addCreatureToState(this);
 		knight = Creature.fromDefinition(knightDefinition,15);
@@ -217,18 +217,18 @@ class MainState extends FlxUIState
 		knight.addCreatureToState(this);
 		knight = Creature.fromDefinition(priestDefinition,15);
 		creatureList.push(knight);
-		knight.addCreatureToState(this);
+		knight.addCreatureToState(this);*/
 		
 		
 		var archer = Creature.fromDefinition(archerDefinition,10);
 		creatureList.push(archer);
 		archer.addCreatureToState(this);
-		archer = Creature.fromDefinition(archerDefinition,10);
+		/*archer = Creature.fromDefinition(archerDefinition,10);
 		creatureList.push(archer);
 		archer.addCreatureToState(this);
 		archer = Creature.fromDefinition(archerDefinition,10);
 		creatureList.push(archer);
-		archer.addCreatureToState(this);
+		archer.addCreatureToState(this);*/
 		
 		return creatureList;
 	}

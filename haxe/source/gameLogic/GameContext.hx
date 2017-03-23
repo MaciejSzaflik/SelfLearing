@@ -9,6 +9,7 @@ import gameLogic.ai.tree.TreeVertex;
 import gameLogic.moves.ListOfMoves;
 import gameLogic.moves.MoveData;
 import gameLogic.moves.MoveType;
+import gameLogic.queue.ContinuesQueue;
 import gameLogic.queue.CreatureQueue;
 import gameLogic.queue.InitiativeQueue;
 import gameLogic.states.SelectMoveState;
@@ -127,7 +128,7 @@ class GameContext
 		for (player in listOfPlayers)
 			mapOfPlayers.set(player.id, player);
 		
-		this.inititativeQueue = new InitiativeQueue();
+		this.inititativeQueue = new ContinuesQueue();
 		stateMachine = new GameStateMachine(this);
 	}
 	

@@ -1,5 +1,6 @@
 package gameLogic.queue;
 import game.Creature;
+import thx.Tuple.Tuple2;
 
 /**
  * ...
@@ -10,7 +11,8 @@ class ContinuesQueue extends CreatureQueue
 
 	public var queue:Array<Creature>;
 	public var creaturesToQueuePosition : Map<Int,Int>;
-	public var currentCounter : Int = 0;
+	
+	public var currentCounter : Int = -1;
 	public function new() 
 	{
 		super();
@@ -36,9 +38,9 @@ class ContinuesQueue extends CreatureQueue
 				return x.initiative - y.initiative;
 		});	
 		
-		for (i : 0...queue.length)
+		for (i in 0...queue.length)
 		{
-			creaturesToQueuePosition.set(creature.id, i);
+			creaturesToQueuePosition.set(queue[i].id, i);
 		}
 		
 		informOnFill();
@@ -47,8 +49,30 @@ class ContinuesQueue extends CreatureQueue
 	override public inline function getNextCreature():Creature
 	{
 		currentCounter++;
+		
+		if (currentCounter == queue.length)
+			endOfTurnOperations();
+		
 		currentCounter = currentCounter % queue.length;
+		
+		trace(currentCounter);
 		return onPop(queue[currentCounter]);
+	}
+	
+	private inline function endOfTurnOperations()
+	{
+		trace("endOfTurnOperations");
+		
+		for (creature in queue)
+		{
+			creature.waited = false;
+		}
+		
+		queue.sort(function(x:Creature, y:Creature):Int 
+		{
+			return  creaturesToQueuePosition[x.id] - creaturesToQueuePosition[y.id];
+		});	
+
 	}
 	
 	override public inline function getQueueIterator():Iterable<Creature> 
@@ -61,15 +85,17 @@ class ContinuesQueue extends CreatureQueue
 		return queue.length;
 	}
 	
-	override public inline function putCreatureOnQueueBottom(creature:Creature)
+	override public inline function getCurrentPosition():Int 
 	{
-		queue.insert(0, creature);
-		informOnFill();
+		return currentCounter;
 	}
 	
-	override public inline function putCreatureOnTop(creature:Creature)
+	override public inline function MakeCreatureWait(creature:Creature)
 	{
+		currentCounter--;
+		queue.remove(creature);
 		queue.push(creature);
+		informOnFill();
 	}
 	
 	override public inline function putCreatureOnIndex(creature:Creature,index:Int)
@@ -79,10 +105,8 @@ class ContinuesQueue extends CreatureQueue
 	
 	override public inline function getInOrder(index:Int):Creature
 	{
-		if (queue.length > index)
-			return queue[queue.length - index - 1];
-		else
-			return null;
+		var index : Int = (currentCounter + index) % queue.length;
+		return queue[index];
 	}
 	
 	override public function onPop(creature:Creature):Creature
@@ -102,6 +126,7 @@ class ContinuesQueue extends CreatureQueue
 		var index = queue.indexOf(toRemove);
 		queue.remove(toRemove);
 		informOnKill(toRemove);
+		
 		return index;
 	}
 	

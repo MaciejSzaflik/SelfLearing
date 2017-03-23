@@ -21,7 +21,7 @@ class WaitAction extends Action
 		if (!performer.waited)
 		{
 			performer.waited = true;
-			GameContext.instance.inititativeQueue.putCreatureOnQueueBottom(performer);	
+			GameContext.instance.inititativeQueue.MakeCreatureWait(performer);	
 		}
 		if (onFinish != null)
 				onFinish();
