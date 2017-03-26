@@ -8,14 +8,8 @@ import gameLogic.moves.MoveData;
  * ...
  * @author 
  */
-class NegaScout extends ArtificialInteligence
+class NegaScout
 {
-
-	override public function generateMove():MoveData 
-	{
-		return super.generateMove();
-	}
-	
 	
 	public static function genericNegaScout<T>(node : TreeVertex<T>, maxDepth : Int, depth : Int, alfa : Float, beta : Float,
 		getColor : T->Int,

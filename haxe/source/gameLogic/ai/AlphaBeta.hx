@@ -13,7 +13,7 @@ import utilites.UtilUtil;
  * ...
  * @author 
  */
-class AlphaBeta extends ArtificialInteligence
+class AlphaBeta 
 {
 	private var evaluationMethod:EvaluatueBoard;
 	private var maxDepth:Int;
@@ -25,7 +25,6 @@ class AlphaBeta extends ArtificialInteligence
 	
 	public function new(depth:Int ,evaluationMethod:EvaluatueBoard = null) 
 	{
-		super();
 		this.evaluationMethod = evaluationMethod;
 		maxDepth = depth;
 	}
@@ -47,14 +46,13 @@ class AlphaBeta extends ArtificialInteligence
 		
 	}
 	
-	
 	public static function genericAlfaBeta<T>(
 		maxDepth : Int, 
 		currentDepth : Int,
 		node : TreeVertex<T>, 
 		getValue : T->Float, 
 		getPlayerType : T -> Bool, 
-		getChildren : TreeVertex<T> -> Iterable<TreeVertex<T>>,
+		getChildren : TreeVertex<T> -> Int -> Iterable<TreeVertex<T>>,
 		alpha : Float,
 		beta : Float,
 		beforeReturn : T-> Bool = null) : Float
@@ -68,7 +66,7 @@ class AlphaBeta extends ArtificialInteligence
 		{
 			bestValue = alpha;
 			var counter : Int = 0;
-			for (child in getChildren(node)) {
+			for (child in getChildren(node, currentDepth)) {
 				counter++;
 				var childValue = genericAlfaBeta(maxDepth,currentDepth+1,child, getValue, getPlayerType, getChildren, bestValue, beta, beforeReturn);
 				bestValue = Std.int(Math.max(bestValue, childValue));
@@ -83,7 +81,7 @@ class AlphaBeta extends ArtificialInteligence
 		{
 			bestValue = beta;
 			var counter : Int = 0;
-			for (child in getChildren(node)) {
+			for (child in getChildren(node,currentDepth)) {
 				counter++;
 				var childValue = genericAlfaBeta(maxDepth,currentDepth+1,child, getValue, getPlayerType, getChildren, alpha, bestValue, beforeReturn);
 				bestValue = Std.int(Math.min(bestValue, childValue));
@@ -142,11 +140,6 @@ class AlphaBeta extends ArtificialInteligence
 				
 		howManyUndo = 0;
 	}	
-
-	override public function generateMove():MoveData 
-	{ 
-		return null;
-	}
 }
 
 

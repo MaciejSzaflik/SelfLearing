@@ -7,13 +7,8 @@ import gameLogic.moves.MoveData;
  * ...
  * @author 
  */
-class NegaMax extends ArtificialInteligence
+class NegaMax 
 {
-	override public function generateMove():MoveData 
-	{
-		return super.generateMove();
-	}
-	
 	public static function genericNegaMax<T>(node :TreeVertex<T>, maxDepth : Int, depth : Int, alpha : Float, beta : Float,
 		getColor : T->Int,
 		getValue : T->Float, 

@@ -95,6 +95,14 @@ class GameContext
 		stateMachine.handleInput(input);
 	}
 	
+	public function redrawCreaturesPositions()
+	{
+		for (creature in inititativeQueue.getQueueIterator())
+		{
+			creature.redrawPosition();
+		}
+	}
+	
 	public function typeOfCurrentPlayer():PlayerType
 	{
 		return mapOfPlayers.get(currentCreature.idPlayerId).playerType;
@@ -266,13 +274,13 @@ class GameContext
 		return generateListOfMovesForCreature(currentCreature);
 	}
 	
-	public function generateTreeVertexListMoves(root : TreeVertex<MinMaxNode>) : List<TreeVertex<MinMaxNode>>
+	public function generateTreeVertexListMoves(root : TreeVertex<MinMaxNode>, creature :Creature) : List<TreeVertex<MinMaxNode>>
 	{
 		var toReturn : List<TreeVertex<MinMaxNode>> = new List<TreeVertex<MinMaxNode>>();
-		for (move in generateListOfMovesForCreature(currentCreature).moves)
+		for (move in generateListOfMovesForCreature(creature).moves)
 		{
 			var node : MinMaxNode = new MinMaxNode(0, move, null);
-			node.playerId = currentCreature.idPlayerId;
+			node.playerId = creature.idPlayerId;
 			toReturn.add(new TreeVertex<MinMaxNode>(root,node));
 		}
 		return toReturn;
