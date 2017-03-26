@@ -15,7 +15,7 @@ class MainTest extends Sprite
 	
 	public function runTest()
 	{
-		 var r = new haxe.unit.TestRunner();
+		var r = new haxe.unit.TestRunner();
 		r.add(new AlphaBetaTest());
 
 		r.run();

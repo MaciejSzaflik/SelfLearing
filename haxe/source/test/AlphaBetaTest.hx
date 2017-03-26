@@ -7,7 +7,7 @@ import gameLogic.ai.NegaMax;
 import gameLogic.ai.NegaScout;
 import gameLogic.ai.tree.TreeVertex;
 import haxe.unit.TestCase;
-
+import thx.Tuple.Tuple2;
 /**
  * ...
  * @author 
@@ -21,26 +21,38 @@ class AlphaBetaTest extends TestCase
 		
 	}
 	
+	
+	public function testGenericTreeAlfaBeta()
+	{
+		TreeVertex.idGenerator = 0;
+		var firstTree = generateTree1();
+		var value = AlphaBeta.genericAlfaBeta(2, 0, firstTree,
+			function(node : TreeVertex<SimpleNode>) { return new Tuple2<TreeVertex<SimpleNode>,Float>(node,node.value.getValue()); },
+			function(node : SimpleNode) { return node.getPlayerType(); },
+			function(node : TreeVertex<SimpleNode>, currentDepth : Int) { return node.children; },
+			-1000, 1000);
+		assertEquals(3.0, value._1);
+		assertEquals(4, value._0.id);
+			
+		var secondTree = generateTree2();
+		value = AlphaBeta.genericAlfaBeta(5, 0, secondTree,
+			function(node : TreeVertex<SimpleNode>) { return new Tuple2<TreeVertex<SimpleNode>,Float>(node,node.value.getValue()); },
+			function(node : SimpleNode) { return node.getPlayerType(); },
+			function(node : TreeVertex<SimpleNode>, currentDepth : Int) { return node.children; },
+			-1000, 1000);
+		assertEquals(7.0, value._1);
+		assertEquals(17, value._0.id);
+		
+		trace(TreeVertex.getOneBeforeRoot(value._0).id);
+		
+	}
+	
 	public function testTestSimpleTreeAlfaBeta()
 	{
 		assertEquals(3, AlphaBeta.valueAlfaBeta(generateTree1(), -1000, 1000));
 		assertEquals(7, AlphaBeta.valueAlfaBeta(generateTree2(), -1000, 1000));
 	}
 	
-	public function testGenericTreeAlfaBeta()
-	{
-		assertEquals(3.0, AlphaBeta.genericAlfaBeta(2, 0, generateTree1(),
-			function(node : SimpleNode) { return node.getValue(); },
-			function(node : SimpleNode) { return node.getPlayerType(); },
-			function(node : TreeVertex<SimpleNode>, currentDepth : Int) { return node.children; },
-			-1000, 1000));
-		
-		assertEquals(7.0, AlphaBeta.genericAlfaBeta(5, 0, generateTree2(),
-			function(node : SimpleNode) { return node.getValue(); },
-			function(node : SimpleNode) { return node.getPlayerType(); },
-			function(node : TreeVertex<SimpleNode>, currentDepth : Int) { return node.children; },
-			-1000, 1000));
-	}
 	
 	public function testTestSimpleTreeNegaScout()
 	{

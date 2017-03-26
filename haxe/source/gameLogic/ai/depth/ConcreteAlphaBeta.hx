@@ -8,6 +8,8 @@ import gameLogic.ai.evaluation.BasicBoardEvaluator;
 import gameLogic.ai.tree.TreeVertex;
 import gameLogic.moves.MoveData;
 import haxe.Timer;
+import thx.Tuple.Tuple2;
+import js.html.svg.FETurbulenceElement;
 
 /**
  * ...
@@ -25,24 +27,27 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 	private var enemyPlayerId : Int;
 	private var startCreatureIndex : Int;
 	
-	public function new() 
+	private var maximalDepth : Int;
+	
+	public function new(depth : Int) 
 	{
 		super();
+		maximalDepth = depth;
 		boardEvaluator = new BasicBoardEvaluator();
 	}
 	
-	private inline function evaluateMinMaxNode(node : MinMaxNode) : Float
+	private inline function evaluateMinMaxNode(node : TreeVertex<MinMaxNode>) : Tuple2<TreeVertex<MinMaxNode>,Float>
 	{
 		var time = Timer.stamp();
-		var action = ActionFactory.actionFromMoveData(node.moveData, null);
+		var action = ActionFactory.actionFromMoveData(node.value.moveData, null);
 		action.performAction();
-		node.wasLeaf = true;
+		node.value.wasLeaf = true;
 		var value = boardEvaluator.evaluateStateSingle(playerId, enemyPlayerId);
 		nodesVistied++;
 		GameContext.instance.undoNextAction();
 		
 		evaluationTimer += Timer.stamp() - time;
-		return value;
+		return new Tuple2<TreeVertex<MinMaxNode>,Float>(node,value);
 	}
 	
 	private inline function generateChildren(vertex : TreeVertex<MinMaxNode>, currentDepth : Int) : Iterable<TreeVertex<MinMaxNode>>
@@ -93,7 +98,8 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 		
 		startCreatureIndex = GameContext.instance.inititativeQueue.getCurrentPosition();
 		
-		var result = AlphaBeta.genericAlfaBeta(4, 0, treeVertex, evaluateMinMaxNode,
+		var result = AlphaBeta.genericAlfaBeta(maximalDepth, 0, treeVertex, 
+			evaluateMinMaxNode,
 			getPlayerType,
 			generateChildren, -1000000, 1000000,
 			onFinish);
@@ -103,8 +109,8 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 		trace("Move generation time: " + moveGenerationTimer);
 		trace("Evaluation time: " + evaluationTimer);
 		trace("Nodes visited: " + nodesVistied);
-		trace(result);
-		return null;
+		
+		return TreeVertex.getOneBeforeRoot(result._0).value.moveData;
 	}
 	
 }

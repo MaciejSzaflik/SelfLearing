@@ -8,7 +8,7 @@ import utilites.UtilUtil;
  */
 class TreeVertex<T>
 {
-	static var idGenerator:Int = 0;
+	public static var idGenerator:Int = 0;
 	public var id:Int;
 	public var value:T;
 	public var parent:TreeVertex<T>;
@@ -46,6 +46,17 @@ class TreeVertex<T>
 		var newChild = new TreeVertex<T>(this, child);
 		children.set(newChild.id, newChild);
 		return newChild.id;
+	}
+	
+	public static function getOneBeforeRoot<T>(node : TreeVertex<T>) : TreeVertex<T>		
+	{
+		if (node.parent == null)
+			return null;
+		else if (node.parent.parent == null)
+			return node;
+		else
+			return getOneBeforeRoot(node.parent);
+		
 	}
 	
 	public function treeToString():String

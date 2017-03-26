@@ -7,6 +7,7 @@ import gameLogic.ai.MinMax.MinMaxNode;
 import gameLogic.ai.evaluation.EvaluatueBoard;
 import gameLogic.ai.tree.TreeVertex;
 import gameLogic.moves.MoveData;
+import thx.Tuple.Tuple2;
 import utilites.UtilUtil;
 
 /**
@@ -50,50 +51,62 @@ class AlphaBeta
 		maxDepth : Int, 
 		currentDepth : Int,
 		node : TreeVertex<T>, 
-		getValue : T->Float, 
+		getValue : TreeVertex<T>-> Tuple2<TreeVertex<T>,Float>, 
 		getPlayerType : T -> Bool, 
 		getChildren : TreeVertex<T> -> Int -> Iterable<TreeVertex<T>>,
 		alpha : Float,
 		beta : Float,
-		beforeReturn : T-> Bool = null) : Float
+		beforeReturn : T-> Bool = null) : Tuple2<TreeVertex<T>,Float>
 	{
-		var bestValue : Float;
+		var bestValue : Tuple2<TreeVertex<T>,Float> = new Tuple2<TreeVertex<T>,Float> (node, 0);
+		
 		if (currentDepth == maxDepth)
 		{
-			bestValue = getValue(node.value);
+			bestValue = getValue(node);
 		}
 		else if (getPlayerType(node.value))
 		{
-			bestValue = alpha;
+			bestValue._1 = alpha;
 			var counter : Int = 0;
 			for (child in getChildren(node, currentDepth)) {
 				counter++;
-				var childValue = genericAlfaBeta(maxDepth,currentDepth+1,child, getValue, getPlayerType, getChildren, bestValue, beta, beforeReturn);
-				bestValue = Std.int(Math.max(bestValue, childValue));
-				if (beta <= bestValue) {
+				var childValue = genericAlfaBeta(maxDepth,currentDepth+1,child, getValue, getPlayerType, getChildren, bestValue._1, beta, beforeReturn);
+				
+				if (bestValue._1 < childValue._1)
+				{
+					bestValue = childValue;
+				}
+				
+				if (beta <= bestValue._1) {
 					break;
 				}
 			}
 			if (counter == 0)
-				bestValue = getValue(node.value);
+				bestValue = getValue(node);
 		}
 		else
 		{
-			bestValue = beta;
+			bestValue._1 = beta;
 			var counter : Int = 0;
 			for (child in getChildren(node,currentDepth)) {
 				counter++;
-				var childValue = genericAlfaBeta(maxDepth,currentDepth+1,child, getValue, getPlayerType, getChildren, alpha, bestValue, beforeReturn);
-				bestValue = Std.int(Math.min(bestValue, childValue));
-				if (bestValue <= alpha) {
+				var childValue = genericAlfaBeta(maxDepth,currentDepth+1,child, getValue, getPlayerType, getChildren, alpha, bestValue._1, beforeReturn);
+				
+				if (bestValue._1 > childValue._1)
+				{
+					bestValue = childValue;
+				}
+				
+				if (bestValue._1 <= alpha) {
 					break;
 				}
 			}
 			if (counter == 0)
-				bestValue = getValue(node.value);
+				bestValue = getValue(node);
 		}
 		if (beforeReturn != null)
 			beforeReturn(node.value);
+			
 		return bestValue;
 	}
 	
