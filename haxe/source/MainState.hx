@@ -134,8 +134,8 @@ class MainState extends FlxUIState
 		var player1 = new GamePlayer(0, DebugArmy(), ColorTable.PLAYER1_COLOR, PlayerType.Human,true);
 		var player2 = new GamePlayer(1, DebugArmy(), ColorTable.PLAYER2_COLOR, PlayerType.Human,false);
 		GameContext.instance.Init(getHexMap(), [player1, player2]); 
-		//player2.setAI(new EnemyQueue(1, new EnemySelectEvaluation()));
-		//player1.setAI(new EnemyQueue(1, new RewardBasedEvaluation()));
+		player2.setAI(new EnemyQueue(1, new EnemySelectEvaluation()));
+		player1.setAI(new EnemyQueue(1, new RewardBasedEvaluation()));
 		CreateUIQueue();
 		GameContext.instance.stateMachine.addNewStateChangeListener(function(state:String)
 		{

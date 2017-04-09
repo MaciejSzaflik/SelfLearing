@@ -50,6 +50,8 @@ class GameContext
 	public var stateMachine:GameStateMachine;
 	public var actionLog:ActionLog;
 	
+	public var creaturesMap:Map<Int,Creature>;
+	
 	private var currentPlayer:GamePlayer;
 	private var _currentPlayerIndex:Int;
 	
@@ -58,6 +60,7 @@ class GameContext
 		set_instance(this);
 		tileToCreature = new Map<Int,Creature>();
 		actionLog = new ActionLog();
+		creaturesMap = new Map<Int,Creature>();
 	}
 	
 	public function mapHeight():Int

@@ -25,11 +25,92 @@ class Creature
 	public var x:Int;
 	public var y:Int;
 	
+	public var dynamicInfo : CreatureDynamicInfo;
+	
 	public var canContrattack(get, never):Bool;
-	public var contrattackCountter:Int;
-	public var currentActionPoints:Int;
-	public var defending:Bool;
-	public var waited:Bool;
+	
+	public var contrattackCounter(get, set):Int;
+	public var currentActionPoints(get, set):Int;
+	public var defending(get, set):Bool;
+	public var waited(get, set):Bool;
+	public var currentHealth(get, set):Int;
+	
+	public var moved(get, set):Bool;
+	public var lostHitPoints(get, set): Int;
+	
+	////////////////////////////////////////////////
+	
+	public function get_contrattackCounter():Int 
+	{
+		return dynamicInfo.contrattackCounter;
+	}
+	
+	public function set_contrattackCounter(value:Int):Int 
+	{
+		return dynamicInfo.contrattackCounter = value;
+	}
+	
+	public function get_currentActionPoints():Int 
+	{
+		return dynamicInfo.currentActionPoints;
+	}
+	
+	public function set_currentActionPoints(value:Int):Int 
+	{
+		return dynamicInfo.currentActionPoints = value;
+	}
+	
+	public function get_defending():Bool 
+	{
+		return dynamicInfo.defending;
+	}
+	
+	public function set_defending(value:Bool):Bool 
+	{
+		return dynamicInfo.defending = value;
+	}
+	
+	public function get_waited():Bool 
+	{
+		return dynamicInfo.waited;
+	}
+	
+	public function set_waited(value:Bool):Bool 
+	{
+		return dynamicInfo.waited = value;
+	}
+	
+	public function get_currentHealth():Int 
+	{
+		return dynamicInfo.currentHealth;
+	}
+	
+	public function set_currentHealth(value:Int):Int 
+	{
+		return dynamicInfo.currentHealth = value;
+	}
+	
+	public function get_moved():Bool 
+	{
+		return dynamicInfo.moved;
+	}
+	
+	public function set_moved(value:Bool):Bool 
+	{
+		return dynamicInfo.moved = value;
+	}
+	
+	public function get_lostHitPoints():Int 
+	{
+		return dynamicInfo.lostHitPoints;
+	}
+	
+	public function set_lostHitPoints(value:Int):Int 
+	{
+		return dynamicInfo.lostHitPoints = value;
+	}
+	
+	///////////////////////////////////////////////
 	
 	public var currentCordinates:HexCoordinates;
 	
@@ -37,14 +118,13 @@ class Creature
 	public var range(get, never):Int;
 	public var attackRange(get, never):Int;
 	
-	public var currentHealth:Int;
+	
 	public var totalHealth(get, never):Int;
 	public var unitHealth(get, never):Int;
 	public var attack(get, never):Int;
 	public var attackVariance(get, never):Int;
 	public var isRanger(get, never):Bool;
 	
-	private var _stackCounter:Int;
 	public var stackCounter(get, set):Int;
 	
 	private var _idPlayerId:Int;
@@ -56,9 +136,6 @@ class Creature
 	private var _definition:CreatureDefinition;
 	public var definition(get, never):CreatureDefinition;
 	
-	public var moved:Bool = false;
-	public var lostHitPoints = 0;
-	
 	public var position(get, never):FlxPoint;
 	public var name(get, never):String;
 	public var level(get, never):Int;
@@ -69,11 +146,11 @@ class Creature
 	}	
 	function get_stackCounter():Int
 	{
-		return _stackCounter;
+		return dynamicInfo.stackSize;
 	}
 	function set_stackCounter(value:Int):Int
 	{
-		_stackCounter = value;
+		dynamicInfo.stackSize = value;
 		label.setText(Std.string(value));
 		return value;
 	}
@@ -99,7 +176,7 @@ class Creature
 	{
 		return definition.health;
 	}
-	function get_totalHealth():Int
+	inline function get_totalHealth():Int
 	{
 		return unitHealth*stackCounter + currentHealth;
 	}
@@ -119,7 +196,7 @@ class Creature
 	}
 	function get_canContrattack():Bool
 	{
-		return contrattackCountter < definition.contrattactsNumber;
+		return contrattackCounter < definition.contrattactsNumber;
 	}
 	function get_isRanger():Bool
 	{
@@ -214,6 +291,7 @@ class Creature
 		this.y = y;
 		this.sprite = sprite;
 		this.label = SpriteFactory.instance.createNewLabel();
+		this.dynamicInfo = new CreatureDynamicInfo();
 	}
 	
 	public function getTileId():Int
@@ -265,7 +343,7 @@ class Creature
 	public function addCreatureToState(stateToAdd:FlxState)
 	{	
 		MainState.getInstance().getDrawer().AddToCreatureGroup(this);
-		
+		GameContext.instance.creaturesMap.set(this.id, this);
 		sprite.setPosition(x, y);
 		label.setPosition(x, y);
 	}
@@ -277,6 +355,16 @@ class Creature
 			sprite.reset(this.position.x, this.position.y);
 		else
 			sprite.kill();
+	}
+	
+	public function getDynamicInfoCopy() : CreatureDynamicInfo
+	{
+		return dynamicInfo.copy();
+	}
+	
+	public function applyDynamicInfo(info : CreatureDynamicInfo)
+	{
+		dynamicInfo.applyInfo(info);
 	}
 	
 }

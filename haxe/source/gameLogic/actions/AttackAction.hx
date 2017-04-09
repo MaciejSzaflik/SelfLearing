@@ -47,7 +47,7 @@ class AttackAction extends Action
 		if (attackerAttack.isAlive && distance == 1 && defender.canContrattack)
 		{
 			defenderAttack = attack(defender, performer);
-			defender.contrattackCountter++;
+			defender.contrattackCounter++;
 			if (onFinish != null)
 				onFinish();
 		}
@@ -69,7 +69,7 @@ class AttackAction extends Action
 				doSimpleAttackAnimation(performer, defender, 1, function()
 				{				
 					defenderAttack = attack(defender, performer);
-					defender.contrattackCountter++;
+					defender.contrattackCounter++;
 					if (onFinish != null)
 						onFinish();
 				});
@@ -121,7 +121,7 @@ class AttackAction extends Action
 		defender.lostHitPoints -= attackerAttack.attackPower;
 		if (defenderAttack != null)
 		{
-			defender.contrattackCountter--;
+			defender.contrattackCounter--;
 			performer.recalculateStackSize(performer.totalHealth + defenderAttack.attackPower);
 			performer.lostHitPoints -= defenderAttack.attackPower;
 			if (!defenderAttack.isAlive)

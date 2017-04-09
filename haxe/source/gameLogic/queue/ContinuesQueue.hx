@@ -114,7 +114,7 @@ class ContinuesQueue extends CreatureQueue
 		if (creature == null)
 			return null;
 		creature.currentActionPoints = creature.range;
-		creature.contrattackCountter = 0;
+		creature.contrattackCounter = 0;
 		creature.moved = false;
 		creature.defending = false;
 		informOnPop(creature);

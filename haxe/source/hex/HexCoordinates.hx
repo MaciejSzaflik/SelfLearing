@@ -83,4 +83,9 @@ class HexCoordinates
 		return Math.floor(((xValue + yValue + 1) * (xValue + yValue)) / 2) + yValue; 
 	}
 	
+	public function copy() : HexCoordinates
+	{
+		return new HexCoordinates(this.q, this.r);
+	}
+	
 }
