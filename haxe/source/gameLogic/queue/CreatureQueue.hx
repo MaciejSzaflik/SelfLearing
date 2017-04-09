@@ -50,6 +50,10 @@ class CreatureQueue
 	{
 	}
 	
+	public function SetFromMomentum(currentPos : Int, creatures : Array<Creature>, pos : Map<Int,Int>)
+	{
+		
+	}
 	
 	public function putCreatureOnIndex(creature:Creature,index:Int)
 	{

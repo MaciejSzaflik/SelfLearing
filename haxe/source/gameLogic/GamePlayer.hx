@@ -21,6 +21,9 @@ class GamePlayer
 	public var deadCreatures:Array<Creature>;
 	public var artificialInt:ArtificialInteligence;
 	public var reversedSprites:Bool;
+	
+	
+	
 	public function new(id:Int,creatures:Array<Creature>,color:FlxColor,playerType:PlayerType,reversedSprites:Bool) 
 	{
 		this.playerType = playerType;

@@ -111,10 +111,10 @@ class GameContext
 		return mapOfPlayers.get(currentCreature.idPlayerId).playerType;
 	}
 	
-	public function getNextCreature():Creature
+	public function getNextCreature() : Creature
 	{
-		currentCreature = inititativeQueue.getNextCreature();
-		return currentCreature;
+		var creature : Creature = inititativeQueue.getNextCreature();
+		return creature;
 	}
 	
 	public function getSizeOfQueue():Int
@@ -394,5 +394,17 @@ class GameContext
 				playerCreature.recalculateStackSize(playerCreature.totalHealth);
 			}
 		}
+	}
+	
+	public function getMomento() : GameContexMomento
+	{
+		var momento : GameContexMomento = new GameContexMomento();
+		momento.StoreContex(this);
+		return momento;
+	}
+	
+	public function restoreFromMomento(momento : GameContexMomento)
+	{
+		momento.RestoreContex(this);
 	}
 }

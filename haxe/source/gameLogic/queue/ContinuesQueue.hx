@@ -130,4 +130,11 @@ class ContinuesQueue extends CreatureQueue
 		return index;
 	}
 	
+	override public function SetFromMomentum(currentPos:Int, creatures:Array<Creature>, pos:Map<Int, Int>) 
+	{
+		currentCounter = currentPos;
+		queue = creatures;
+		creaturesToQueuePosition = pos;
+	}
+	
 }
