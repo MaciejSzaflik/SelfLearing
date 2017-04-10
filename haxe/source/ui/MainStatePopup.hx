@@ -31,12 +31,12 @@ class MainStatePopup extends FlxUIPopup
 	
 	public function save()
 	{
-		
+		MainState.getInstance().SaveMomento();
 	}
 	
 	public function load()
 	{
-		
+		MainState.getInstance().RestoreMomento();
 	}
 	
 	public function restart()

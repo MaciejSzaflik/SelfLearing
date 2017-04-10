@@ -40,7 +40,8 @@ class CreatureDynamicInfo
 		this.lostHitPoints = info.lostHitPoints;
 		this.currentHealth = info.currentHealth;
 		
-		this.currentCordinates = info.currentCordinates.copy();  
+		if(info.currentCordinates!=null)
+			this.currentCordinates = info.currentCordinates.copy();  
 	}
 	
 	public function copy() : CreatureDynamicInfo
@@ -57,7 +58,9 @@ class CreatureDynamicInfo
 		toReturn.lostHitPoints = this.lostHitPoints;
 		toReturn.currentHealth = this.currentHealth;
 		
-		toReturn.currentCordinates = this.currentCordinates.copy();  
+		if(this.currentCordinates!=null)
+			toReturn.currentCordinates = this.currentCordinates.copy();  
+			
 		return toReturn;
 	}
 }

@@ -15,6 +15,7 @@ import flixel.util.FlxColor;
 import game.Creature;
 import game.StageDescription;
 import gameLogic.ActionLog;
+import gameLogic.GameContexMomento;
 import gameLogic.GameContext;
 import gameLogic.Input;
 import gameLogic.GamePlayer;
@@ -62,6 +63,8 @@ class MainState extends FlxUIState
 		return instance;
 	}
 	
+	private var contexMomento : GameContexMomento;
+	
 	public var stageDescription:StageDescription;
 
 	private var btnPlay:FlxButton;
@@ -108,6 +111,22 @@ class MainState extends FlxUIState
 			CreateGameContex();
 		});
 	}
+	
+	public function SaveMomento()
+	{
+		contexMomento = new GameContexMomento();
+		contexMomento.StoreContex(GameContext.instance);
+	}
+	
+	public function RestoreMomento()
+	{
+		if (contexMomento == null)
+			return;
+		
+		contexMomento.RestoreContex(GameContext.instance);
+		contexMomento = null;
+	}
+	
 	
 	private function CreateDebugMap()
 	{
