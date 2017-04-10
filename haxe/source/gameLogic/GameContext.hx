@@ -58,6 +58,7 @@ class GameContext
 	public function new() 
 	{
 		set_instance(this);
+		
 		tileToCreature = new Map<Int,Creature>();
 		actionLog = new ActionLog();
 		creaturesMap = new Map<Int,Creature>();
@@ -113,8 +114,8 @@ class GameContext
 	
 	public function getNextCreature() : Creature
 	{
-		var creature : Creature = inititativeQueue.getNextCreature();
-		return creature;
+		currentCreature = inititativeQueue.getNextCreature();
+		return currentCreature;
 	}
 	
 	public function getSizeOfQueue():Int
@@ -135,12 +136,15 @@ class GameContext
 	public function Init(map:HexMap, listOfPlayers:Array<GamePlayer>)
 	{
 		this.map = map;
+		
 		this.mapOfPlayers = new Map<Int,GamePlayer>();
 		for (player in listOfPlayers)
 			mapOfPlayers.set(player.id, player);
 		
 		this.inititativeQueue = new ContinuesQueue();
 		stateMachine = new GameStateMachine(this);
+		
+		
 	}
 	
 	public function Start()

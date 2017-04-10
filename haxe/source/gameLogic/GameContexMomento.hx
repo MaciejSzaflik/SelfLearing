@@ -19,6 +19,8 @@ class GameContexMomento
 	
 	public var creaturesDynamicInfo : Map<Int,CreatureDynamicInfo>;
 	
+	public var currentCreatureId : Int;
+	
 	public function new() 
 	{
 		
@@ -26,6 +28,8 @@ class GameContexMomento
 	
 	public function StoreContex(toStore : GameContext)
 	{
+		currentCreatureId = toStore.currentCreature.id;
+		
 		savePlayersArrys(toStore);
 		saveCreadturesDynamicInfo(toStore);
 		saveMap(toStore);
@@ -34,6 +38,8 @@ class GameContexMomento
 	
 	public function RestoreContex(toFill : GameContext)
 	{
+		toFill.currentCreature = toFill.creaturesMap.get(currentCreatureId);
+		
 		restorePlayers(toFill);
 		restoreCreadturesDynamicInfo(toFill);
 		restoreMap(toFill);

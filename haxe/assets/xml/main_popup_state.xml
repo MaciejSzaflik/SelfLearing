@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<data>	
+	<include id="main_popup_state"/>
+	
+	<sprite id="black" x="0" y="0" width="100%" height="100%" color="0x48000000"/>
+	
+	<chrome id="back" src="ui/frame_big" slice9="4,4,8,8" x="25" y="25" width="120" height="200">		
+		<anchor x="center" x-flush="center" y="center" y-flush="center"/>
+	</chrome>
+	
+	<button id="btn0" x="0" y="-20" label="Close">
+		<anchor x="back.center" x-flush="center" y="back.bottom" y-flush="bottom"/>
+		<param type="int" value="0"/>		
+	</button>
+	
+	<button id="btn1" x="0" y="25" label="Save">
+		<anchor x="back.center" x-flush="center" y="back.top" y-flush="top"/>
+		<param type="int" value="1"/>		
+	</button>
+	
+	<button id="btn2" x="0" y="50" label="Load">
+		<anchor x="back.center" x-flush="center" y="back.top" y-flush="top"/>
+		<param type="int" value="2"/>		
+	</button>
+	
+	<button id="btn3" x="0" y="75" label="Restart">
+		<anchor x="back.center" x-flush="center" y="back.top" y-flush="top"/>
+		<param type="int" value="3"/>		
+	</button>
+	
+</data>

@@ -55,14 +55,11 @@ class ContinuesQueue extends CreatureQueue
 		
 		currentCounter = currentCounter % queue.length;
 		
-		trace(currentCounter);
 		return onPop(queue[currentCounter]);
 	}
 	
 	private inline function endOfTurnOperations()
-	{
-		trace("endOfTurnOperations");
-		
+	{	
 		for (creature in queue)
 		{
 			creature.waited = false;

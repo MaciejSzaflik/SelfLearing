@@ -14,6 +14,7 @@ import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
 import game.Creature;
 import game.StageDescription;
+import gameLogic.ActionLog;
 import gameLogic.GameContext;
 import gameLogic.Input;
 import gameLogic.GamePlayer;
@@ -43,11 +44,13 @@ import openfl.events.Event;
 import source.Drawer;
 import source.SpriteFactory;
 import ui.ColorTable;
+import ui.MainStatePopup;
 import ui.PortraitsQueue;
 import utilites.GameConfiguration;
 import utilites.InputType;
 import utilites.MathUtil;
 import utilites.ThreadProvider;
+import utilites.UtilUtil;
 
 using flixel.util.FlxSpriteUtil;
 
@@ -129,6 +132,23 @@ class MainState extends FlxUIState
 		portraitQueue = new PortraitsQueue(GameContext.instance.inititativeQueue, uiQueue,uiPortrait, uiRightPanel.height, 64);
 	}
 
+	
+	public function TryToRestart()
+	{
+		GameContext.instance.map.getGraph().impassableVertices = new Map<Int,Bool>();
+		for (creature in GameContext.instance.creaturesMap)
+		{
+			trace(creature.id);
+			creature.enable(false);
+		}
+		
+		GameContext.instance.tileToCreature = new Map<Int,Creature>();
+		GameContext.instance.actionLog = new ActionLog();
+		GameContext.instance.creaturesMap = new Map<Int,Creature>();
+		
+		CreateGameContex();
+	}
+	
 	private function CreateGameContex()
 	{
 		var player1 = new GamePlayer(0, DebugArmy(), ColorTable.PLAYER1_COLOR, PlayerType.Human,true);
@@ -407,10 +427,15 @@ class MainState extends FlxUIState
 		return mainInterfaceButtons.indexOf(buttonName) != -1;
 	}
 	
+	private function openPopup()
+	{
+		openSubState(new MainStatePopup());
+	}
+	
 	private function handleButtonClick(buttonName:String)
 	{
 		if (buttonName == "back")
-			GameContext.instance.undoNextAction();
+			openPopup();	
 		else if (buttonName == "debug")
 			EnableDebugRisk(!debugEnabled);
 		else if (buttonName == "eval_1")
