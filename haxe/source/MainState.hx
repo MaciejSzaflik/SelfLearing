@@ -479,7 +479,7 @@ class MainState extends FlxUIState
 		}
 		else if (buttonName == "eval_3")
 		{
-			var alpha = new ConcreteAlphaBeta(3);
+			var alpha = new ConcreteAlphaBeta(3,false);
 			
 			Creature.ignoreUpdate = true;
 			ThreadProvider.instance.AddTask(function(){

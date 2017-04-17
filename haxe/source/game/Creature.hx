@@ -173,10 +173,13 @@ class Creature
 	{
 		return dynamicInfo.stackSize;
 	}
-	function set_stackCounter(value:Int):Int
+	function set_stackCounter(value:Int)
 	{
 		dynamicInfo.stackSize = value;
-		label.setText(Std.string(value));
+		
+		if (!Creature.ignoreUpdate)
+			label.setText(Std.string(value));
+			
 		return value;
 	}
 	

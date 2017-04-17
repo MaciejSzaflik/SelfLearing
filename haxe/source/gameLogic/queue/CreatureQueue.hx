@@ -59,6 +59,11 @@ class CreatureQueue
 	{
 	}
 	
+	public function getOnPlace(index:Int):Creature
+	{
+		return null;
+	}
+	
 	public function getInOrder(index:Int):Creature
 	{
 		return null;

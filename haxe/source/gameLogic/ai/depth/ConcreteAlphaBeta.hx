@@ -29,10 +29,13 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 	
 	private var maximalDepth : Int;
 	
-	public function new(depth : Int) 
+	private var shouldGetNextCreature : Bool;
+	
+	public function new(depth : Int, shouldGetNextCreature : Bool) 
 	{
 		super();
 		maximalDepth = depth;
+		this.shouldGetNextCreature = shouldGetNextCreature;
 		boardEvaluator = new BasicBoardEvaluator();
 	}
 	
@@ -53,8 +56,12 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 	private inline function generateChildren(vertex : TreeVertex<MinMaxNode>, currentDepth : Int) : Iterable<TreeVertex<MinMaxNode>>
 	{
 		var time = Timer.stamp();
-		var creature = GameContext.instance.inititativeQueue.getInOrder(startCreatureIndex + currentDepth);
-
+		var creature = null;
+		if(shouldGetNextCreature)
+			creature = GameContext.instance.inititativeQueue.getOnPlace(startCreatureIndex + currentDepth);
+		else
+			creature = GameContext.instance.inititativeQueue.getOnPlace(startCreatureIndex);
+		
 		if (vertex.value.moveData != null)
 		{
 			var action = ActionFactory.actionFromMoveData(vertex.value.moveData, null);
@@ -97,6 +104,8 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 		nodesVistied = 0;
 		
 		startCreatureIndex = GameContext.instance.inititativeQueue.getCurrentPosition();
+		trace(startCreatureIndex);
+		trace(GameContext.instance.inititativeQueue.getOnPlace(startCreatureIndex).name);
 		
 		var result = AlphaBeta.genericAlfaBeta(maximalDepth, 0, treeVertex, 
 			evaluateMinMaxNode,

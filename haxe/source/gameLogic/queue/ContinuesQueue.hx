@@ -106,6 +106,11 @@ class ContinuesQueue extends CreatureQueue
 		return queue[index];
 	}
 	
+	override public inline function getOnPlace(index:Int):Creature 
+	{
+		return queue[index % queue.length];
+	}
+	
 	override public function onPop(creature:Creature):Creature
 	{
 		if (creature == null)
