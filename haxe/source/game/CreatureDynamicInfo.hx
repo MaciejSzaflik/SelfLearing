@@ -1,7 +1,5 @@
 package game;
 import hex.HexCoordinates;
-import js.html.rtc.IdentityAssertion;
-
 /**
  * ...
  * @author ...
@@ -21,6 +19,7 @@ class CreatureDynamicInfo
 	
 	public var currentCordinates:HexCoordinates;
 	
+	public var definitionId:Int;
 	
 	public function new() 
 	{
@@ -33,13 +32,14 @@ class CreatureDynamicInfo
 		this.currentActionPoints = info.currentActionPoints;
 		this.defending = info.defending;
 		this.waited = info.waited;
+		this.definitionId = info.definitionId;
 		
 		this.stackSize = info.stackSize;
 		
 		this.moved = info.moved;
 		this.lostHitPoints = info.lostHitPoints;
 		this.currentHealth = info.currentHealth;
-		
+		trace(this.currentCordinates + " " + info.currentCordinates);
 		if(info.currentCordinates!=null)
 			this.currentCordinates = info.currentCordinates.copy();  
 	}
@@ -51,6 +51,7 @@ class CreatureDynamicInfo
 		toReturn.currentActionPoints = this.currentActionPoints;
 		toReturn.defending = this.defending;
 		toReturn.waited = this.waited;
+		toReturn.definitionId = this.definitionId;
 		
 		toReturn.stackSize = this.stackSize;
 		

@@ -15,8 +15,7 @@ class Tweener
 	
 	public function new() 
 	{
-		this.animations = new Map<Int,TweenAnimation>();
-		nextId = 0;
+		cancelAllAnimations();
 	}
 	
 	public function update(elapsed:Float)
@@ -28,6 +27,12 @@ class Tweener
 				toRemove.add(id);
 		}
 		removeFromAnimations(toRemove);
+	}
+	
+	public function cancelAllAnimations()
+	{
+		this.animations = new Map<Int,TweenAnimation>();
+		nextId = 0;
 	}
 	
 	private function removeFromAnimations(idsToRemove:List<Int>)

@@ -116,6 +116,8 @@ class MainState extends FlxUIState
 	{
 		contexMomento = new GameContexMomento();
 		contexMomento.StoreContex(GameContext.instance);
+		trace(contexMomento);
+		trace("SaveMomento");
 	}
 	
 	public function RestoreMomento()
@@ -123,8 +125,11 @@ class MainState extends FlxUIState
 		if (contexMomento == null)
 			return;
 		
-		contexMomento.RestoreContex(GameContext.instance);
+		GameContext.instance = contexMomento.RestoreContex(GameContext.instance);
 		contexMomento = null;
+		
+		trace("RestoreMomento");
+		GameContext.instance.redrawCreaturesPositions();
 	}
 	
 	

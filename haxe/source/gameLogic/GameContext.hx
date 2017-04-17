@@ -348,6 +348,19 @@ class GameContext
 		return numberOfDead;
 	}
 	
+	public function getPlayerType(id:Int):PlayerType
+	{
+		if (mapOfPlayers.exists(id))
+			return mapOfPlayers.get(id).playerType;
+		return PlayerType.None;
+	}
+	
+	public function setPlayerType(id:Int, type: PlayerType)
+	{
+		if (mapOfPlayers.exists(id))
+			mapOfPlayers.get(id).playerType = type;
+	}
+	
 	public function get_currentPlayerIndex():Int
 	{
 		return _currentPlayerIndex;

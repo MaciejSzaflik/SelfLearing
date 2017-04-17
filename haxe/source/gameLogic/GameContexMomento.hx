@@ -1,4 +1,5 @@
 package gameLogic;
+import animation.Tweener;
 import game.Creature;
 import game.CreatureDynamicInfo;
 import gameLogic.queue.ContinuesQueue;
@@ -36,14 +37,17 @@ class GameContexMomento
 		saveInitiaveQueue(toStore);
 	}
 	
-	public function RestoreContex(toFill : GameContext)
+	public function RestoreContex(toFill : GameContext) : GameContext
 	{
+		Tweener.instance.cancelAllAnimations();
+		
 		toFill.currentCreature = toFill.creaturesMap.get(currentCreatureId);
 		
 		restorePlayers(toFill);
 		restoreCreadturesDynamicInfo(toFill);
 		restoreMap(toFill);
 		restoreInitiaveQueue(toFill);
+		return toFill;
 	}
 	
 	public function savePlayersArrys(toStore : GameContext)

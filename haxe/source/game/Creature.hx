@@ -36,7 +36,10 @@ class Creature
 	public var currentHealth(get, set):Int;
 	
 	public var moved(get, set):Bool;
-	public var lostHitPoints(get, set): Int;
+	public var lostHitPoints(get, set):Int;
+	public var definitionId(get, set):Int;
+	
+	public var currentCordinates(get, set):HexCoordinates;
 	
 	////////////////////////////////////////////////
 	
@@ -110,9 +113,29 @@ class Creature
 		return dynamicInfo.lostHitPoints = value;
 	}
 	
+	public function get_definitionId():Int 
+	{
+		return dynamicInfo.definitionId;
+	}
+	
+	public function set_definitionId(value:Int):Int 
+	{
+		return dynamicInfo.definitionId = value;
+	}
+
+	public function get_currentCordinates():HexCoordinates 
+	{
+		return dynamicInfo.currentCordinates;
+	}
+	
+	public function set_currentCordinates(value:HexCoordinates) 
+	{
+		return dynamicInfo.currentCordinates = value;
+	}
+	
 	///////////////////////////////////////////////
 	
-	public var currentCordinates:HexCoordinates;
+	
 	
 	public var initiative(get, never):Int;
 	public var range(get, never):Int;
@@ -129,7 +152,7 @@ class Creature
 	
 	private var _idPlayerId:Int;
 	public var idPlayerId(get, set):Int;
-	public var definitionId:Int;
+	
 	
 	public var summoned:Bool;
 	

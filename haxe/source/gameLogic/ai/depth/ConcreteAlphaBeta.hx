@@ -9,7 +9,6 @@ import gameLogic.ai.tree.TreeVertex;
 import gameLogic.moves.MoveData;
 import haxe.Timer;
 import thx.Tuple.Tuple2;
-import js.html.svg.FETurbulenceElement;
 
 /**
  * ...

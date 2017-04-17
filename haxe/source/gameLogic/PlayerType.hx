@@ -7,4 +7,5 @@ enum PlayerType
 {
 	Human;
 	AI;
+	None;
 }
