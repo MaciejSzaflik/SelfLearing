@@ -37,6 +37,7 @@ import gameLogic.ai.evaluation.RiskMinimaizer;
 import gameLogic.ai.evaluation.TotalHp;
 import gameLogic.ai.tree.TreeVertex;
 import gameLogic.moves.MoveType;
+import gameLogic.states.SelectMoveState;
 import haxe.Timer;
 import hex.HexMap;
 import hex.HexTopping;
@@ -116,7 +117,6 @@ class MainState extends FlxUIState
 	{
 		contexMomento = new GameContexMomento();
 		contexMomento.StoreContex(GameContext.instance);
-		trace(contexMomento);
 		trace("SaveMomento");
 	}
 	
@@ -126,10 +126,12 @@ class MainState extends FlxUIState
 			return;
 		
 		GameContext.instance = contexMomento.RestoreContex(GameContext.instance);
-		contexMomento = null;
 		
 		trace("RestoreMomento");
 		GameContext.instance.redrawCreaturesPositions();
+		GameContext.instance.revalidateImpassable();	
+		GameContext.instance.stateMachine.setCurrentState(new SelectMoveState(GameContext.instance.stateMachine, GameContext.instance.currentCreature));
+		this.portraitQueue.revalidate();
 	}
 	
 	

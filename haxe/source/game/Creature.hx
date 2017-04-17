@@ -331,6 +331,8 @@ class Creature
 	public function redrawPosition()
 	{
 		setPosition(GameContext.instance.map.getHexCenter(getTileId()));
+		label.setText(Std.string(stackCounter));
+		enable(stackCounter>0);
 	}
 	
 	public function setPosition(position:FlxPoint)

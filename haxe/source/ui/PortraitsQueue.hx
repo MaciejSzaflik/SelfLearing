@@ -41,6 +41,12 @@ class PortraitsQueue
 		attachListeners();
 	}
 	
+	public function revalidate()
+	{
+		setPortrait(GameContext.instance.currentCreature.name);
+		onFill();
+	}
+	
 	private function attachListeners()
 	{
 		this.logicData.addFillListener(onFill);

@@ -107,6 +107,15 @@ class GameContext
 		}
 	}
 	
+	public function revalidateImpassable()
+	{
+		map.getGraph().impassableVertices = new Map<Int,Bool>();
+		for (creature in inititativeQueue.getQueueIterator())
+		{
+			map.setHexImpassable(creature.currentCordinates);
+		}	
+	}
+	
 	public function typeOfCurrentPlayer():PlayerType
 	{
 		return mapOfPlayers.get(currentCreature.idPlayerId).playerType;

@@ -54,7 +54,7 @@ class GamePlayer
 	
 	public function setAI(AI:ArtificialInteligence)
 	{
-		playerType = PlayerType.AI;
+		//playerType = PlayerType.AI;
 		artificialInt = AI;
 	}
 	

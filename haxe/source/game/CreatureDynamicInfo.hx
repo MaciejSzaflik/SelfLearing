@@ -39,7 +39,6 @@ class CreatureDynamicInfo
 		this.moved = info.moved;
 		this.lostHitPoints = info.lostHitPoints;
 		this.currentHealth = info.currentHealth;
-		trace(this.currentCordinates + " " + info.currentCordinates);
 		if(info.currentCordinates!=null)
 			this.currentCordinates = info.currentCordinates.copy();  
 	}
