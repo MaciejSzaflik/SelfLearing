@@ -14,7 +14,7 @@ import thx.Tuple.Tuple2;
  * ...
  * @author ...
  */
-class ConcreteAlphaBeta extends ArtificialInteligence 
+class ConcreteAlphaBeta extends ArtificialInteligence
 {
 	private var boardEvaluator : BasicBoardEvaluator;
 	
@@ -79,7 +79,7 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 	}
 	
 	
-	override public function generateMove():MoveData 
+	private function tryToGetBestLeaf():TreeVertex<MinMaxNode>
 	{
 		var minimaxNode = new MinMaxNode(0, null, null);
 
@@ -109,7 +109,24 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 		trace("Evaluation time: " + evaluationTimer);
 		trace("Nodes visited: " + nodesVistied);
 		
-		return TreeVertex.getOneBeforeRoot(result._0).value.moveData;
+		return result._0;
+	}
+	
+	override public function generateMoveFuture():Array<MoveData> 
+	{
+		var moves = new Array<MoveData>();
+		var currentNode = tryToGetBestLeaf();
+		while (currentNode != null && currentNode.parent != null)
+		{
+			moves.push(currentNode.value.moveData);
+			currentNode = currentNode.parent;
+		}
+		return moves;
+	}
+	
+	override public function generateMove():MoveData 
+	{
+		return TreeVertex.getOneBeforeRoot(tryToGetBestLeaf()).value.moveData;
 	}
 	
 }

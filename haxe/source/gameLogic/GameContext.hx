@@ -1,6 +1,7 @@
 package gameLogic;
 import data.CreatureDefinition;
 import flixel.math.FlxPoint;
+import flixel.util.FlxColor;
 import game.Creature;
 import gameLogic.ActionLog;
 import gameLogic.actions.Action;
@@ -432,5 +433,10 @@ class GameContext
 	public function restoreFromMomento(momento : GameContexMomento)
 	{
 		momento.RestoreContex(this);
+	}
+	
+	public function getPlayerColor(id : Int) : FlxColor
+	{
+		return mapOfPlayers.get(id).color;
 	}
 }

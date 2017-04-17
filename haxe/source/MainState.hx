@@ -36,6 +36,7 @@ import gameLogic.ai.evaluation.RiskByDistance;
 import gameLogic.ai.evaluation.RiskMinimaizer;
 import gameLogic.ai.evaluation.TotalHp;
 import gameLogic.ai.tree.TreeVertex;
+import gameLogic.moves.MoveData;
 import gameLogic.moves.MoveType;
 import gameLogic.states.SelectMoveState;
 import haxe.Timer;
@@ -479,7 +480,20 @@ class MainState extends FlxUIState
 		else if (buttonName == "eval_3")
 		{
 			var alpha = new ConcreteAlphaBeta(3);
-			alpha.generateMove();
+			
+			
+			ThreadProvider.instance.AddTask(function(){
+				var moveData : Array<MoveData> =  alpha.generateMoveFuture();
+				getDrawer().clear(3);
+				
+				for (move in moveData)
+				{
+					var color = GameContext.instance.getPlayerColor(move.performer.idPlayerId);
+					if(move.type == MoveType.Attack)
+						drawHexId(move.affected.getTileId(), 3, FlxColor.YELLOW);
+					drawHexId(move.tileId, 3, color);
+				}
+			});
 		}
 	}
 	
