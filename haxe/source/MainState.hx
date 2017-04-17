@@ -481,18 +481,24 @@ class MainState extends FlxUIState
 		{
 			var alpha = new ConcreteAlphaBeta(3);
 			
-			
+			Creature.ignoreUpdate = true;
 			ThreadProvider.instance.AddTask(function(){
-				var moveData : Array<MoveData> =  alpha.generateMoveFuture();
-				getDrawer().clear(3);
 				
-				for (move in moveData)
-				{
-					var color = GameContext.instance.getPlayerColor(move.performer.idPlayerId);
-					if(move.type == MoveType.Attack)
-						drawHexId(move.affected.getTileId(), 3, FlxColor.YELLOW);
-					drawHexId(move.tileId, 3, color);
+				try{
+					var moveData : Array<MoveData> =  alpha.generateMoveFuture();
+					getDrawer().clear(3);
+					
+					for (move in moveData)
+					{
+						var color = GameContext.instance.getPlayerColor(move.performer.idPlayerId);
+						if(move.type == MoveType.Attack)
+							drawHexId(move.affected.getTileId(), 3, FlxColor.YELLOW);
+						drawHexId(move.tileId, 3, color);
+					}
+				} catch( msg : String ) {
+					trace("Error occurred: " + msg);
 				}
+				
 			});
 		}
 	}

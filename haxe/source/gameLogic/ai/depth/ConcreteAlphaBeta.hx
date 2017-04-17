@@ -1,5 +1,6 @@
 package gameLogic.ai.depth;
 
+import game.Creature;
 import gameLogic.actions.ActionFactory;
 import gameLogic.ai.ArtificialInteligence;
 import gameLogic.ai.MinMax;
@@ -102,7 +103,8 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 			getPlayerType,
 			generateChildren, -1000000, 1000000,
 			onFinish);
-			
+		
+		Creature.ignoreUpdate = false;
 		GameContext.instance.redrawCreaturesPositions();
 		trace("Total time: " + (Timer.stamp() - totalTimer));
 		trace("Move generation time: " + moveGenerationTimer);

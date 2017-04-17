@@ -17,6 +17,8 @@ import utilites.GameConfiguration;
  */
 class Creature
 {
+	public static var ignoreUpdate : Bool = false;
+	
 	public static var creatureCounter:Int = 0;
 	
 	public var id:Int;
@@ -330,6 +332,9 @@ class Creature
 	
 	public function redrawPosition()
 	{
+		if (Creature.ignoreUpdate)
+			return;
+		
 		setPosition(GameContext.instance.map.getHexCenter(getTileId()));
 		label.setText(Std.string(stackCounter));
 		enable(stackCounter>0);
@@ -337,6 +342,9 @@ class Creature
 	
 	public function setPosition(position:FlxPoint)
 	{
+		if (Creature.ignoreUpdate)
+			return;
+		
 		sprite.setPosition(position.x, position.y);
 		label.setPosition(position.x, sprite.getPosition().y + getHeight());
 	}
