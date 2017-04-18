@@ -130,6 +130,9 @@ class MainState extends FlxUIState
 	
 	public function RotateHourglass()
 	{
+		if (hourglass == null)
+			CreateHourglass();
+		
 		hourglass.revive();
 		hourglass.angle = 0;
 
@@ -142,6 +145,12 @@ class MainState extends FlxUIState
 	private function rotateSecHalf()
 	{
 		hourglassAnimationKey = Tweener.instance.addAnimation(new Rotate(hourglass, 180, 360, 0.5, rotateFirstHalf));
+	}
+	
+	public function HideHourglass()
+	{
+		hourglass.kill();
+		Tweener.instance.cancelAnimation(hourglassAnimationKey);
 	}
 	
 	public function SaveMomento()
@@ -209,7 +218,7 @@ class MainState extends FlxUIState
 	private function CreateGameContex()
 	{
 		var player1 = new GamePlayer(0, DebugArmy(), ColorTable.PLAYER1_COLOR, PlayerType.Human,true);
-		var player2 = new GamePlayer(1, DebugArmy(), ColorTable.PLAYER2_COLOR, PlayerType.Human,false);
+		var player2 = new GamePlayer(1, DebugArmy(), ColorTable.PLAYER2_COLOR, PlayerType.AI,false);
 		GameContext.instance.Init(getHexMap(), [player1, player2]); 
 		player2.setAI(new EnemyQueue(1, new EnemySelectEvaluation()));
 		player1.setAI(new EnemyQueue(1, new RewardBasedEvaluation()));

@@ -29,6 +29,12 @@ class Tweener
 		removeFromAnimations(toRemove);
 	}
 	
+	public function cancelAnimation(id : Int)
+	{
+		if (animations.exists(id))
+			animations.remove(id);
+	}
+	
 	public function cancelAllAnimations()
 	{
 		this.animations = new Map<Int,TweenAnimation>();

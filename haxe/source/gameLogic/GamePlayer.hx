@@ -73,12 +73,11 @@ class GamePlayer
 		creatures.push(res);
 	}
 	
-	public function generateMove():MoveData
+	public function tryToGenerateMove(moveConsumerer: MoveData->Void, before : Void->Void , after : Void->Void)
 	{
-		if (artificialInt != null && playerType == PlayerType.AI)
+		if (playerType == PlayerType.AI && artificialInt != null)
 		{
-			var move = artificialInt.generateMove();				
-			return artificialInt.generateMove();
+			artificialInt.generateMoveWithThread(moveConsumerer, before, after);
 		}
 		return null;
 	}

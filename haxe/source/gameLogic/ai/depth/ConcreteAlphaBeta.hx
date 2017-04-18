@@ -142,7 +142,8 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 	
 	override public function generateMove():MoveData 
 	{
-		return TreeVertex.getOneBeforeRoot(tryToGetBestLeaf()).value.moveData;
+		var moveData = TreeVertex.getOneBeforeRoot(tryToGetBestLeaf()).value.moveData;
+		return moveData;
 	}
 	
 }

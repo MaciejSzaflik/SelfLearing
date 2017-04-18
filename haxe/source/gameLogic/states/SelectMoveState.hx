@@ -48,9 +48,37 @@ class SelectMoveState extends State
 
 	override public function onEnter():Void 
 	{
-		var move = GameContext.instance.mapOfPlayers.get(selectedCreature.idPlayerId).generateMove();
+		GameContext.instance.mapOfPlayers.get(selectedCreature.idPlayerId).tryToGenerateMove(
+			consumeMove, 
+			onAIPlayer, 
+			onAIPlayerEnd);
+	}
+
+	private function consumeMove(move : MoveData)
+	{
+		Creature.ignoreUpdate = false;
 		if (move != null)
 			handleMove(move);
+	}
+	
+	private function onAIPlayerEnd():Void 
+	{
+		MainState.getInstance().HideHourglass();
+	}
+	
+	private function onAIPlayer()
+	{
+		if (GameContext.instance.typeOfCurrentPlayer() == PlayerType.Human)
+			return;
+		
+		try{
+			MainState.getInstance().SaveMomento();
+			Creature.ignoreUpdate = true;
+			MainState.getInstance().RotateHourglass();
+		} catch (msg : String)
+		{
+			trace(msg);
+		}
 	}
 	
 	private function getMoveRange()
