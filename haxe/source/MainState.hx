@@ -122,6 +122,9 @@ class MainState extends FlxUIState
 	
 	public function CreateHourglass()
 	{
+		if (hourglass != null)
+			return;
+		
 		hourglass = SpriteFactory.instance.createHourglass();
 		hourglass.setPosition(FlxG.width - 100, 80);
 		add(hourglass);
@@ -220,7 +223,7 @@ class MainState extends FlxUIState
 		var player1 = new GamePlayer(0, DebugArmy(), ColorTable.PLAYER1_COLOR, PlayerType.Human,true);
 		var player2 = new GamePlayer(1, DebugArmy(), ColorTable.PLAYER2_COLOR, PlayerType.AI,false);
 		GameContext.instance.Init(getHexMap(), [player1, player2]); 
-		player2.setAI(new EnemyQueue(1, new EnemySelectEvaluation()));
+		player2.setAI(new ConcreteAlphaBeta(3,true));
 		player1.setAI(new EnemyQueue(1, new RewardBasedEvaluation()));
 		CreateUIQueue();
 		GameContext.instance.stateMachine.addNewStateChangeListener(function(state:String)
@@ -293,10 +296,10 @@ class MainState extends FlxUIState
 		var knight = Creature.fromDefinition(knightDefinition,15);
 		creatureList.push(knight);
 		knight.addCreatureToState(this);
-		/*knight = Creature.fromDefinition(knightDefinition,15);
+		knight = Creature.fromDefinition(knightDefinition,15);
 		creatureList.push(knight);
 		knight.addCreatureToState(this);
-		knight = Creature.fromDefinition(knightDefinition,15);
+		/*knight = Creature.fromDefinition(knightDefinition,15);
 		creatureList.push(knight);
 		knight.addCreatureToState(this);
 		knight = Creature.fromDefinition(knightDefinition,15);
@@ -310,10 +313,10 @@ class MainState extends FlxUIState
 		var archer = Creature.fromDefinition(archerDefinition,10);
 		creatureList.push(archer);
 		archer.addCreatureToState(this);
-		/*archer = Creature.fromDefinition(archerDefinition,10);
+		archer = Creature.fromDefinition(archerDefinition,10);
 		creatureList.push(archer);
 		archer.addCreatureToState(this);
-		archer = Creature.fromDefinition(archerDefinition,10);
+		/*archer = Creature.fromDefinition(archerDefinition,10);
 		creatureList.push(archer);
 		archer.addCreatureToState(this);*/
 		

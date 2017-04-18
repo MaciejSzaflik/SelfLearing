@@ -58,7 +58,7 @@ class MoveAction extends Action
 			checkpoints
 			,0.01 * checkpoints.length,
 			onFinish);
-			
+		trace("performMoveAction");
 		Tweener.instance.addAnimation(moveAnimation);
 	}
 	

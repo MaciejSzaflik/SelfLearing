@@ -41,6 +41,11 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 		boardEvaluator = new BasicBoardEvaluator();
 	}
 	
+	override public function isThreadNeeded():Bool 
+	{
+		return true;
+	}
+	
 	private inline function evaluateMinMaxNode(node : TreeVertex<MinMaxNode>) : Tuple2<TreeVertex<MinMaxNode>,Float>
 	{
 		var time = Timer.stamp();
@@ -108,7 +113,6 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 		movesGenerated = 0;
 		
 		startCreatureIndex = GameContext.instance.inititativeQueue.getCurrentPosition();
-		trace(startCreatureIndex);
 		trace(GameContext.instance.inititativeQueue.getOnPlace(startCreatureIndex).name);
 		
 		var result = AlphaBeta.genericAlfaBeta(maximalDepth, 0, treeVertex, 

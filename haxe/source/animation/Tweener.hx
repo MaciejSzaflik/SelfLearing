@@ -1,4 +1,5 @@
 package animation;
+import utilites.UtilUtil;
 
 class Tweener
 {
@@ -51,7 +52,7 @@ class Tweener
 	{
 		animations.set(nextId, animationToAdd);
 		nextId++;
-		return nextId;
+		return nextId-1;
 	}
 	
 }

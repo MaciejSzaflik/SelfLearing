@@ -48,7 +48,8 @@ class ArtificialInteligence
 		else
 		{
 			trace("callBack");
-			callBack(generateMove());
+			var moveData = generateMove();
+			callBack(moveData);
 			if (after != null)
 				after();
 		}
