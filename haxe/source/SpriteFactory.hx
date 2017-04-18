@@ -37,6 +37,13 @@ class SpriteFactory
 		sprite.loadGraphic(getPortraitPath(creatureName), false, 64, 64, false);
 		return sprite;
 	}
+	public function createHourglass():FlxSprite
+	{
+		var sprite = new FlxSprite(60, 60);
+		sprite.loadGraphic("assets/images/hourglass.png", false, 36, 57, true);
+		return sprite;
+	}
+	
 	
 	public function createNewLabel():CreatureLabel
 	{

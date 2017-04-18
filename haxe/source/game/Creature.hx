@@ -386,6 +386,9 @@ class Creature
 	
 	public function enable(enable:Bool)
 	{
+		if (Creature.ignoreUpdate)
+			return;
+		
 		label.enable(enable);
 		if (enable)
 			sprite.reset(this.position.x, this.position.y);

@@ -8,7 +8,13 @@ import haxe.Constraints.FlatEnum;
  */
 class MathUtil
 {
-
+	
+	static inline public function smooothStep (a:Float,b:Float,t:Float):Float
+	{
+		t = clamp01((t - a) / (b - a));
+		return t * t * (3 - 2 * t);
+	}
+	
 	static inline public function lerp(a:Float,b:Float,t:Float):Float
 	{
 		return a + t * (b - a);

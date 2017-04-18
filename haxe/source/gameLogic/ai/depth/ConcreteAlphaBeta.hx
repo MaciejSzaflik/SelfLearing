@@ -23,6 +23,8 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 	public var moveGenerationTimer : Float;
 	public var evaluationTimer : Float;
 	public var nodesVistied : Int;
+	public var movesGenerated : Int;
+	
 	private var playerId : Int;
 	private var enemyPlayerId : Int;
 	private var startCreatureIndex : Int;
@@ -69,6 +71,7 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 		}
 		var toReturn = GameContext.instance.generateTreeVertexListMoves(vertex,creature);
 		moveGenerationTimer += Timer.stamp() - time;
+		movesGenerated += toReturn.length;
 		return toReturn;
 	}
 	
@@ -102,6 +105,7 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 		moveGenerationTimer = 0;
 		evaluationTimer = 0;
 		nodesVistied = 0;
+		movesGenerated = 0;
 		
 		startCreatureIndex = GameContext.instance.inititativeQueue.getCurrentPosition();
 		trace(startCreatureIndex);
@@ -119,6 +123,7 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 		trace("Move generation time: " + moveGenerationTimer);
 		trace("Evaluation time: " + evaluationTimer);
 		trace("Nodes visited: " + nodesVistied);
+		trace("Children Generated: " + movesGenerated);
 		
 		return result._0;
 	}

@@ -1,5 +1,6 @@
 package;
 
+import animation.Rotate;
 import animation.Tweener;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -39,6 +40,7 @@ import gameLogic.ai.tree.TreeVertex;
 import gameLogic.moves.MoveData;
 import gameLogic.moves.MoveType;
 import gameLogic.states.SelectMoveState;
+import haxe.CallStack;
 import haxe.Timer;
 import hex.HexMap;
 import hex.HexTopping;
@@ -72,6 +74,9 @@ class MainState extends FlxUIState
 	private var btnPlay:FlxButton;
 	private var drawer:Drawer;
 	private var hexMap:HexMap;
+	
+	private var hourglassAnimationKey:Int;
+	private var hourglass:FlxSprite;
 	
 	private var fpsText:FlxText;
 	private var debugText:FlxText;
@@ -111,7 +116,32 @@ class MainState extends FlxUIState
 			addText();
 			CreateDebugMap();
 			CreateGameContex();
+			CreateHourglass();
 		});
+	}
+	
+	public function CreateHourglass()
+	{
+		hourglass = SpriteFactory.instance.createHourglass();
+		hourglass.setPosition(FlxG.width - 100, 80);
+		add(hourglass);
+		hourglass.kill();
+	}
+	
+	public function RotateHourglass()
+	{
+		hourglass.revive();
+		hourglass.angle = 0;
+
+		rotateFirstHalf();
+	}
+	private function rotateFirstHalf()
+	{
+		hourglassAnimationKey = Tweener.instance.addAnimation(new Rotate(hourglass, 0, 180, 0.5, rotateSecHalf));
+	}
+	private function rotateSecHalf()
+	{
+		hourglassAnimationKey = Tweener.instance.addAnimation(new Rotate(hourglass, 180, 360, 0.5, rotateFirstHalf));
 	}
 	
 	public function SaveMomento()
@@ -479,11 +509,11 @@ class MainState extends FlxUIState
 		}
 		else if (buttonName == "eval_3")
 		{
-			var alpha = new ConcreteAlphaBeta(3,false);
-			
+			var alpha = new ConcreteAlphaBeta(4,true);
+			SaveMomento();
 			Creature.ignoreUpdate = true;
+			RotateHourglass();
 			ThreadProvider.instance.AddTask(function(){
-				
 				try{
 					var moveData : Array<MoveData> =  alpha.generateMoveFuture();
 					getDrawer().clear(3);
@@ -495,7 +525,14 @@ class MainState extends FlxUIState
 							drawHexId(move.affected.getTileId(), 3, FlxColor.YELLOW);
 						drawHexId(move.tileId, 3, color);
 					}
-				} catch( msg : String ) {
+					hourglass.kill();
+
+					#if neko
+					Sys.sleep(1.0);
+					getDrawer().clear(3);
+					#end
+				} catch ( msg : String ) {
+					trace("Stack: " + CallStack.toString(CallStack.exceptionStack()));
 					trace("Error occurred: " + msg);
 				}
 				
