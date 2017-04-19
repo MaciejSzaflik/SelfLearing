@@ -61,7 +61,6 @@ class ConcreteNegaMax extends ConcreteAlphaBeta
 		}
 		
 		evaluationTimer += Timer.stamp() - time;
-		trace(node.parent == null);
 		return new Tuple2<TreeVertex<MinMaxNode>,Float>(node, value);
 	}
 	
@@ -70,9 +69,6 @@ class ConcreteNegaMax extends ConcreteAlphaBeta
 		var moves = new Array<MoveData>();
 		var currentNode = tryToGetBestLeaf();
 		
-		trace((currentNode == null) + " " + (currentNode.parent == null));
-		
-		trace(currentNode.treeToString());
 		while (currentNode != null && currentNode.parent != null)
 		{
 			moves.push(currentNode.value.moveData);

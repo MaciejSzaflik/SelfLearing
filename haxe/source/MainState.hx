@@ -529,7 +529,7 @@ class MainState extends FlxUIState
 		}
 		else if (buttonName == "eval_3")
 		{
-			var alpha = new ConcreteNegaMax(3,true);
+			var alpha = new ConcreteNegaMax(4,true);
 			SaveMomento();
 			Creature.ignoreUpdate = true;
 			RotateHourglass();
@@ -538,7 +538,6 @@ class MainState extends FlxUIState
 					var moveData : Array<MoveData> =  alpha.generateMoveFuture();
 					getDrawer().clear(3);
 					
-					trace(moveData.length);
 					for (move in moveData)
 					{
 						var color = GameContext.instance.getPlayerColor(move.performer.idPlayerId);

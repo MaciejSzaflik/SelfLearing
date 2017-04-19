@@ -28,7 +28,7 @@ class NegaMax
 				var x : Tuple2<TreeVertex<T>,Float>  = genericNegaMax(child, maxDepth, depth + 1, -beta, -alpha, getColor,getValue,getChildren,beforeReturn);
 				x._1 = -x._1;
 				if (x._1 > max._1) 
-					max._1 = x._1;
+					max = x;
 				if (x._1 > alpha )
 					alpha = x._1;
 				if (alpha > beta)
