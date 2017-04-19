@@ -77,12 +77,12 @@ class AlphaBetaTest extends TestCase
 	{
 		assertEquals(3.0, NegaMax.genericNegaMax(generateTree1(), 2, 0, -1000, 1000,
 		function(node : SimpleNode) { return node.getColor(); },
-		function(node : SimpleNode) { return node.getValue(); },
-		function(node : TreeVertex<SimpleNode>) { return node.children; }));
+		function(node : TreeVertex<SimpleNode>) { return new Tuple2<TreeVertex<SimpleNode>,Float>(node,node.value.getValue()); },
+		function(node : TreeVertex<SimpleNode>, currentDepth : Int) { return node.children; })._1);
 		assertEquals(7.0, NegaMax.genericNegaMax(generateTree2(), 2, 0, -1000, 1000,
 		function(node : SimpleNode) { return node.getColor(); },
-		function(node : SimpleNode) { return node.getValue(); },
-		function(node : TreeVertex<SimpleNode>) { return node.children; }));
+		function(node : TreeVertex<SimpleNode>) { return new Tuple2<TreeVertex<SimpleNode>,Float>(node,node.value.getValue()); },
+		function(node : TreeVertex<SimpleNode>, currentDepth : Int) { return node.children; })._1);
 	}
 	
 	public function testTestSimpleTreeNegaMax()

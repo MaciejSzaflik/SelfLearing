@@ -13,6 +13,9 @@ class ActionFactory
 	public static function actionFromMoveData(moveData:MoveData,callback:Function,animation:Bool = false):Action
 	{
 		var toReturn:Action = null;
+		if (moveData == null)
+			return createPassAction(moveData);
+			
 		switch(moveData.type)
 		{
 			case MoveType.Move:

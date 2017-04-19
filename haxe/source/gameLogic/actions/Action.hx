@@ -8,12 +8,13 @@ import haxe.Constraints.Function;
  */
 class Action
 {
+	public static var id : Int = 0;
 	public var performer:Creature;
 	private var onFinish:Function;
 	
 	public function new() 
 	{
-		
+		id++;
 	}
 	public function performAction()
 	{

@@ -38,6 +38,7 @@ class ArtificialInteligence
 							
 				} catch (msg:String)
 				{
+					trace("msg :" + msg);
 					trace("Stack: " + CallStack.toString(CallStack.exceptionStack()));
 					callBack(new MoveData(null, MoveType.Pass, -1));
 				}

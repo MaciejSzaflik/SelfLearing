@@ -28,6 +28,7 @@ import gameLogic.ai.EnemyQueue;
 import gameLogic.ai.MinMax;
 import gameLogic.ai.RandomAI;
 import gameLogic.ai.depth.ConcreteAlphaBeta;
+import gameLogic.ai.depth.ConcreteNegaMax;
 import gameLogic.ai.evaluation.BasicBoardEvaluator;
 import gameLogic.ai.evaluation.EnemySelectEvaluation;
 import gameLogic.ai.evaluation.EvaluationResult;
@@ -165,16 +166,23 @@ class MainState extends FlxUIState
 	
 	public function RestoreMomento()
 	{
+		
 		if (contexMomento == null)
 			return;
-		
-		GameContext.instance = contexMomento.RestoreContex(GameContext.instance);
-		
-		trace("RestoreMomento");
-		GameContext.instance.redrawCreaturesPositions();
-		GameContext.instance.revalidateImpassable();	
-		GameContext.instance.stateMachine.setCurrentState(new SelectMoveState(GameContext.instance.stateMachine, GameContext.instance.currentCreature));
-		this.portraitQueue.revalidate();
+		try{
+			GameContext.instance = contexMomento.RestoreContex(GameContext.instance);
+			
+			trace("RestoreMomento");
+			GameContext.instance.redrawCreaturesPositions();
+			GameContext.instance.revalidateImpassable();	
+			GameContext.instance.stateMachine.setCurrentState(new SelectMoveState(GameContext.instance.stateMachine, GameContext.instance.currentCreature));
+			this.portraitQueue.revalidate();
+		}
+		catch (msg:String)
+		{
+			trace(msg);
+			trace( CallStack.toString(CallStack.exceptionStack()));
+		}
 	}
 	
 	
@@ -521,7 +529,7 @@ class MainState extends FlxUIState
 		}
 		else if (buttonName == "eval_3")
 		{
-			var alpha = new ConcreteAlphaBeta(4,true);
+			var alpha = new ConcreteNegaMax(3,true);
 			SaveMomento();
 			Creature.ignoreUpdate = true;
 			RotateHourglass();
@@ -530,6 +538,7 @@ class MainState extends FlxUIState
 					var moveData : Array<MoveData> =  alpha.generateMoveFuture();
 					getDrawer().clear(3);
 					
+					trace(moveData.length);
 					for (move in moveData)
 					{
 						var color = GameContext.instance.getPlayerColor(move.performer.idPlayerId);
