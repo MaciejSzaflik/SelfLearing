@@ -63,14 +63,19 @@ class AlphaBetaTest extends TestCase
 	
 	public function testTestGenericTreeNegaScout()
 	{
-		assertEquals(3.0, NegaScout.genericNegaScout(generateTree1(), 2, 0, -1000, 1000,
+		var startAlfa = new Tuple2<TreeVertex<SimpleNode>,Float>(null, -1000);
+		var startBeta = new Tuple2<TreeVertex<SimpleNode>,Float>(null, 1000);
+		assertEquals(3.0, NegaScout.genericNegaScout(generateTree1(), 2, 0, startAlfa, startBeta,
 			function(node : SimpleNode) { return node.getColor();},
-			function(node : SimpleNode) { return node.getValue(); },
-			function(node : TreeVertex<SimpleNode>) { return node.children; }));
-		assertEquals(7.0, NegaScout.genericNegaScout(generateTree2(), 2, 0, -1000, 1000,
+			function(node : TreeVertex<SimpleNode>) { return new Tuple2<TreeVertex<SimpleNode>,Float>(node,node.value.getValue()); },
+			function(node : TreeVertex<SimpleNode>, currentDepth : Int) { return node.children; })._1);
+			
+		startAlfa = new Tuple2<TreeVertex<SimpleNode>,Float>(null, -1000);
+		startBeta = new Tuple2<TreeVertex<SimpleNode>,Float>(null, 1000);
+		assertEquals(7.0, NegaScout.genericNegaScout(generateTree2(), 2, 0, startAlfa, startBeta,
 			function(node : SimpleNode) { return node.getColor(); },
-			function(node : SimpleNode) { return node.getValue(); },
-			function(node : TreeVertex<SimpleNode>) { return node.children; }));
+			function(node : TreeVertex<SimpleNode>) { return new Tuple2<TreeVertex<SimpleNode>,Float>(node,node.value.getValue()); },
+			function(node : TreeVertex<SimpleNode>, currentDepth : Int) { return node.children; })._1);
 	}
 	
 	public function testTestGenericTreeNegaMax()
