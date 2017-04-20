@@ -43,23 +43,23 @@ class ConcreteNegaMax extends ConcreteAlphaBeta
 	{
 		var time = Timer.stamp();
 		var action = ActionFactory.actionFromMoveData(node.value.moveData, null);
-		var value = 0;
+		var value = 0.0;
 		if (action != null)
 		{
 			action.performAction();
 			movesPerformed++;
 			node.value.wasLeaf = true;
 			nodesVistied++;
+			value = boardEvaluator.evaluateStateSingle(playerId, enemyPlayerId, node.value.moveData);
 			GameContext.instance.undoNextAction();
 			movesReversed++;
 		}
 		else
 		{
-			var value = boardEvaluator.evaluateStateSingle(playerId, enemyPlayerId);
-			value *= getPlayerColor(node.value);
+			value = boardEvaluator.evaluateStateSingle(playerId, enemyPlayerId, node.value.moveData);
 			nodesVistied++;
 		}
-		
+		value *= getPlayerColor(node.value);
 		evaluationTimer += Timer.stamp() - time;
 		return new Tuple2<TreeVertex<MinMaxNode>,Float>(node, value);
 	}

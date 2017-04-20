@@ -29,6 +29,7 @@ import gameLogic.ai.MinMax;
 import gameLogic.ai.RandomAI;
 import gameLogic.ai.depth.ConcreteAlphaBeta;
 import gameLogic.ai.depth.ConcreteNegaMax;
+import gameLogic.ai.depth.ConcreteNegaScout;
 import gameLogic.ai.evaluation.BasicBoardEvaluator;
 import gameLogic.ai.evaluation.EnemySelectEvaluation;
 import gameLogic.ai.evaluation.EvaluationResult;
@@ -164,7 +165,7 @@ class MainState extends FlxUIState
 		trace("SaveMomento");
 	}
 	
-	public function RestoreMomento()
+	public function RestoreMomento(changeState : Bool = true)
 	{
 		
 		if (contexMomento == null)
@@ -175,7 +176,13 @@ class MainState extends FlxUIState
 			trace("RestoreMomento");
 			GameContext.instance.redrawCreaturesPositions();
 			GameContext.instance.revalidateImpassable();	
-			GameContext.instance.stateMachine.setCurrentState(new SelectMoveState(GameContext.instance.stateMachine, GameContext.instance.currentCreature));
+			
+			if (changeState)
+			{
+				Tweener.instance.cancelAllAnimations();
+				GameContext.instance.stateMachine.setCurrentState(new SelectMoveState(GameContext.instance.stateMachine, GameContext.instance.currentCreature));
+			}
+				
 			this.portraitQueue.revalidate();
 		}
 		catch (msg:String)
@@ -231,7 +238,7 @@ class MainState extends FlxUIState
 		var player1 = new GamePlayer(0, DebugArmy(), ColorTable.PLAYER1_COLOR, PlayerType.Human,true);
 		var player2 = new GamePlayer(1, DebugArmy(), ColorTable.PLAYER2_COLOR, PlayerType.AI,false);
 		GameContext.instance.Init(getHexMap(), [player1, player2]); 
-		player2.setAI(new ConcreteAlphaBeta(3,true));
+		player2.setAI(new ConcreteNegaScout(3,true));
 		player1.setAI(new EnemyQueue(1, new RewardBasedEvaluation()));
 		CreateUIQueue();
 		GameContext.instance.stateMachine.addNewStateChangeListener(function(state:String)
@@ -529,7 +536,7 @@ class MainState extends FlxUIState
 		}
 		else if (buttonName == "eval_3")
 		{
-			var alpha = new ConcreteNegaMax(4,true);
+			var alpha = new ConcreteNegaScout(4,true);
 			SaveMomento();
 			Creature.ignoreUpdate = true;
 			RotateHourglass();

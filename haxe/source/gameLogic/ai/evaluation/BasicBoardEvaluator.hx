@@ -1,5 +1,6 @@
 package gameLogic.ai.evaluation;
 import game.Creature;
+import gameLogic.moves.MoveData;
 import hex.HexMap;
 import gameLogic.ai.evaluation.RiskValues;
 import thx.Tuple.Tuple2;
@@ -15,11 +16,11 @@ class BasicBoardEvaluator implements EvaluatueBoard
 		
 	}
 	
-	public function evaluateStateSingle(myId:Int, enemyId:Int): Float
+	public function evaluateStateSingle(myId:Int, enemyId:Int, moveData : MoveData): Float
 	{
 		var enemy = RewardBasedEvaluation.GetEvaluation(enemyId);
 		if(enemy > 0)
-			return RewardBasedEvaluation.GetEvaluation(myId) / enemy;
+			return RewardBasedEvaluation.GetEvaluation(myId) / enemy * 2;
 		else
 			return 10;
 	}

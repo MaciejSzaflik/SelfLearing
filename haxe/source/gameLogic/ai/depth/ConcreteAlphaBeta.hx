@@ -57,7 +57,7 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 		action.performAction();
 		movesPerformed++;
 		node.value.wasLeaf = true;
-		var value = boardEvaluator.evaluateStateSingle(playerId, enemyPlayerId);
+		var value = boardEvaluator.evaluateStateSingle(playerId, enemyPlayerId,node.value.moveData);
 		nodesVistied++;
 		
 		GameContext.instance.undoNextAction();
@@ -130,8 +130,8 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 		trace("Moves Reversed: " + movesReversed);
 		trace("Moves Performed: " + movesPerformed);
 		
-		//if (movesPerformed != movesReversed)
-		//	MainState.getInstance().RestoreMomento();
+		if (movesPerformed != movesReversed)
+			MainState.getInstance().RestoreMomento(false);
 	}
 	
 	private function initializeValues()
@@ -154,7 +154,7 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 		movesPerformed = 0;
 		
 		startCreatureIndex = GameContext.instance.inititativeQueue.getCurrentPosition();
-		trace(GameContext.instance.inititativeQueue.getOnPlace(startCreatureIndex).name);
+		trace(GameContext.instance.inititativeQueue.getOnPlace(startCreatureIndex).name + " " + GameContext.instance.inititativeQueue.getOnPlace(startCreatureIndex).id);
 	}
 	
 	override public function generateMoveFuture():Array<MoveData> 

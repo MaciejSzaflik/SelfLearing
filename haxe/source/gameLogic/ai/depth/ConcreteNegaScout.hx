@@ -1,7 +1,10 @@
 package gameLogic.ai.depth;
 
 import gameLogic.ai.AlphaBeta;
+import gameLogic.ai.MinMax.MinMaxNode;
 import gameLogic.ai.evaluation.EvaluatueBoard;
+import gameLogic.ai.tree.TreeVertex;
+import thx.Tuple.Tuple2;
 
 /**
  * ...
@@ -19,13 +22,30 @@ class ConcreteNegaScout extends ConcreteNegaMax
 	{
 		initializeValues();
 
-		var result = NegaScout.genericNegaScout(treeVertex, maximalDepth, 0, -1000000, 1000000,
-		getPlayerColor,
-		evaluateMinMaxNode,
-		generateChildren,
-		onFinish);
+		var startAlfa =  new Tuple2<TreeVertex<MinMaxNode>,Float>(treeVertex, -1000000);
+		var startBeta =  new Tuple2<TreeVertex<MinMaxNode>,Float>(treeVertex, 1000000);
+		
+		var result = NegaScout.genericNegaScout(treeVertex, maximalDepth, 0, startAlfa, startBeta,
+			getPlayerColor,
+			evaluateMinMaxNode,
+			generateChildren,
+			onFinish);
 
 		traceAndClean();
 		return result._0;
+	}
+	
+	override private function onFinish(node : MinMaxNode) : Bool
+	{
+		if (node.moveData == null)
+			return false;
+			
+		if (!node.wasLeaf)
+		{
+			
+			GameContext.instance.undoNextAction();
+			movesReversed++;
+		}
+		return true;
 	}
 }

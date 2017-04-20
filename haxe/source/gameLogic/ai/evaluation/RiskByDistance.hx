@@ -2,6 +2,7 @@ package gameLogic.ai.evaluation;
 import game.Creature;
 import game.CreatureSprite;
 import gameLogic.ai.evaluation.RiskValues;
+import gameLogic.moves.MoveData;
 import hex.HexCoordinates;
 import hex.HexMap;
 import thx.Tuple.Tuple2;
@@ -24,7 +25,7 @@ class RiskByDistance implements EvaluatueBoard
 	}
 	var dmgToCreature : Map<Int,Int>;
 	
-	public function evaluateStateSingle(myId : Int, enemyId : Int)
+	public function evaluateStateSingle(myId : Int, enemyId : Int, moveData : MoveData)
 	{
 		var tup = evaluateState(myId, enemyId);
 		if (tup._1 > 0)

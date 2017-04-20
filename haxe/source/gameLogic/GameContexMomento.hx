@@ -39,8 +39,6 @@ class GameContexMomento
 	
 	public function RestoreContex(toFill : GameContext) : GameContext
 	{
-		Tweener.instance.cancelAllAnimations();
-		
 		toFill.currentCreature = toFill.creaturesMap.get(currentCreatureId);
 		
 		restorePlayers(toFill);

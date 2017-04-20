@@ -25,27 +25,33 @@ class NegaScout
 		
 		if (depth == maxDepth)
 		{
-			return new Tuple2<TreeVertex<T>,Float> (node, getValue(node)._1);
+			a = new Tuple2<TreeVertex<T>,Float> (node, getValue(node)._1);
 		}
-
-		var index = 0;
-		for (child in getChildren(node,depth))
+		else
 		{
-			t = flipValue(genericNegaScout(child, maxDepth, depth + 1, flipWithCopy(b), flipWithCopy(a), getColor, getValue, getChildren));
-			
-			if ((t._1 > a._1) && (t._1 < beta._1) && index > 0)
+			var index = 0;
+			for (child in getChildren(node,depth))
 			{
-				a = flipValue(genericNegaScout(child, maxDepth, depth + 1, flipWithCopy(beta), flipWithCopy(t), getColor, getValue, getChildren));
+				t = flipValue(genericNegaScout(child, maxDepth, depth + 1, flipWithCopy(b), flipWithCopy(a), getColor, getValue, getChildren, beforeReturn));
+				
+				if ((t._1 > a._1) && (t._1 < beta._1) && index > 0)
+				{
+					a = flipValue(genericNegaScout(child, maxDepth, depth + 1, flipWithCopy(beta), flipWithCopy(t), getColor, getValue, getChildren , beforeReturn));
+				}
+				
+				if(t._1 > a._1)
+					a = t;
+				
+				if (a._1 >= beta._1)
+					break;
+				
+				b._1 = a._1 + 1;
+				index++;
 			}
-			
-			if(t._1 > a._1)
-				a = t;
-			
-			if (a._1 >= beta._1)
-				return a;
-			
-			b._1 = a._1 + 1;
-			index++;
+		}
+		if (beforeReturn != null)
+		{
+			beforeReturn(node.value);
 		}
 		
 		return a;

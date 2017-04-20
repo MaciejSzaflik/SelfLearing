@@ -178,7 +178,7 @@ class Creature
 		dynamicInfo.stackSize = value;
 		
 		if (!Creature.ignoreUpdate)
-			label.setText(Std.string(value));
+			label.setText(Std.string(value) + ":" + id);
 			
 		return value;
 	}
@@ -339,7 +339,7 @@ class Creature
 			return;
 		
 		setPosition(GameContext.instance.map.getHexCenter(getTileId()));
-		label.setText(Std.string(stackCounter));
+		label.setText(Std.string(stackCounter) + ":" + id);
 		enable(stackCounter>0);
 	}
 	
