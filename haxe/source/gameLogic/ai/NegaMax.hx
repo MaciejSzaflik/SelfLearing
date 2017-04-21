@@ -23,8 +23,10 @@ class NegaMax
 		}
 		else
 		{	
+			var index = 0;
 			for (child in getChildren(node,depth))
 			{
+				index++;
 				var x : Tuple2<TreeVertex<T>,Float>  = genericNegaMax(child, maxDepth, depth + 1, -beta, -alpha, getColor,getValue,getChildren,beforeReturn);
 				x._1 = -x._1;
 				if (x._1 > max._1) 
@@ -34,6 +36,8 @@ class NegaMax
 				if (alpha > beta)
 					break;
 			}
+			if (index == 0)
+				max = getValue(node);
 		}
 		if (beforeReturn != null)
 			beforeReturn(node.value);

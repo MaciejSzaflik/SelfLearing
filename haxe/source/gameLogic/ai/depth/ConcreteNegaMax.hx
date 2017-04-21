@@ -42,26 +42,27 @@ class ConcreteNegaMax extends ConcreteAlphaBeta
 	override function evaluateMinMaxNode(node : TreeVertex<MinMaxNode>) : Tuple2<TreeVertex<MinMaxNode>,Float>
 	{
 		var time = Timer.stamp();
-		var action = ActionFactory.actionFromMoveData(node.value.moveData, null);
+		var move = node.value.moveData;
+		var action = ActionFactory.actionFromMoveData(move, null);
 		var value = 0.0;
 		if (action != null)
 		{
-			var tryToEvalState = CurrentStateData.CalculateForCreature(node.value.moveData.performer, node.value.moveData.type);
+			var tryToEvalState = CurrentStateData.CalculateForCreature(move.performer, move.type, move.affected);
 			action.performAction();
 			movesPerformed++;
 			node.value.wasLeaf = true;
 			nodesVistied++;
 			
-			var afterState = CurrentStateData.CalculateForCreature(node.value.moveData.performer, node.value.moveData.type);
+			var afterState = CurrentStateData.CalculateForCreature(move.performer, move.type, move.affected);
 			node.value.data = CurrentStateData.Evaluate(tryToEvalState, afterState);
+			value = node.value.data._0;
 			
-			value = boardEvaluator.evaluateStateSingle(playerId, enemyPlayerId, node.value.moveData);
 			GameContext.instance.undoNextAction();
 			movesReversed++;
 		}
 		else
 		{
-			value = boardEvaluator.evaluateStateSingle(playerId, enemyPlayerId, node.value.moveData);
+			value = boardEvaluator.evaluateStateSingle(playerId, enemyPlayerId, move);
 			nodesVistied++;
 		}
 		value *= getPlayerColor(node.value);

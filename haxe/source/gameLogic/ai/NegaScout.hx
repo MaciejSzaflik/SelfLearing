@@ -48,6 +48,9 @@ class NegaScout
 				b._1 = a._1 + 1;
 				index++;
 			}
+			
+			if (index == 0)
+				a = new Tuple2<TreeVertex<T>,Float> (node, getValue(node)._1);
 		}
 		if (beforeReturn != null)
 		{

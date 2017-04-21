@@ -14,6 +14,7 @@ class CurrentStateData
 	public var theirHealth : Int;
 	public var currentTotalDistance : Float; 
 	public var isCreatureRanger : Bool;
+	public var isEnemyRanger : Bool;
 	public var moveType : MoveType;
 	public var ourCount : Int;
 	public var theirCount : Int;
@@ -29,11 +30,16 @@ class CurrentStateData
 		moveType = MoveType.Pass;
 	}
 	
-	public static function CalculateForCreature(creature: Creature, moveType : MoveType) : CurrentStateData
+	public static function CalculateForCreature(creature: Creature,moveType : MoveType,enemy: Creature = null) : CurrentStateData
 	{
 		var calc : CurrentStateData = new CurrentStateData();
 		calc.isCreatureRanger = creature.isRanger;
 		calc.moveType = moveType;
+		
+		if(enemy!=null)
+			calc.isEnemyRanger = enemy.isRanger;
+			
+			
 		for (enemy in GameContext.instance.getEnemies(creature.idPlayerId))
 		{
 			calc.theirHealth += enemy.totalHealth;
@@ -51,7 +57,7 @@ class CurrentStateData
 	public static function Evaluate(before : CurrentStateData, after : CurrentStateData) : Tuple3<Float,MoveDiagnose,MoveDiagnose>
 	{
 		var toReturn : Tuple3<Float,MoveDiagnose,MoveDiagnose> = new Tuple3<Float,MoveDiagnose,MoveDiagnose>(0,MoveDiagnose.Pass,MoveDiagnose.Pass);
-		
+		var bonus = 0.0;
 		if (before.moveType == MoveType.Attack)
 		{
 			var theirDiff = before.theirHealth - after.ourHealth;
@@ -62,15 +68,22 @@ class CurrentStateData
 			else	
 			{
 				if (ourDiff > 0)
+				{
 					toReturn._1 = MoveDiagnose.AttackMeleeByRanger;
+					bonus -= 1000;
+				}
 				else
 					toReturn._1 = MoveDiagnose.AttackRangerByRanger;
+					bonus += 1000;
 			}
 			
 			if (ourDiff > theirDiff)
 					toReturn._2 = MoveDiagnose.AttackRecklessly;
 				else
 					toReturn._2 = MoveDiagnose.AttackWithAdvantage;
+					
+			if (before.isEnemyRanger)
+				bonus += 1000;
 		}
 		else if (before.moveType == MoveType.Move)
 		{
@@ -85,13 +98,13 @@ class CurrentStateData
 		
 		if (after.theirHealth > 0)
 		{
-			toReturn._0 = after.ourHealth / after.theirHealth;
+			toReturn._0 = (after.ourHealth / after.theirHealth)*1000;
 			toReturn._0 += (before.ourCount - after.ourCount) * ( -150);
 			toReturn._0 += (before.theirCount - after.theirCount) * ( 150);
 		}
 		else
 			toReturn._0 = 1000000000000;
-		
+		toReturn._0 += bonus;
 		
 		return toReturn;
 	}

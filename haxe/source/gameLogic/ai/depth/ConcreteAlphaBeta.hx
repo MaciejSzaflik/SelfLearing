@@ -54,18 +54,14 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 	{
 		var time = Timer.stamp();
 		var action = ActionFactory.actionFromMoveData(node.value.moveData, null);
-		
-		
-		
+
 		action.performAction();
 		movesPerformed++;
 		node.value.wasLeaf = true;
 		var value = boardEvaluator.evaluateStateSingle(playerId, enemyPlayerId,node.value.moveData);
 		nodesVistied++;
 		
-		
-		
-		
+
 		GameContext.instance.undoNextAction();
 		movesReversed++;
 		evaluationTimer += Timer.stamp() - time;
