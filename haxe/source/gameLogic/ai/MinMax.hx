@@ -2,11 +2,13 @@ package gameLogic.ai;
 import game.Creature;
 import gameLogic.actions.ActionFactory;
 import gameLogic.ai.ArtificialInteligence;
+import gameLogic.ai.CurrentStateData.MoveDiagnose;
 import gameLogic.ai.evaluation.EvaluationMethod;
 import gameLogic.ai.tree.TreeVertex;
 import gameLogic.moves.ListOfMoves;
 import gameLogic.moves.MoveData;
 import haxe.Timer;
+import thx.Tuple.Tuple3;
 
 /**
  * ...
@@ -90,6 +92,8 @@ class MinMaxNode
 	public var nodeValue : Float;
 	public var playerId : Int;
 	public var wasLeaf : Bool;
+	public var data : Tuple3<Float,MoveDiagnose,MoveDiagnose>;
+	
 	public function getEnemyId() : Int
 	{
 		return playerId == 0 ? 1 : 0;

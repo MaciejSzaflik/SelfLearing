@@ -46,10 +46,15 @@ class ConcreteNegaMax extends ConcreteAlphaBeta
 		var value = 0.0;
 		if (action != null)
 		{
+			var tryToEvalState = CurrentStateData.CalculateForCreature(node.value.moveData.performer, node.value.moveData.type);
 			action.performAction();
 			movesPerformed++;
 			node.value.wasLeaf = true;
 			nodesVistied++;
+			
+			var afterState = CurrentStateData.CalculateForCreature(node.value.moveData.performer, node.value.moveData.type);
+			node.value.data = CurrentStateData.Evaluate(tryToEvalState, afterState);
+			
 			value = boardEvaluator.evaluateStateSingle(playerId, enemyPlayerId, node.value.moveData);
 			GameContext.instance.undoNextAction();
 			movesReversed++;

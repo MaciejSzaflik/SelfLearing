@@ -65,7 +65,7 @@ class HexCoordinates
 		return new HexCoordinates(xValue, zValue);
 	}
 	
-	static public function getManhatanDistance(start:HexCoordinates, end:HexCoordinates):Float
+	static public inline function getManhatanDistance(start:HexCoordinates, end:HexCoordinates):Float
 	{
 		return (Math.abs(start.x - end.x) + Math.abs(start.y - end.y) + Math.abs(start.z - end.z)) / 2;
 	}
