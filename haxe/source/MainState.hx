@@ -173,9 +173,9 @@ class MainState extends FlxUIState
 		try{
 			GameContext.instance = contexMomento.RestoreContex(GameContext.instance);
 			
-			trace("RestoreMomento");
 			GameContext.instance.redrawCreaturesPositions();
 			GameContext.instance.revalidateImpassable();	
+			
 			
 			if (changeState)
 			{
@@ -235,11 +235,11 @@ class MainState extends FlxUIState
 	
 	private function CreateGameContex()
 	{
-		var player1 = new GamePlayer(0, DebugArmy(), ColorTable.PLAYER1_COLOR, PlayerType.Human,true);
+		var player1 = new GamePlayer(0, DebugArmy(), ColorTable.PLAYER1_COLOR, PlayerType.AI,true);
 		var player2 = new GamePlayer(1, DebugArmy(), ColorTable.PLAYER2_COLOR, PlayerType.AI,false);
 		GameContext.instance.Init(getHexMap(), [player1, player2]); 
-		player2.setAI(new ConcreteNegaScout(3,true));
-		player1.setAI(new EnemyQueue(1, new RewardBasedEvaluation()));
+		player2.setAI(new ConcreteAlphaBeta(2,true));
+		player1.setAI(new ConcreteAlphaBeta(2,true));
 		CreateUIQueue();
 		GameContext.instance.stateMachine.addNewStateChangeListener(function(state:String)
 		{

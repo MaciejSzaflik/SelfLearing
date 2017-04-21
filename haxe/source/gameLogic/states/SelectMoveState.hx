@@ -31,11 +31,18 @@ class SelectMoveState extends State
 	private var isHuman = false;
 	private var enableAnimations = true;
 	
+	public static var moveCounter = 0;
+	
 	public function new(stateMachine:StateMachine,creature:Creature) 
 	{
 		this.stateName = "Select Move";
+		moveCounter++;
 		super(stateMachine);
 		clearAll();
+		
+		if (checkEndCondition())
+			return;
+		
 		GameContext.instance.currentPlayerIndex = creature.idPlayerId;
 		selectedCreature = creature;
 		isHuman = GameContext.instance.typeOfCurrentPlayer() == PlayerType.Human;
@@ -228,6 +235,16 @@ class SelectMoveState extends State
 	private function endState()
 	{
 		selectedCreature.redrawPosition();
+		if (checkEndCondition())
+			return;
+		else if (GameContext.instance.getSizeOfQueue() == 0)
+			stateMachine.setCurrentState(new StartRound(this.stateMachine));
+		else
+			stateMachine.setCurrentState(new SelectMoveState(this.stateMachine, GameContext.instance.getNextCreature()));
+	}
+	
+	private function checkEndCondition() : Bool
+	{
 		var counterOfPlayersWithCreatures = 0;
 		for (player in GameContext.instance.mapOfPlayers)
 		{
@@ -235,11 +252,12 @@ class SelectMoveState extends State
 				counterOfPlayersWithCreatures++;
 		}
 		if (counterOfPlayersWithCreatures == 1)
+		{
 			stateMachine.setCurrentState(new EndState(this.stateMachine));
-		else if (GameContext.instance.getSizeOfQueue() == 0)
-			stateMachine.setCurrentState(new StartRound(this.stateMachine));
-		else
-			stateMachine.setCurrentState(new SelectMoveState(this.stateMachine, GameContext.instance.getNextCreature()));
+			return true;
+		}
+		
+		return false;
 	}
 	
 	private function handleMoveClick(input:Input)

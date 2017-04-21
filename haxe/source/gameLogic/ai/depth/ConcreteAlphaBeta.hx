@@ -8,6 +8,7 @@ import gameLogic.ai.MinMax.MinMaxNode;
 import gameLogic.ai.evaluation.BasicBoardEvaluator;
 import gameLogic.ai.tree.TreeVertex;
 import gameLogic.moves.MoveData;
+import gameLogic.moves.MoveType;
 import haxe.Timer;
 import thx.Tuple.Tuple2;
 
@@ -47,19 +48,25 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 	
 	override public function isThreadNeeded():Bool 
 	{
-		return true;
+		return false;
 	}
 	
 	private function evaluateMinMaxNode(node : TreeVertex<MinMaxNode>) : Tuple2<TreeVertex<MinMaxNode>,Float>
 	{
 		var time = Timer.stamp();
 		var action = ActionFactory.actionFromMoveData(node.value.moveData, null);
-
+		var move = node.value.moveData;
+		var value = 0.0;
+		
+		var tryToEvalState = CurrentStateData.CalculateForCreature(move.performer, move.type);
 		action.performAction();
 		movesPerformed++;
 		node.value.wasLeaf = true;
-		var value = boardEvaluator.evaluateStateSingle(playerId, enemyPlayerId,node.value.moveData);
 		nodesVistied++;
+		
+		var afterState = CurrentStateData.CalculateForCreature(move.performer, move.type);
+		node.value.data = CurrentStateData.Evaluate(tryToEvalState, afterState);
+		value = node.value.data._0;
 		
 
 		GameContext.instance.undoNextAction();
@@ -177,8 +184,11 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 	
 	override public function generateMove():MoveData 
 	{
-		var moveData = TreeVertex.getOneBeforeRoot(tryToGetBestLeaf()).value.moveData;
-		return moveData;
+		var node = TreeVertex.getOneBeforeRoot(tryToGetBestLeaf());
+		if(node != null)
+			return node.value.moveData;
+		else
+			return new MoveData(null, MoveType.Pass, -1);
 	}
 	
 }

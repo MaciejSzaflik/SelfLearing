@@ -47,13 +47,13 @@ class ConcreteNegaMax extends ConcreteAlphaBeta
 		var value = 0.0;
 		if (action != null)
 		{
-			var tryToEvalState = CurrentStateData.CalculateForCreature(move.performer, move.type, move.affected);
+			var tryToEvalState = CurrentStateData.CalculateForCreature(move.performer, move.type);
 			action.performAction();
 			movesPerformed++;
 			node.value.wasLeaf = true;
 			nodesVistied++;
 			
-			var afterState = CurrentStateData.CalculateForCreature(move.performer, move.type, move.affected);
+			var afterState = CurrentStateData.CalculateForCreature(move.performer, move.type);
 			node.value.data = CurrentStateData.Evaluate(tryToEvalState, afterState);
 			value = node.value.data._0;
 			

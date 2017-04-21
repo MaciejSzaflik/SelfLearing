@@ -14,10 +14,11 @@ class CurrentStateData
 	public var theirHealth : Int;
 	public var currentTotalDistance : Float; 
 	public var isCreatureRanger : Bool;
-	public var isEnemyRanger : Bool;
 	public var moveType : MoveType;
 	public var ourCount : Int;
 	public var theirCount : Int;
+	public var ourRangerCount : Int;
+	public var theirRangerCount : Int;
 	
 	public function new() 
 	{
@@ -27,29 +28,32 @@ class CurrentStateData
 		isCreatureRanger = false;
 		ourCount = 0;
 		theirCount = 0;
+		ourRangerCount = 0;
+		theirRangerCount = 0;
 		moveType = MoveType.Pass;
 	}
 	
-	public static function CalculateForCreature(creature: Creature,moveType : MoveType,enemy: Creature = null) : CurrentStateData
+	public static function CalculateForCreature(creature: Creature,moveType : MoveType) : CurrentStateData
 	{
 		var calc : CurrentStateData = new CurrentStateData();
 		calc.isCreatureRanger = creature.isRanger;
-		calc.moveType = moveType;
-		
-		if(enemy!=null)
-			calc.isEnemyRanger = enemy.isRanger;
-			
+		calc.moveType = moveType;	
 			
 		for (enemy in GameContext.instance.getEnemies(creature.idPlayerId))
 		{
 			calc.theirHealth += enemy.totalHealth;
 			calc.currentTotalDistance = HexCoordinates.getManhatanDistance(creature.currentCordinates, enemy.currentCordinates);
 			calc.theirCount++;
+			if (enemy.isRanger)
+				calc.theirRangerCount++;
 		}
 		for (friend in GameContext.instance.getPlayerCreatures(creature.idPlayerId))
 		{
 			calc.ourHealth += friend.totalHealth;
 			calc.ourCount++;
+			
+			if (friend.isRanger)
+				calc.ourRangerCount++;
 		}
 		return calc;
 	}
@@ -57,7 +61,6 @@ class CurrentStateData
 	public static function Evaluate(before : CurrentStateData, after : CurrentStateData) : Tuple3<Float,MoveDiagnose,MoveDiagnose>
 	{
 		var toReturn : Tuple3<Float,MoveDiagnose,MoveDiagnose> = new Tuple3<Float,MoveDiagnose,MoveDiagnose>(0,MoveDiagnose.Pass,MoveDiagnose.Pass);
-		var bonus = 0.0;
 		if (before.moveType == MoveType.Attack)
 		{
 			var theirDiff = before.theirHealth - after.ourHealth;
@@ -68,22 +71,15 @@ class CurrentStateData
 			else	
 			{
 				if (ourDiff > 0)
-				{
 					toReturn._1 = MoveDiagnose.AttackMeleeByRanger;
-					bonus -= 1000;
-				}
 				else
 					toReturn._1 = MoveDiagnose.AttackRangerByRanger;
-					bonus += 1000;
 			}
 			
 			if (ourDiff > theirDiff)
 					toReturn._2 = MoveDiagnose.AttackRecklessly;
 				else
 					toReturn._2 = MoveDiagnose.AttackWithAdvantage;
-					
-			if (before.isEnemyRanger)
-				bonus += 1000;
 		}
 		else if (before.moveType == MoveType.Move)
 		{
@@ -101,10 +97,11 @@ class CurrentStateData
 			toReturn._0 = (after.ourHealth / after.theirHealth)*1000;
 			toReturn._0 += (before.ourCount - after.ourCount) * ( -150);
 			toReturn._0 += (before.theirCount - after.theirCount) * ( 150);
+			toReturn._0 += (after.ourRangerCount) * (150);
+			toReturn._0 += (after.theirRangerCount) * (-150);
 		}
 		else
-			toReturn._0 = 1000000000000;
-		toReturn._0 += bonus;
+			toReturn._0 = 20000;
 		
 		return toReturn;
 	}
