@@ -45,8 +45,8 @@ class StatsGatherer
 		output.close();
 		output = null;
 		#end
-		outputString = "";
 		trace(outputString);
+		outputString = "";
 	}
 	
 	public function write(moveCounter : Int, totalTime: Float, moveTime : Float, evaluationTime : Float, nodes : Int, childeren : Int)

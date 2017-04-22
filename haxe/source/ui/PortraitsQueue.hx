@@ -76,7 +76,6 @@ class PortraitsQueue
 	}
 	private function createOrRevive()
 	{
-		trace("createOrRevive");
 		var i = 0;
 		while (i < maxSize)
 		{

@@ -236,8 +236,8 @@ class MainState extends FlxUIState
 	
 	private function CreateGameContex()
 	{
-		var player1 = new GamePlayer(0, DebugArmy(), ColorTable.PLAYER1_COLOR, PlayerType.AI,true);
-		var player2 = new GamePlayer(1, DebugArmy(), ColorTable.PLAYER2_COLOR, PlayerType.AI,false);
+		var player1 = new GamePlayer(0, DebugArmy(), ColorTable.PLAYER1_COLOR, PlayerType.Human,true);
+		var player2 = new GamePlayer(1, DebugArmy(), ColorTable.PLAYER2_COLOR, PlayerType.Human,false);
 		GameContext.instance.Init(getHexMap(), [player1, player2]); 
 		player2.setAI(new ConcreteAlphaBeta(3,true));
 		player1.setAI(new ConcreteAlphaBeta(3,true));
@@ -312,10 +312,10 @@ class MainState extends FlxUIState
 		var knight = Creature.fromDefinition(knightDefinition,15);
 		creatureList.push(knight);
 		knight.addCreatureToState(this);
-		/*knight = Creature.fromDefinition(knightDefinition,15);
+		knight = Creature.fromDefinition(knightDefinition,15);
 		creatureList.push(knight);
-		knight.addCreatureToState(this);*/
-		/*knight = Creature.fromDefinition(knightDefinition,15);
+		knight.addCreatureToState(this);
+		knight = Creature.fromDefinition(knightDefinition,15);
 		creatureList.push(knight);
 		knight.addCreatureToState(this);
 		knight = Creature.fromDefinition(knightDefinition,15);
@@ -323,18 +323,18 @@ class MainState extends FlxUIState
 		knight.addCreatureToState(this);
 		knight = Creature.fromDefinition(priestDefinition,15);
 		creatureList.push(knight);
-		knight.addCreatureToState(this);*/
+		knight.addCreatureToState(this);
 		
 		
 		var archer = Creature.fromDefinition(archerDefinition,10);
 		creatureList.push(archer);
 		archer.addCreatureToState(this);
-		/*archer = Creature.fromDefinition(archerDefinition,10);
+		archer = Creature.fromDefinition(archerDefinition,10);
 		creatureList.push(archer);
-		archer.addCreatureToState(this);*/
-		/*archer = Creature.fromDefinition(archerDefinition,10);
+		archer.addCreatureToState(this);
+		archer = Creature.fromDefinition(archerDefinition,10);
 		creatureList.push(archer);
-		archer.addCreatureToState(this);*/
+		archer.addCreatureToState(this);
 		
 		return creatureList;
 	}

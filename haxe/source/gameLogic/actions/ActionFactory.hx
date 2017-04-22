@@ -14,7 +14,7 @@ class ActionFactory
 	{
 		var toReturn:Action = null;
 		if (moveData == null)
-			return createPassAction(moveData);
+			return createPassAction(callback);
 			
 		switch(moveData.type)
 		{
@@ -29,7 +29,7 @@ class ActionFactory
 			case MoveType.Wait:
 				toReturn = createWaitAction(moveData,callback);
 			case MoveType.Pass:
-				toReturn = createPassAction(moveData);
+				toReturn = createPassAction(callback);
 		}
 		return toReturn;
 	}
@@ -53,9 +53,9 @@ class ActionFactory
 	{
 		return new WaitAction(moveData.performer,callback);
 	}
-	private static function createPassAction(moveData:MoveData):Action
+	private static function createPassAction(callBack:Function):Action
 	{
-		return null;
+		return new PassAction(callBack);
 	}
 	
 }

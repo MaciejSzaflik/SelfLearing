@@ -9,6 +9,7 @@ import gameLogic.actions.AttackAction;
 import gameLogic.actions.DefendAction;
 import gameLogic.actions.MoveAction;
 import gameLogic.actions.WaitAction;
+import gameLogic.ai.CurrentStateData;
 import gameLogic.moves.ListOfMoves;
 import gameLogic.moves.MoveData;
 import gameLogic.moves.MoveType;
@@ -33,6 +34,9 @@ class SelectMoveState extends State
 	
 	public static var moveCounter = 0;
 	
+	private var beforeMove : CurrentStateData;
+	private var moveTypeSelected : MoveType;
+	
 	public function new(stateMachine:StateMachine,creature:Creature) 
 	{
 		this.stateName = "Select Move";
@@ -44,6 +48,9 @@ class SelectMoveState extends State
 			return;
 		
 		GameContext.instance.currentPlayerIndex = creature.idPlayerId;
+		
+		beforeMove = CurrentStateData.CalculateForCreature(creature, MoveType.Pass);
+
 		selectedCreature = creature;
 		isHuman = GameContext.instance.typeOfCurrentPlayer() == PlayerType.Human;
 		if(isHuman)
@@ -64,8 +71,8 @@ class SelectMoveState extends State
 	private function consumeMove(move : MoveData)
 	{
 		Creature.ignoreUpdate = false;
-		if (move != null)
-			handleMove(move);
+
+		handleMove(move);
 	}
 	
 	private function onAIPlayerEnd():Void 
@@ -148,6 +155,11 @@ class SelectMoveState extends State
 	
 	override function handleMove(move:MoveData) 
 	{
+		if (move == null)
+			move = new MoveData(null, MoveType.Pass, -1);
+		
+		moveTypeSelected = move.type;
+			
 		if (move.type == MoveType.Move)
 		{
 			handleMoveAction(move,function() {		
@@ -168,11 +180,13 @@ class SelectMoveState extends State
 			}
 		}
 		else if (move.type == MoveType.Pass)
-			endState();
+			handleAction(move,endState);
 		else if (move.type == MoveType.Defend)
 			handleAction(move,endState);
 		else if (move.type == MoveType.Wait)
-			handleAction(move,endState);
+			handleAction(move, endState);
+			
+		
 	}
 	
 	private function handleMoveAction(moveData:MoveData,callBack:Function)
@@ -224,6 +238,7 @@ class SelectMoveState extends State
 	{
 		if (attacksInfo.listOfCreatures.exists(key))
 		{
+			moveTypeSelected = MoveType.Attack;
 			var moveData = new MoveData(selectedCreature, MoveType.Attack, key);
 			moveData.affected = attacksInfo.listOfCreatures.get(key);
 			var attackAction = ActionFactory.actionFromMoveData(moveData,function(){endState();},enableAnimations);
@@ -235,6 +250,9 @@ class SelectMoveState extends State
 	private function endState()
 	{
 		selectedCreature.redrawPosition();
+		var afterMove = CurrentStateData.CalculateForCreature(selectedCreature, moveTypeSelected);
+		trace(CurrentStateData.Evaluate(beforeMove, afterMove));
+		
 		if (checkEndCondition())
 			return;
 		else if (GameContext.instance.getSizeOfQueue() == 0)
@@ -262,12 +280,14 @@ class SelectMoveState extends State
 	
 	private function handleMoveClick(input:Input)
 	{
+		moveTypeSelected = MoveType.Move;
 		handleMoveAction(new MoveData(selectedCreature,MoveType.Move,input.coor.toKey()), function() {		
 				MainState.getInstance().getDrawer().clear(1);
 				moveList.movesByTypes.remove(MoveType.Move);			
 				checkAttackPossiblity();
 				isAnimationPlaying = false;
 		});
+
 	}
 	
 	

@@ -63,8 +63,7 @@ class CurrentStateData
 		var toReturn : Tuple3<Float,MoveDiagnose,MoveDiagnose> = new Tuple3<Float,MoveDiagnose,MoveDiagnose>(0, MoveDiagnose.Pass, MoveDiagnose.Pass);
 		var theirDiff = before.theirHealth - after.theirHealth;
 		var ourDiff = before.ourHealth - after.ourHealth;
-		
-		if (before.moveType == MoveType.Attack)
+		if (after.moveType == MoveType.Attack)
 		{
 			if (!before.isCreatureRanger)
 				toReturn._1 = MoveDiagnose.AttackMeleeByMelee;
@@ -81,9 +80,9 @@ class CurrentStateData
 				else
 					toReturn._2 = MoveDiagnose.AttackWithAdvantage;
 		}
-		else if (before.moveType == MoveType.Move)
+		else if (after.moveType == MoveType.Move)
 		{
-			if (before.currentTotalDistance > after.currentTotalDistance)
+			if (before.currentTotalDistance < after.currentTotalDistance)
 				toReturn._1 = MoveDiagnose.Flee;
 			else
 				toReturn._1 = MoveDiagnose.Move;
