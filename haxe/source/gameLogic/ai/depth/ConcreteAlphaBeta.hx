@@ -9,8 +9,10 @@ import gameLogic.ai.evaluation.BasicBoardEvaluator;
 import gameLogic.ai.tree.TreeVertex;
 import gameLogic.moves.MoveData;
 import gameLogic.moves.MoveType;
+import gameLogic.states.SelectMoveState;
 import haxe.Timer;
 import thx.Tuple.Tuple2;
+import utilites.StatsGatherer;
 
 /**
  * ...
@@ -57,20 +59,22 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 		var action = ActionFactory.actionFromMoveData(node.value.moveData, null);
 		var move = node.value.moveData;
 		var value = 0.0;
-		
-		var tryToEvalState = CurrentStateData.CalculateForCreature(move.performer, move.type);
-		action.performAction();
-		movesPerformed++;
-		node.value.wasLeaf = true;
-		nodesVistied++;
-		
-		var afterState = CurrentStateData.CalculateForCreature(move.performer, move.type);
-		node.value.data = CurrentStateData.Evaluate(tryToEvalState, afterState);
-		value = node.value.data._0;
+		if (move != null)
+		{
+			var tryToEvalState = CurrentStateData.CalculateForCreature(move.performer, move.type);
+			action.performAction();
+			movesPerformed++;
+			node.value.wasLeaf = true;
+			nodesVistied++;
+			
+			var afterState = CurrentStateData.CalculateForCreature(move.performer, move.type);
+			node.value.data = CurrentStateData.Evaluate(tryToEvalState, afterState);
+			value = node.value.data._0;
 		
 
-		GameContext.instance.undoNextAction();
-		movesReversed++;
+			GameContext.instance.undoNextAction();
+			movesReversed++;
+		}
 		evaluationTimer += Timer.stamp() - time;
 		return new Tuple2<TreeVertex<MinMaxNode>,Float>(node,value);
 	}
@@ -131,14 +135,9 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 	{
 		Creature.ignoreUpdate = false;
 		GameContext.instance.redrawCreaturesPositions();
-		trace("Total time: " + (Timer.stamp() - totalTimer));
-		trace("Move generation time: " + moveGenerationTimer);
-		trace("Evaluation time: " + evaluationTimer);
-		trace("Nodes visited: " + nodesVistied);
-		trace("Children Generated: " + movesGenerated);
-		trace("Moves Reversed: " + movesReversed);
-		trace("Moves Performed: " + movesPerformed);
-		
+
+		StatsGatherer.instance.write(SelectMoveState.moveCounter, (Timer.stamp() - totalTimer), moveGenerationTimer, evaluationTimer, nodesVistied, movesGenerated);
+		trace("oki");
 		if (movesPerformed != movesReversed)
 			MainState.getInstance().RestoreMomento(false);
 	}
@@ -185,8 +184,11 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 	override public function generateMove():MoveData 
 	{
 		var node = TreeVertex.getOneBeforeRoot(tryToGetBestLeaf());
-		if(node != null)
+		if (node != null)
+		{
+			trace(node.value.moveData.type + " " + SelectMoveState.moveCounter);
 			return node.value.moveData;
+		}
 		else
 			return new MoveData(null, MoveType.Pass, -1);
 	}

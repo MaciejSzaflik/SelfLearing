@@ -29,7 +29,7 @@ class SelectMoveState extends State
 	
 	private var isAnimationPlaying = false;
 	private var isHuman = false;
-	private var enableAnimations = true;
+	private var enableAnimations = false;
 	
 	public static var moveCounter = 0;
 	

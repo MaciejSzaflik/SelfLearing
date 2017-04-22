@@ -1,6 +1,7 @@
 package gameLogic.states;
 
 import gameLogic.StateMachine;
+import utilites.StatsGatherer;
 
 /**
  * ...
@@ -18,6 +19,8 @@ class EndState extends State
 		MainState.getInstance().getDrawer().clear(2);
 		
 		trace(GameContext.instance.mapOfPlayers.get(0).creatures.length);
+		
+		StatsGatherer.instance.finish();
 	}
 	
 }

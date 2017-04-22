@@ -60,12 +60,12 @@ class CurrentStateData
 	
 	public static function Evaluate(before : CurrentStateData, after : CurrentStateData) : Tuple3<Float,MoveDiagnose,MoveDiagnose>
 	{
-		var toReturn : Tuple3<Float,MoveDiagnose,MoveDiagnose> = new Tuple3<Float,MoveDiagnose,MoveDiagnose>(0,MoveDiagnose.Pass,MoveDiagnose.Pass);
+		var toReturn : Tuple3<Float,MoveDiagnose,MoveDiagnose> = new Tuple3<Float,MoveDiagnose,MoveDiagnose>(0, MoveDiagnose.Pass, MoveDiagnose.Pass);
+		var theirDiff = before.theirHealth - after.theirHealth;
+		var ourDiff = before.ourHealth - after.ourHealth;
+		
 		if (before.moveType == MoveType.Attack)
 		{
-			var theirDiff = before.theirHealth - after.ourHealth;
-			var ourDiff = before.theirHealth - after.ourHealth;
-			
 			if (!before.isCreatureRanger)
 				toReturn._1 = MoveDiagnose.AttackMeleeByMelee;
 			else	
@@ -92,17 +92,18 @@ class CurrentStateData
 			toReturn._1 = MoveDiagnose.Pass;
 		
 		
-		if (after.theirHealth > 0)
+		if (theirDiff > 0)
 		{
-			toReturn._0 = (after.ourHealth / after.theirHealth)*1000;
+			toReturn._0 =  (ourDiff/theirDiff)*1000;
 			toReturn._0 += (before.ourCount - after.ourCount) * ( -150);
 			toReturn._0 += (before.theirCount - after.theirCount) * ( 150);
 			toReturn._0 += (after.ourRangerCount) * (150);
-			toReturn._0 += (after.theirRangerCount) * (-150);
+			toReturn._0 += (after.theirRangerCount) * ( -150);
+			
+			if (after.theirHealth <= 0)
+				toReturn._0 += 20000;
 		}
-		else
-			toReturn._0 = 20000;
-		
+			
 		return toReturn;
 	}
 	
