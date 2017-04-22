@@ -162,7 +162,6 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 		movesPerformed = 0;
 		
 		startCreatureIndex = GameContext.instance.inititativeQueue.getCurrentPosition();
-		trace(GameContext.instance.inititativeQueue.getOnPlace(startCreatureIndex).name + " " + GameContext.instance.inititativeQueue.getOnPlace(startCreatureIndex).id);
 	}
 	
 	override public function generateMoveFuture():Array<MoveData> 

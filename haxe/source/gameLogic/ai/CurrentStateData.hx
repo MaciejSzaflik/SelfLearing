@@ -90,18 +90,16 @@ class CurrentStateData
 		else
 			toReturn._1 = MoveDiagnose.Pass;
 		
-		
-		if (theirDiff > 0)
+		if (after.theirHealth > 0)
 		{
-			toReturn._0 =  (ourDiff/theirDiff)*1000;
-			toReturn._0 += (before.ourCount - after.ourCount) * ( -150);
-			toReturn._0 += (before.theirCount - after.theirCount) * ( 150);
-			toReturn._0 += (after.ourRangerCount) * (150);
-			toReturn._0 += (after.theirRangerCount) * ( -150);
-			
-			if (after.theirHealth <= 0)
-				toReturn._0 += 20000;
+			toReturn._0 =  (after.ourHealth/after.theirHealth);
+			toReturn._0 += after.ourCount * 150;
+			toReturn._0 += after.theirCount * -150;
+			toReturn._0 += after.ourRangerCount*150;
+			toReturn._0 += after.theirRangerCount* -150;
 		}
+		else 
+			toReturn._0 += 40000;
 			
 		return toReturn;
 	}

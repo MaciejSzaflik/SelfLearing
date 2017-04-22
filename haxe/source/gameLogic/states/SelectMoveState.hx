@@ -251,7 +251,7 @@ class SelectMoveState extends State
 	{
 		selectedCreature.redrawPosition();
 		var afterMove = CurrentStateData.CalculateForCreature(selectedCreature, moveTypeSelected);
-		trace(CurrentStateData.Evaluate(beforeMove, afterMove));
+		//trace(CurrentStateData.Evaluate(beforeMove, afterMove));
 		
 		if (checkEndCondition())
 			return;

@@ -236,8 +236,8 @@ class MainState extends FlxUIState
 	
 	private function CreateGameContex()
 	{
-		var player1 = new GamePlayer(0, DebugArmy(), ColorTable.PLAYER1_COLOR, PlayerType.Human,true);
-		var player2 = new GamePlayer(1, DebugArmy(), ColorTable.PLAYER2_COLOR, PlayerType.Human,false);
+		var player1 = new GamePlayer(0, DebugArmy(), ColorTable.PLAYER1_COLOR, PlayerType.AI,true);
+		var player2 = new GamePlayer(1, DebugArmy(), ColorTable.PLAYER2_COLOR, PlayerType.AI,false);
 		GameContext.instance.Init(getHexMap(), [player1, player2]); 
 		player2.setAI(new ConcreteAlphaBeta(3,true));
 		player1.setAI(new ConcreteAlphaBeta(3,true));

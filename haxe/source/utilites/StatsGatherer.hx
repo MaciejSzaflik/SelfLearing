@@ -56,6 +56,6 @@ class StatsGatherer
 			openOutput();
 		output.writeString(moveCounter + "," + totalTime+"," + moveTime+"," + evaluationTime+"," + nodes + "," + childeren);
 		#end
-		outputString += moveCounter + "," + totalTime+"," + moveTime+"," + evaluationTime+"," + nodes + "," + childeren + "\n"	;
+		outputString += moveCounter + "," + totalTime+"," + moveTime+"," + evaluationTime+"," + nodes + "," + childeren + "\n";
 	}
 }

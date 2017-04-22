@@ -28,7 +28,6 @@ class ArtificialInteligence
 		if (before != null)
 			before();
 		
-		trace("generateMoveWithThread");
 		if (isThreadNeeded())
 		{
 			ThreadProvider.instance.AddTask(function(){
@@ -48,7 +47,6 @@ class ArtificialInteligence
 		}
 		else
 		{
-			trace("callBack");
 			var moveData = generateMove();
 			callBack(moveData);
 			if (after != null)
