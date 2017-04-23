@@ -21,6 +21,17 @@ class UtilUtil
 	   return ret; 
 	}
 	
+	@:generic public static inline function IncremanteIfPossible<T>(map : Map<T,Int>, key : T) 
+	{
+		var value = map.get(key);
+		if (value != null)
+			map.set(key,value + 1);
+		else
+			map.set(key, 1);
+
+			
+	}
+	
 	public static function getIndexOf<T> (array:Array < T > , value:T):Int {
 		
 		for (i in 0...array.length)

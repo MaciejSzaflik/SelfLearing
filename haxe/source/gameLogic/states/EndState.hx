@@ -20,7 +20,11 @@ class EndState extends State
 		
 		trace(GameContext.instance.mapOfPlayers.get(0).creatures.length);
 		
-		StatsGatherer.instance.finish();
+		var playerHp = new Array<Int>();
+		for (player in GameContext.instance.mapOfPlayers)
+			playerHp.push(player.totalHp());
+			
+		StatsGatherer.instance.finish(playerHp);
 	}
 	
 }

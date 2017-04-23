@@ -71,6 +71,7 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 			node.value.data = CurrentStateData.Evaluate(tryToEvalState, afterState);
 			value = node.value.data._0;
 		
+			StatsGatherer.instance.onMoveEvaluated(node.value.data);
 
 			GameContext.instance.undoNextAction();
 			movesReversed++;

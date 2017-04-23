@@ -56,6 +56,7 @@ import ui.PortraitsQueue;
 import utilites.GameConfiguration;
 import utilites.InputType;
 import utilites.MathUtil;
+import utilites.StatsGatherer;
 import utilites.ThreadProvider;
 import utilites.UtilUtil;
 
@@ -237,10 +238,14 @@ class MainState extends FlxUIState
 	private function CreateGameContex()
 	{
 		var player1 = new GamePlayer(0, DebugArmy(), ColorTable.PLAYER1_COLOR, PlayerType.AI,true);
-		var player2 = new GamePlayer(1, DebugArmy(), ColorTable.PLAYER2_COLOR, PlayerType.AI,false);
+		var player2 = new GamePlayer(1, DebugArmy(), ColorTable.PLAYER2_COLOR, PlayerType.AI, false);
+		
+		
+		StatsGatherer.instance.initialize([player1.totalHp(), player2.totalHp()]);
+		
 		GameContext.instance.Init(getHexMap(), [player1, player2]); 
-		player2.setAI(new ConcreteAlphaBeta(3,true));
-		player1.setAI(new ConcreteAlphaBeta(3,true));
+		player2.setAI(new ConcreteAlphaBeta(1,true));
+		player1.setAI(new ConcreteAlphaBeta(1,true));
 		CreateUIQueue();
 		GameContext.instance.stateMachine.addNewStateChangeListener(function(state:String)
 		{

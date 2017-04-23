@@ -60,7 +60,7 @@ class CurrentStateData
 	
 	public static function Evaluate(before : CurrentStateData, after : CurrentStateData) : Tuple3<Float,MoveDiagnose,MoveDiagnose>
 	{
-		var toReturn : Tuple3<Float,MoveDiagnose,MoveDiagnose> = new Tuple3<Float,MoveDiagnose,MoveDiagnose>(0, MoveDiagnose.Pass, MoveDiagnose.Pass);
+		var toReturn : Tuple3<Float,MoveDiagnose,MoveDiagnose> = new Tuple3<Float,MoveDiagnose,MoveDiagnose>(0, MoveDiagnose.Empty, MoveDiagnose.Empty);
 		var theirDiff = before.theirHealth - after.theirHealth;
 		var ourDiff = before.ourHealth - after.ourHealth;
 		if (after.moveType == MoveType.Attack)
@@ -92,14 +92,14 @@ class CurrentStateData
 		
 		if (after.theirHealth > 0)
 		{
-			toReturn._0 =  (after.ourHealth/after.theirHealth);
+			toReturn._0 =  (after.ourHealth/after.theirHealth)*100;
 			toReturn._0 += after.ourCount * 150;
 			toReturn._0 += after.theirCount * -150;
 			toReturn._0 += after.ourRangerCount*150;
 			toReturn._0 += after.theirRangerCount* -150;
 		}
 		else 
-			toReturn._0 += 40000;
+			toReturn._0 += 4000;
 			
 		return toReturn;
 	}
@@ -116,4 +116,5 @@ enum MoveDiagnose
 	AttackRecklessly;
 	AttackWithAdvantage;
 	Pass;
+	Empty;
 }

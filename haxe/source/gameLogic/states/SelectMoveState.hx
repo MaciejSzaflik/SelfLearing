@@ -17,6 +17,7 @@ import haxe.Constraints.Function;
 import source.Drawer;
 import ui.ColorTable;
 import utilites.InputType;
+import utilites.StatsGatherer;
 
 /**
  * ...
@@ -251,7 +252,9 @@ class SelectMoveState extends State
 	{
 		selectedCreature.redrawPosition();
 		var afterMove = CurrentStateData.CalculateForCreature(selectedCreature, moveTypeSelected);
-		//trace(CurrentStateData.Evaluate(beforeMove, afterMove));
+		var result = CurrentStateData.Evaluate(beforeMove, afterMove);
+		trace(result);
+		StatsGatherer.instance.onMovePerformed(result);
 		
 		if (checkEndCondition())
 			return;

@@ -38,6 +38,16 @@ class GamePlayer
 			createAI();
 	}
 	
+	public function totalHp()
+	{
+		var total = 0;
+		for (creature in creatures)
+		{
+			total += creature.totalHealth;
+		}
+		return total;
+	}
+	
 	public function addCreatureToPlayer(creature:Creature)
 	{
 		creature.idPlayerId = id;
