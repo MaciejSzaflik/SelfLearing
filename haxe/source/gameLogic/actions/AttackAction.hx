@@ -15,19 +15,23 @@ class AttackAction extends Action
 {
 	private var useAnimation:Bool;
 	private var defender:Creature;
+	private var attackerTileId : Int;
 	
+	private var orginalPosition : Int;
 	private var attackerAttack:AttackInfo;
 	private var defenderAttack:AttackInfo;
 	private var creatureAlreadyMoved:Bool;
 	
-	public function new(attacker:Creature,defender:Creature,onFinish:Function,withAnimation:Bool = false) 
+	public function new(attacker:Creature,tileIdToMove : Int,defender:Creature,onFinish:Function,withAnimation:Bool = false) 
 	{
 		super();
 		this.performer = attacker;
 		this.defender = defender;
 		this.onFinish = onFinish;
+		this.attackerTileId = tileIdToMove;
 		useAnimation = withAnimation;
 		creatureAlreadyMoved = attacker.moved;
+		orginalPosition = attacker.getTileId();
 	}
 	
 	override public function performAction() 
@@ -38,14 +42,16 @@ class AttackAction extends Action
 		else
 			actionWithoutAnimation();
 	}
-	
+	//
 	private function actionWithoutAnimation()
 	{
-		attackerAttack = attack(performer, defender);
-		var distance = HexCoordinates.getManhatanDistance(performer.currentCordinates, defender.currentCordinates);
+		performer.setCoodinates(GameContext.instance.map.getHexByIndex(attackerTileId).getCoor());
 		
-		if (attackerAttack.isAlive && distance == 1 && defender.canContrattack)
+		attackerAttack = attack(performer, defender);
+		var distance = HexCoordinates.getManhatanDistance(GameContext.instance.map.getHexByIndex(attackerTileId).getCoor(), defender.currentCordinates);
+		if (attackerAttack.isAlive && distance < 2 && defender.canContrattack)
 		{
+			trace("nemey contrattacked");
 			defenderAttack = attack(defender, performer);
 			defender.contrattackCounter++;
 			if (onFinish != null)
@@ -81,8 +87,12 @@ class AttackAction extends Action
 	
 	private function attack(hitter:Creature,gettingHit:Creature):AttackInfo
 	{
-		
+		var isDefending = gettingHit.defending;
 		var attackPower = Std.int(Math.min(gettingHit.totalHealth, hitter.calculateAttack()));
+		
+		if (isDefending)
+			attackPower = Math.ceil(attackPower*0.5);
+		
 		var isAlive = gettingHit.getHit(attackPower);
 		var inQueue = -1;
 		if (!isAlive)
@@ -106,7 +116,7 @@ class AttackAction extends Action
 		listPoints.add(midpoint);
 		listPoints.add(mover.position);
 		
-		var bumpAnimation = new MoveBetweenPoints(mover, listPoints, 0.04, function(){
+		var bumpAnimation = new MoveBetweenPoints(mover, listPoints, 0.1, function(){
 			if (afterAnimation != null)
 				afterAnimation();
 		});
@@ -117,6 +127,7 @@ class AttackAction extends Action
 	override public function resetAction() 
 	{
 		super.resetAction();
+		performer.setCoodinates(GameContext.instance.map.getHexByIndex(orginalPosition).getCoor());
 		defender.recalculateStackSize(defender.totalHealth + attackerAttack.attackPower);
 		defender.lostHitPoints -= attackerAttack.attackPower;
 		if (defenderAttack != null)

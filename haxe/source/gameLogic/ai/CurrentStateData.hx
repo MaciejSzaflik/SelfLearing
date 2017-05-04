@@ -2,6 +2,8 @@ package gameLogic.ai;
 import game.Creature;
 import gameLogic.moves.MoveType;
 import hex.HexCoordinates;
+import thx.Floats;
+import thx.Ints;
 import thx.Tuple.Tuple3;
 
 /**
@@ -19,6 +21,7 @@ class CurrentStateData
 	public var theirCount : Int;
 	public var ourRangerCount : Int;
 	public var theirRangerCount : Int;
+	public var tileId : Int;
 	
 	public function new() 
 	{
@@ -31,6 +34,7 @@ class CurrentStateData
 		ourRangerCount = 0;
 		theirRangerCount = 0;
 		moveType = MoveType.Pass;
+		tileId = 0;
 	}
 	
 	public static function CalculateForCreature(creature: Creature,moveType : MoveType) : CurrentStateData
@@ -38,7 +42,7 @@ class CurrentStateData
 		var calc : CurrentStateData = new CurrentStateData();
 		calc.isCreatureRanger = creature.isRanger;
 		calc.moveType = moveType;	
-			
+		calc.tileId = creature.getTileId();
 		for (enemy in GameContext.instance.getEnemies(creature.idPlayerId))
 		{
 			calc.theirHealth += enemy.totalHealth;
@@ -92,15 +96,17 @@ class CurrentStateData
 		
 		if (after.theirHealth > 0)
 		{
-			toReturn._0 =  (after.ourHealth/after.theirHealth)*100;
+			toReturn._0 =  (after.ourHealth/after.theirHealth*10)*100;
 			toReturn._0 += after.ourCount * 150;
 			toReturn._0 += after.theirCount * -150;
 			toReturn._0 += after.ourRangerCount*150;
-			toReturn._0 += after.theirRangerCount* -150;
+			toReturn._0 += after.theirRangerCount * -150;
+			
+			if (after.moveType != MoveType.Attack)
+				toReturn._0 *= 0.5;
 		}
 		else 
-			toReturn._0 += 4000;
-			
+			toReturn._0 += Math.POSITIVE_INFINITY;
 		return toReturn;
 	}
 	

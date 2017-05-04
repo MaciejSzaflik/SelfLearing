@@ -7,6 +7,7 @@ import gameLogic.ai.RandomAI;
 import gameLogic.ai.evaluation.KillTheWeakest;
 import gameLogic.moves.MoveData;
 import gameLogic.moves.MoveType;
+import utilites.UtilUtil;
 
 /**
  * ...
@@ -18,7 +19,7 @@ class GamePlayer
 	public var playerType:PlayerType;
 	public var color:FlxColor;
 	public var creatures:Array<Creature>;
-	public var deadCreatures:Array<Creature>;
+	public var deadCreatures:Map<Int,Creature>;
 	public var artificialInt:ArtificialInteligence;
 	public var reversedSprites:Bool;
 	
@@ -27,7 +28,7 @@ class GamePlayer
 		this.playerType = playerType;
 		this.id = id;
 		this.color = color;
-		this.deadCreatures = new Array<Creature>();
+		this.deadCreatures = new Map<Int,Creature>();
 		this.creatures = new Array<Creature>();
 		this.reversedSprites = reversedSprites;
 		
@@ -74,12 +75,12 @@ class GamePlayer
 			return;
 		
 		creatures.remove(killed);
-		deadCreatures.push(killed);
+		deadCreatures.set(killed.id, killed);
 	}
 	
 	public function onCreatureResurected(res:Creature)
 	{
-		deadCreatures.remove(res);
+		deadCreatures.remove(res.id);
 		creatures.push(res);
 	}
 	
@@ -95,7 +96,7 @@ class GamePlayer
 	public var numberOfDead(get, never):Int;
 	function get_numberOfDead():Int
 	{
-		return deadCreatures.length;
+		return UtilUtil.CountMap(this.deadCreatures);
 	}
 	
 	

@@ -14,7 +14,8 @@ class NegaMax
 		getColor : T->Int,
 		getValue : TreeVertex<T>->Tuple2<TreeVertex<T>,Float>, 
 		getChildren : TreeVertex<T> -> Int -> Iterable<TreeVertex<T>>,
-		beforeReturn : T-> Bool = null) : Tuple2<TreeVertex<T>,Float>
+		beforeReturn : T-> Bool = null,
+		fliping : Bool = true) : Tuple2<TreeVertex<T>,Float>
 	{	
 		var max : Tuple2<TreeVertex<T>,Float> = new Tuple2<TreeVertex<T>,Float> (node, -1000000000000);
 		if (depth == maxDepth)
@@ -22,13 +23,17 @@ class NegaMax
 			max = getValue(node);
 		}
 		else
-		{	
+		{
 			var index = 0;
 			for (child in getChildren(node,depth))
 			{
+				var shouldFlip = -1;
+				if (getColor(child.value) == getColor(node.value) && !fliping)
+					shouldFlip = 1;
+				
 				index++;
-				var x : Tuple2<TreeVertex<T>,Float>  = genericNegaMax(child, maxDepth, depth + 1, -beta, -alpha, getColor,getValue,getChildren,beforeReturn);
-				x._1 = -x._1;
+				var x : Tuple2<TreeVertex<T>,Float>  = genericNegaMax(child, maxDepth, depth + 1, shouldFlip*beta, shouldFlip*alpha, getColor,getValue,getChildren,beforeReturn);
+				x._1 = shouldFlip*x._1;
 				if (x._1 > max._1) 
 					max = x;
 				if (x._1 > alpha )

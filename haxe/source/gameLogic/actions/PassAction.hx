@@ -14,4 +14,11 @@ class PassAction extends Action
 		this.onFinish = onFinish;
 	}
 	
+	override public function performAction() 
+	{
+		super.performAction();
+		if (onFinish != null)
+			onFinish();
+	}
+	
 }

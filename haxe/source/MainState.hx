@@ -237,15 +237,15 @@ class MainState extends FlxUIState
 	
 	private function CreateGameContex()
 	{
-		var player1 = new GamePlayer(0, DebugArmy(), ColorTable.PLAYER1_COLOR, PlayerType.AI,true);
-		var player2 = new GamePlayer(1, DebugArmy(), ColorTable.PLAYER2_COLOR, PlayerType.AI, false);
+		var player1 = new GamePlayer(0, DebugArmy(), ColorTable.PLAYER1_COLOR, PlayerType.Human,true);
+		var player2 = new GamePlayer(1, DebugArmy(), ColorTable.PLAYER2_COLOR, PlayerType.Human, false);
 		
 		
 		StatsGatherer.instance.initialize([player1.totalHp(), player2.totalHp()]);
 		
 		GameContext.instance.Init(getHexMap(), [player1, player2]); 
-		player2.setAI(new ConcreteAlphaBeta(1,true));
 		player1.setAI(new ConcreteAlphaBeta(1,true));
+		player2.setAI(new ConcreteAlphaBeta(1,true));
 		CreateUIQueue();
 		GameContext.instance.stateMachine.addNewStateChangeListener(function(state:String)
 		{
@@ -317,9 +317,9 @@ class MainState extends FlxUIState
 		var knight = Creature.fromDefinition(knightDefinition,15);
 		creatureList.push(knight);
 		knight.addCreatureToState(this);
-		knight = Creature.fromDefinition(knightDefinition,15);
+		/*knight = Creature.fromDefinition(knightDefinition,15);
 		creatureList.push(knight);
-		knight.addCreatureToState(this);
+		knight.addCreatureToState(this)
 		knight = Creature.fromDefinition(knightDefinition,15);
 		creatureList.push(knight);
 		knight.addCreatureToState(this);
@@ -330,17 +330,17 @@ class MainState extends FlxUIState
 		creatureList.push(knight);
 		knight.addCreatureToState(this);
 		
-		
+		*/
 		var archer = Creature.fromDefinition(archerDefinition,10);
 		creatureList.push(archer);
-		archer.addCreatureToState(this);
+		archer.addCreatureToState(this);/*
 		archer = Creature.fromDefinition(archerDefinition,10);
 		creatureList.push(archer);
 		archer.addCreatureToState(this);
 		archer = Creature.fromDefinition(archerDefinition,10);
 		creatureList.push(archer);
 		archer.addCreatureToState(this);
-		
+		*/
 		return creatureList;
 	}
 	
@@ -542,24 +542,23 @@ class MainState extends FlxUIState
 		}
 		else if (buttonName == "eval_3")
 		{
-			var alpha = new ConcreteNegaScout(4,true);
+			var alpha = new ConcreteAlphaBeta(1,true);
 			SaveMomento();
 			Creature.ignoreUpdate = true;
 			RotateHourglass();
 			ThreadProvider.instance.AddTask(function(){
 				try{
-					var moveData : Array<MoveData> =  alpha.generateMoveFuture();
+					var moveData : MoveData =  alpha.generateMove();
 					getDrawer().clear(3);
 					
-					for (move in moveData)
-					{
-						var color = GameContext.instance.getPlayerColor(move.performer.idPlayerId);
-						if(move.type == MoveType.Attack)
-							drawHexId(move.affected.getTileId(), 3, FlxColor.YELLOW);
-						drawHexId(move.tileId, 3, color);
-					}
-					hourglass.kill();
 
+					var color = GameContext.instance.getPlayerColor(moveData.performer.idPlayerId);
+					if(moveData.type == MoveType.Attack)
+						drawHexId(moveData.affected.getTileId(), 3, FlxColor.YELLOW);
+						
+					drawHexId(moveData.tileId, 3, color);
+					hourglass.kill();
+					trace("move: " + moveData.type);
 					#if neko
 					Sys.sleep(1.0);
 					getDrawer().clear(3);

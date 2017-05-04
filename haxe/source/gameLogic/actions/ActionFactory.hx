@@ -39,7 +39,7 @@ class ActionFactory
 	}
 	private static function createAttackAction(moveData:MoveData,callback:Function,animation:Bool):AttackAction
 	{
-		return new AttackAction(moveData.performer, moveData.affected,callback,animation);
+		return new AttackAction(moveData.performer, moveData.tileId , moveData.affected,callback,animation);
 	}
 	private static function createAbilityAction(moveData:MoveData):AbilityAction
 	{

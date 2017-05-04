@@ -137,7 +137,7 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 		Creature.ignoreUpdate = false;
 		GameContext.instance.redrawCreaturesPositions();
 
-		StatsGatherer.instance.write(SelectMoveState.moveCounter, (Timer.stamp() - totalTimer), moveGenerationTimer, evaluationTimer, nodesVistied, movesGenerated);
+		StatsGatherer.instance.write(false,SelectMoveState.moveCounter, (Timer.stamp() - totalTimer), moveGenerationTimer, evaluationTimer, nodesVistied, movesGenerated);
 		trace("oki");
 		if (movesPerformed != movesReversed)
 			MainState.getInstance().RestoreMomento(false);

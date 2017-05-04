@@ -158,7 +158,7 @@ class PlayerArrays
 	
 	public function ApplyToPlayer(creaturesMain : Map<Int,Creature>, player : GamePlayer)
 	{
-		player.deadCreatures = new Array<Creature>();
+		player.deadCreatures = new Map<Int,Creature>();
 		player.creatures = new Array<Creature>();
 		
 		for (ids in aliveCreatures)
@@ -168,7 +168,7 @@ class PlayerArrays
 		
 		for (ids in deadCreatures)
 		{
-			player.deadCreatures.push(creaturesMain.get(ids));
+			player.deadCreatures.set(ids, creaturesMain.get(ids));
 		}
 	}
 }

@@ -237,7 +237,7 @@ class Creature
 	
 	public function getHit(hitPower:Int):Bool
 	{
-		var newHealth = totalHealth - (defending?Math.ceil(hitPower * 0.5):hitPower);
+		var newHealth = totalHealth - hitPower;
 		lostHitPoints += hitPower;
 		if (newHealth <= 0)
 		{

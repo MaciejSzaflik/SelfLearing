@@ -31,7 +31,7 @@ class SelectMoveState extends State
 	
 	private var isAnimationPlaying = false;
 	private var isHuman = false;
-	private var enableAnimations = false;
+	private var enableAnimations = true;
 	
 	public static var moveCounter = 0;
 	
@@ -44,14 +44,13 @@ class SelectMoveState extends State
 		moveCounter++;
 		super(stateMachine);
 		clearAll();
-		
+		cleanUpImpossibleCreatures();
 		if (checkEndCondition())
 			return;
 		
 		GameContext.instance.currentPlayerIndex = creature.idPlayerId;
 		
 		beforeMove = CurrentStateData.CalculateForCreature(creature, MoveType.Pass);
-
 		selectedCreature = creature;
 		isHuman = GameContext.instance.typeOfCurrentPlayer() == PlayerType.Human;
 		if(isHuman)
@@ -256,12 +255,24 @@ class SelectMoveState extends State
 		trace(result);
 		StatsGatherer.instance.onMovePerformed(result);
 		
+		
+		
+		
 		if (checkEndCondition())
 			return;
 		else if (GameContext.instance.getSizeOfQueue() == 0)
 			stateMachine.setCurrentState(new StartRound(this.stateMachine));
 		else
 			stateMachine.setCurrentState(new SelectMoveState(this.stateMachine, GameContext.instance.getNextCreature()));
+	}
+	
+	private function cleanUpImpossibleCreatures()
+	{
+		for ( creature in GameContext.instance.creaturesMap)
+		{
+			if(creature.totalHealth <= 0)
+				GameContext.instance.onCreatureKilled(creature);
+		}
 	}
 	
 	private function checkEndCondition() : Bool

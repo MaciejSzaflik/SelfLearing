@@ -15,9 +15,12 @@ import thx.Tuple.Tuple2;
 class ConcreteNegaMax extends ConcreteAlphaBeta
 {
 
-	public function new(depth : Int, shouldGetNextCreature : Bool) 
+	var fliping  : Bool;
+	
+	public function new(depth : Int, shouldGetNextCreature : Bool, fliping : Bool) 
 	{
-		super(depth,shouldGetNextCreature);
+		super(depth, shouldGetNextCreature);
+		this.fliping = fliping;
 	}
 
 	override function tryToGetBestLeaf():TreeVertex<MinMaxNode>
@@ -45,7 +48,7 @@ class ConcreteNegaMax extends ConcreteAlphaBeta
 		var move = node.value.moveData;
 		var action = ActionFactory.actionFromMoveData(move, null);
 		var value = 0.0;
-		if (action != null)
+		if (action != null && move!=null)
 		{
 			var tryToEvalState = CurrentStateData.CalculateForCreature(move.performer, move.type);
 			action.performAction();

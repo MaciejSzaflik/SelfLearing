@@ -130,13 +130,17 @@ class StatsGatherer
 		UtilUtil.IncremanteIfPossible(movesEvaluatedType, value._2);
 	}
 	
-	public function write(moveCounter : Int, totalTime: Float, moveTime : Float, evaluationTime : Float, nodes : Int, childeren : Int)
+	public function write(print : Bool, moveCounter : Int, totalTime: Float, moveTime : Float, evaluationTime : Float, nodes : Int, childeren : Int)
 	{
+		var toWrite = moveCounter + "," + totalTime+"," + moveTime+"," + evaluationTime+"," + nodes + "," + childeren + "\n";
 		#if neko
 		if (output == null)
 			openOutput();
-		output.writeString(moveCounter + "," + totalTime+"," + moveTime+"," + evaluationTime+"," + nodes + "," + childeren);
+		output.writeString(toWrite);
 		#end
-		outputString += moveCounter + "," + totalTime+"," + moveTime+"," + evaluationTime+"," + nodes + "," + childeren + "\n";
+		outputString += toWrite;
+		
+		if (print)
+			trace(toWrite);
 	}
 }

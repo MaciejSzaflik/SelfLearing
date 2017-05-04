@@ -13,9 +13,9 @@ import thx.Tuple.Tuple2;
 class ConcreteNegaScout extends ConcreteNegaMax 
 {
 
-	public function new(depth : Int, shouldGetNextCreature : Bool) 
+	public function new(depth : Int, shouldGetNextCreature : Bool, fliping : Bool) 
 	{
-		super(depth,shouldGetNextCreature);
+		super(depth,shouldGetNextCreature,fliping);
 	}
 
 	override function tryToGetBestLeaf():TreeVertex<MinMaxNode>
