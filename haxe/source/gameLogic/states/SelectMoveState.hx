@@ -45,6 +45,7 @@ class SelectMoveState extends State
 		super(stateMachine);
 		clearAll();
 		cleanUpImpossibleCreatures();
+		
 		if (checkEndCondition())
 			return;
 		
@@ -52,6 +53,8 @@ class SelectMoveState extends State
 		
 		beforeMove = CurrentStateData.CalculateForCreature(creature, MoveType.Pass);
 		selectedCreature = creature;
+		
+		trace(selectedCreature.totalHealth + " " + selectedCreature.isSpriteEnabled() + " " + selectedCreature.id);
 		isHuman = GameContext.instance.typeOfCurrentPlayer() == PlayerType.Human;
 		if(isHuman)
 		{
@@ -252,11 +255,7 @@ class SelectMoveState extends State
 		selectedCreature.redrawPosition();
 		var afterMove = CurrentStateData.CalculateForCreature(selectedCreature, moveTypeSelected);
 		var result = CurrentStateData.Evaluate(beforeMove, afterMove);
-		trace(result);
 		StatsGatherer.instance.onMovePerformed(result);
-		
-		
-		
 		
 		if (checkEndCondition())
 			return;
@@ -270,8 +269,8 @@ class SelectMoveState extends State
 	{
 		for ( creature in GameContext.instance.creaturesMap)
 		{
-			if(creature.totalHealth <= 0)
-				GameContext.instance.onCreatureKilled(creature);
+			//if(creature.totalHealth <= 0)
+				//GameContext.instance.onCreatureKilled(creature);
 		}
 	}
 	

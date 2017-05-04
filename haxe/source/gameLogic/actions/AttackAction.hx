@@ -51,7 +51,6 @@ class AttackAction extends Action
 		var distance = HexCoordinates.getManhatanDistance(GameContext.instance.map.getHexByIndex(attackerTileId).getCoor(), defender.currentCordinates);
 		if (attackerAttack.isAlive && distance < 2 && defender.canContrattack)
 		{
-			trace("nemey contrattacked");
 			defenderAttack = attack(defender, performer);
 			defender.contrattackCounter++;
 			if (onFinish != null)
@@ -116,7 +115,7 @@ class AttackAction extends Action
 		listPoints.add(midpoint);
 		listPoints.add(mover.position);
 		
-		var bumpAnimation = new MoveBetweenPoints(mover, listPoints, 0.1, function(){
+		var bumpAnimation = new MoveBetweenPoints(mover, listPoints, 0.04, function(){
 			if (afterAnimation != null)
 				afterAnimation();
 		});

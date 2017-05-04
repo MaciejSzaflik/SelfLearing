@@ -19,6 +19,7 @@ import hex.Hex;
 import hex.HexCoordinates;
 import hex.HexMap;
 import source.BoardMap;
+import utilites.UtilUtil;
 
 /**
  * ...
@@ -44,6 +45,7 @@ class GameContext
 	
 	public var map:HexMap;
 	public var mapOfPlayers:Map<Int,GamePlayer>;
+	public var enemyStartHp:Map<Int,Int>;
 	public var currentPlayerIndex(get, set):Int;
 	public var tileToCreature:Map<Int,Creature>;
 	public var inititativeQueue:CreatureQueue;
@@ -104,7 +106,8 @@ class GameContext
 	{
 		for (creature in inititativeQueue.getQueueIterator())
 		{
-			creature.redrawPosition();
+			if(creature!=null)
+				creature.redrawPosition();
 		}
 	}
 	
@@ -150,11 +153,24 @@ class GameContext
 		this.mapOfPlayers = new Map<Int,GamePlayer>();
 		for (player in listOfPlayers)
 			mapOfPlayers.set(player.id, player);
-		
 		this.inititativeQueue = new ContinuesQueue();
 		stateMachine = new GameStateMachine(this);
 		
-		
+		calculateStartingHp();
+	}
+	
+	private function calculateStartingHp()
+	{
+		enemyStartHp = new Map<Int,Int>();
+		for (creature in creaturesMap)
+		{
+			UtilUtil.AddIfPossible(enemyStartHp, creature.idPlayerId, creature.totalHealth);
+		}
+	}
+	
+	public function getStartHpOfPlayer(playerId : Int)
+	{
+		return enemyStartHp.get(playerId);
 	}
 	
 	public function Start()

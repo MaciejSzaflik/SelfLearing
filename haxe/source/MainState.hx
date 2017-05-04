@@ -163,7 +163,7 @@ class MainState extends FlxUIState
 	{
 		contexMomento = new GameContexMomento();
 		contexMomento.StoreContex(GameContext.instance);
-		trace("SaveMomento");
+		//trace("SaveMomento");
 	}
 	
 	public function RestoreMomento(changeState : Bool = true)
@@ -237,14 +237,14 @@ class MainState extends FlxUIState
 	
 	private function CreateGameContex()
 	{
-		var player1 = new GamePlayer(0, DebugArmy(), ColorTable.PLAYER1_COLOR, PlayerType.Human,true);
-		var player2 = new GamePlayer(1, DebugArmy(), ColorTable.PLAYER2_COLOR, PlayerType.Human, false);
+		var player1 = new GamePlayer(0, DebugArmy(), ColorTable.PLAYER1_COLOR, PlayerType.AI,true);
+		var player2 = new GamePlayer(1, DebugArmy(), ColorTable.PLAYER2_COLOR, PlayerType.AI, false);
 		
 		
 		StatsGatherer.instance.initialize([player1.totalHp(), player2.totalHp()]);
 		
 		GameContext.instance.Init(getHexMap(), [player1, player2]); 
-		player1.setAI(new ConcreteAlphaBeta(1,true));
+		player1.setAI(new ConcreteAlphaBeta(3,true));
 		player2.setAI(new ConcreteAlphaBeta(1,true));
 		CreateUIQueue();
 		GameContext.instance.stateMachine.addNewStateChangeListener(function(state:String)
@@ -317,12 +317,12 @@ class MainState extends FlxUIState
 		var knight = Creature.fromDefinition(knightDefinition,15);
 		creatureList.push(knight);
 		knight.addCreatureToState(this);
-		/*knight = Creature.fromDefinition(knightDefinition,15);
-		creatureList.push(knight);
-		knight.addCreatureToState(this)
 		knight = Creature.fromDefinition(knightDefinition,15);
 		creatureList.push(knight);
-		knight.addCreatureToState(this);
+		knight.addCreatureToState(this);/*
+		knight = Creature.fromDefinition(knightDefinition,15);
+		creatureList.push(knight);
+		knight.addCreatureToState(this);/*
 		knight = Creature.fromDefinition(knightDefinition,15);
 		creatureList.push(knight);
 		knight.addCreatureToState(this);
@@ -542,7 +542,7 @@ class MainState extends FlxUIState
 		}
 		else if (buttonName == "eval_3")
 		{
-			var alpha = new ConcreteAlphaBeta(1,true);
+			var alpha = new ConcreteAlphaBeta(4,true);
 			SaveMomento();
 			Creature.ignoreUpdate = true;
 			RotateHourglass();

@@ -69,7 +69,8 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 			
 			var afterState = CurrentStateData.CalculateForCreature(move.performer, move.type);
 			node.value.data = CurrentStateData.Evaluate(tryToEvalState, afterState);
-			value = node.value.data._0;
+			
+			value = CurrentStateData.EvaluateForPlayer(this.playerId);
 		
 			StatsGatherer.instance.onMoveEvaluated(node.value.data);
 
@@ -77,6 +78,8 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 			movesReversed++;
 		}
 		evaluationTimer += Timer.stamp() - time;
+		trace(value);
+		node.value.nodeValue = value;
 		return new Tuple2<TreeVertex<MinMaxNode>,Float>(node,value);
 	}
 	
@@ -128,6 +131,7 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 			generateChildren, -1000000, 1000000,
 			onFinish);
 		
+		trace(treeVertex.treeToString());
 		traceAndClean();
 		return result._0;
 	}
@@ -138,7 +142,7 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 		GameContext.instance.redrawCreaturesPositions();
 
 		StatsGatherer.instance.write(false,SelectMoveState.moveCounter, (Timer.stamp() - totalTimer), moveGenerationTimer, evaluationTimer, nodesVistied, movesGenerated);
-		trace("oki");
+		//trace("oki");
 		if (movesPerformed != movesReversed)
 			MainState.getInstance().RestoreMomento(false);
 	}
@@ -186,7 +190,7 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 		var node = TreeVertex.getOneBeforeRoot(tryToGetBestLeaf());
 		if (node != null)
 		{
-			trace(node.value.moveData.type + " " + SelectMoveState.moveCounter);
+		//	trace(node.value.moveData.type + " " + SelectMoveState.moveCounter);
 			return node.value.moveData;
 		}
 		else

@@ -28,9 +28,17 @@ class UtilUtil
 			map.set(key,value + 1);
 		else
 			map.set(key, 1);
-
-			
 	}
+	
+	@:generic public static inline function AddIfPossible<T>(map : Map<T,Int>, key : T, valueToAdd : Int) 
+	{
+		var value = map.get(key);
+		if (value != null)
+			map.set(key,value + valueToAdd);
+		else
+			map.set(key, valueToAdd);
+	}
+	
 	
 	public static function getIndexOf<T> (array:Array < T > , value:T):Int {
 		

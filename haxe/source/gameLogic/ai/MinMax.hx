@@ -106,4 +106,9 @@ class MinMaxNode
 		this.listOfMoves = listOfMoves;
 		this.nodeValue = value;
 	}
+	
+	public function toString()
+	{
+		return Std.string(this.nodeValue);
+	}
 }

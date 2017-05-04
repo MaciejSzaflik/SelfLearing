@@ -322,6 +322,16 @@ class Creature
 		this.dynamicInfo = new CreatureDynamicInfo();
 	}
 	
+	public function isSpriteEnabled():Bool
+	{
+		return this.sprite.alive;
+	}
+	
+	public function toString():String
+	{
+		return "a";
+	}
+	
 	public function getTileId():Int
 	{
 		return currentCordinates.toKey();

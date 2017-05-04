@@ -30,23 +30,6 @@ class AlphaBeta
 		maxDepth = depth;
 	}
 	
-	private function alphaBeta(node:MinMaxNode, alpha:Float, beta:Float, maximisingPlayer:Int, depth:Int) : Float
-	{
-		var bestValue : Float = 0;
-		if (depth == maxDepth)
-		{
-			var action = ActionFactory.actionFromMoveData(node.moveData, null);
-			action.performAction();
-			
-			var evalResult = evaluationMethod.evaluateState(node.playerId, GameContext.instance.getEnemyId(node.playerId));
-			node.nodeValue = evalResult._0 * (1 / evalResult._1);
-			bestValue = node.nodeValue;
-		}
-		
-		return bestValue;
-		
-	}
-	
 	public static function genericAlfaBeta<T>(
 		maxDepth : Int, 
 		currentDepth : Int,
@@ -71,7 +54,7 @@ class AlphaBeta
 			for (child in getChildren(node, currentDepth)) {
 				counter++;
 				var childValue = genericAlfaBeta(maxDepth,currentDepth+1,child, getValue, getPlayerType, getChildren, bestValue._1, beta, beforeReturn);
-				
+
 				if (bestValue._1 < childValue._1)
 				{
 					bestValue = childValue;
@@ -106,7 +89,7 @@ class AlphaBeta
 		}
 		if (beforeReturn != null)
 			beforeReturn(node.value);
-			
+		
 		return bestValue;
 	}
 	

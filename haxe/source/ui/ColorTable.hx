@@ -6,8 +6,8 @@ package ui;
  */
 class ColorTable
 {
-	public static inline var PLAYER1_COLOR = 0xffcc1111;
-	public static inline var PLAYER2_COLOR = 0xff1111ff;
+	public static inline var PLAYER1_COLOR = 0xffff00ff;
+	public static inline var PLAYER2_COLOR = 0xff00e5ee;
 	public static inline var PLAYER1_TRANS = 0x40cc1111;
 	public static inline var PLAYER2_TRANS = 0x401111ff;
 	public static inline var POINTER_COLOR = 0x99ffffff;
