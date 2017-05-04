@@ -224,7 +224,7 @@ class MainState extends FlxUIState
 		GameContext.instance.map.getGraph().impassableVertices = new Map<Int,Bool>();
 		for (creature in GameContext.instance.creaturesMap)
 		{
-			trace(creature.id);
+			//trace(creature.id);
 			creature.enable(false);
 		}
 		
@@ -244,7 +244,7 @@ class MainState extends FlxUIState
 		StatsGatherer.instance.initialize([player1.totalHp(), player2.totalHp()]);
 		
 		GameContext.instance.Init(getHexMap(), [player1, player2]); 
-		player1.setAI(new ConcreteAlphaBeta(3,true));
+		player1.setAI(new ConcreteAlphaBeta(2,true));
 		player2.setAI(new ConcreteAlphaBeta(1,true));
 		CreateUIQueue();
 		GameContext.instance.stateMachine.addNewStateChangeListener(function(state:String)
@@ -460,8 +460,16 @@ class MainState extends FlxUIState
 			onClick();
 		}
 		
+		if (restartFlag)
+		{
+			restartFlag = false;
+			TryToRestart();
+		}
+		
 		super.update(elapsed);
 	}
+	public var restartFlag : Bool = false;
+	
 	
 	private function onClick()
 	{

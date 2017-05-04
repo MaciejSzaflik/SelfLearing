@@ -54,7 +54,7 @@ class SelectMoveState extends State
 		beforeMove = CurrentStateData.CalculateForCreature(creature, MoveType.Pass);
 		selectedCreature = creature;
 		
-		trace(selectedCreature.totalHealth + " " + selectedCreature.isSpriteEnabled() + " " + selectedCreature.id);
+		//trace(selectedCreature.totalHealth + " " + selectedCreature.isSpriteEnabled() + " " + selectedCreature.id);
 		isHuman = GameContext.instance.typeOfCurrentPlayer() == PlayerType.Human;
 		if(isHuman)
 		{

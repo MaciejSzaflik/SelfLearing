@@ -158,6 +158,8 @@ class HexMap extends BoardMap
 		if (hexes.exists(start) && hexes.exists(end))
 		{
 			var listOfVertices = pathfinder.findPath(start, end);
+			if (listOfVertices == null )
+				return null;
 			for (vert in listOfVertices)
 				centers.add(hexes.get(vert).center);
 		}

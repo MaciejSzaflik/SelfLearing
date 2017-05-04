@@ -15,7 +15,7 @@ class MoveAction extends Action
 	private var moveTo:Int;
 	private var moveFrom:Int;
 	private var withAnimation:Bool;
-	
+	private var speedFloat : Float = 0.001;
 	public function new(creatureToMove:Creature,moveTo:Int,onFinish:Function,withAnimation:Bool = false) 
 	{
 		super();
@@ -56,7 +56,7 @@ class MoveAction extends Action
 		var moveAnimation = new MoveBetweenPoints(
 			performer,
 			checkpoints
-			,0.01 * checkpoints.length,
+			,speedFloat * checkpoints.length,
 			onFinish);
 		Tweener.instance.addAnimation(moveAnimation);
 	}

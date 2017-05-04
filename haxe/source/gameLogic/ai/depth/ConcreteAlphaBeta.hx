@@ -48,6 +48,11 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 		boardEvaluator = new BasicBoardEvaluator();
 	}
 	
+	public function toString()
+	{
+		return "AlphaBeta: " + maximalDepth;
+	}
+	
 	override public function isThreadNeeded():Bool 
 	{
 		return false;
@@ -78,7 +83,6 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 			movesReversed++;
 		}
 		evaluationTimer += Timer.stamp() - time;
-		trace(value);
 		node.value.nodeValue = value;
 		return new Tuple2<TreeVertex<MinMaxNode>,Float>(node,value);
 	}
@@ -131,7 +135,7 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 			generateChildren, -1000000, 1000000,
 			onFinish);
 		
-		trace(treeVertex.treeToString());
+		//trace(treeVertex.treeToString());
 		traceAndClean();
 		return result._0;
 	}

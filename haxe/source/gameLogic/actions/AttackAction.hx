@@ -21,6 +21,7 @@ class AttackAction extends Action
 	private var attackerAttack:AttackInfo;
 	private var defenderAttack:AttackInfo;
 	private var creatureAlreadyMoved:Bool;
+	private var animSpeed : Float = 0.001;
 	
 	public function new(attacker:Creature,tileIdToMove : Int,defender:Creature,onFinish:Function,withAnimation:Bool = false) 
 	{
@@ -115,7 +116,7 @@ class AttackAction extends Action
 		listPoints.add(midpoint);
 		listPoints.add(mover.position);
 		
-		var bumpAnimation = new MoveBetweenPoints(mover, listPoints, 0.04, function(){
+		var bumpAnimation = new MoveBetweenPoints(mover, listPoints, animSpeed, function(){
 			if (afterAnimation != null)
 				afterAnimation();
 		});

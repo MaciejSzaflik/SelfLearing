@@ -18,8 +18,6 @@ class EndState extends State
 		MainState.getInstance().getDrawer().clear(1);
 		MainState.getInstance().getDrawer().clear(2);
 		
-		trace(GameContext.instance.mapOfPlayers.get(0).creatures.length);
-		
 		var playerHp = new Array<Int>();
 		for (player in GameContext.instance.mapOfPlayers)
 			playerHp.push(player.totalHp());

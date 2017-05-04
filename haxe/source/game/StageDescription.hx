@@ -23,7 +23,7 @@ class StageDescription
 	
 	public function InitTestStage()
 	{
-		mapRows = 10;
+		mapRows = 5;
 		mapCols = 5;
 		mapHexSize = 60;
 		waterLevel = 1;

@@ -355,7 +355,7 @@ class Creature
 	
 	public function setPosition(position:FlxPoint)
 	{
-		if (Creature.ignoreUpdate)
+		if (Creature.ignoreUpdate || position == null)
 			return;
 		
 		sprite.setPosition(position.x, position.y);

@@ -1,4 +1,6 @@
 package utilites;
+import gameLogic.GameContext;
+import gameLogic.GamePlayer;
 import gameLogic.ai.CurrentStateData.MoveDiagnose;
 import gameLogic.moves.MoveType;
 #if neko
@@ -25,12 +27,19 @@ class StatsGatherer
 	private var startHealth : Array<Int>;
 	private var finished : Bool;
 	
+	static var gameCounter : Int;
+	static var wins : Array<Int>;
+	
 	static public var instance(get, never) : StatsGatherer;
 	static private var _instance : StatsGatherer;
 	static function get_instance() : StatsGatherer
 	{
 		if (_instance == null)
 		{
+			StatsGatherer.gameCounter = 0;
+			StatsGatherer.wins = new Array<Int>();
+			StatsGatherer.wins.push(0);
+			StatsGatherer.wins.push(0);
 			_instance = new StatsGatherer();
 		}
 		return _instance;
@@ -97,16 +106,26 @@ class StatsGatherer
 		output.close();
 		output = null;
 		#end
-		trace(outputString);
+		//trace(outputString);
 		outputString = "";
 		for (value in prepareToTrace())
 		{
-			trace(value);
+			//trace(value);
 		}
 		
 		for (i in 0...startHealth.length)
 		{
-			trace("Player " + i + " health lost: " + ((startHealth[i] - endHealth[i])/startHealth[i]));
+			trace("Player " + i + " health lost: " + ((startHealth[i] - endHealth[i]) / startHealth[i]));
+		}
+		
+		
+		for (player in GameContext.instance.mapOfPlayers)
+		{
+			if (player.creatures.length != 0)
+			{
+				trace(player.artificialInt + " " + player.id + " won");
+				wins[player.id]++;
+			}
 		}
 		
 		startHealth = null;
@@ -115,6 +134,13 @@ class StatsGatherer
 		movePerformedValue = new Array <Float>();
 		
 		finished = true;
+		
+		gameCounter++;
+		trace(gameCounter);
+		if (gameCounter < 30)
+			MainState.getInstance().restartFlag = true;
+		else
+			trace(wins);
 	}
 	
 	public function onMovePerformed(value : Tuple3<Float,MoveDiagnose,MoveDiagnose>)
