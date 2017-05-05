@@ -1,5 +1,6 @@
 package gameLogic.states;
 
+import animation.Tweener;
 import game.Creature;
 import gameLogic.Input;
 import gameLogic.PossibleAttacksInfo;
@@ -15,6 +16,7 @@ import gameLogic.moves.MoveData;
 import gameLogic.moves.MoveType;
 import haxe.Constraints.Function;
 import source.Drawer;
+import source.animation.WaitFrame;
 import ui.ColorTable;
 import utilites.InputType;
 import utilites.StatsGatherer;
@@ -31,7 +33,7 @@ class SelectMoveState extends State
 	
 	private var isAnimationPlaying = false;
 	private var isHuman = false;
-	private var enableAnimations = true;
+	private var enableAnimations = false;
 	
 	public static var moveCounter = 0;
 	
@@ -65,6 +67,9 @@ class SelectMoveState extends State
 
 	override public function onEnter():Void 
 	{
+		if (MainState.getInstance().gameEnded)
+			return;
+		
 		GameContext.instance.mapOfPlayers.get(selectedCreature.idPlayerId).tryToGenerateMove(
 			consumeMove, 
 			onAIPlayer, 
@@ -242,7 +247,7 @@ class SelectMoveState extends State
 		if (attacksInfo.listOfCreatures.exists(key))
 		{
 			moveTypeSelected = MoveType.Attack;
-			var moveData = new MoveData(selectedCreature, MoveType.Attack, key);
+			var moveData = new MoveData(selectedCreature, MoveType.Attack, selectedCreature.getTileId());
 			moveData.affected = attacksInfo.listOfCreatures.get(key);
 			var attackAction = ActionFactory.actionFromMoveData(moveData,function(){endState();},enableAnimations);
 			attackAction.performAction();
@@ -262,7 +267,15 @@ class SelectMoveState extends State
 		else if (GameContext.instance.getSizeOfQueue() == 0)
 			stateMachine.setCurrentState(new StartRound(this.stateMachine));
 		else
-			stateMachine.setCurrentState(new SelectMoveState(this.stateMachine, GameContext.instance.getNextCreature()));
+		{
+			Tweener.instance.addAnimation(new WaitFrame(1, function(){
+				
+				if (MainState.getInstance().gameEnded)
+					return;
+				
+				stateMachine.setCurrentState(new SelectMoveState(this.stateMachine, GameContext.instance.getNextCreature()));
+			}));
+		}
 	}
 	
 	private function cleanUpImpossibleCreatures()
@@ -282,7 +295,7 @@ class SelectMoveState extends State
 			if (player.creatures.length != 0)
 				counterOfPlayersWithCreatures++;
 		}
-		if (counterOfPlayersWithCreatures == 1)
+		if (counterOfPlayersWithCreatures == 1 || moveCounter >= 100)
 		{
 			stateMachine.setCurrentState(new EndState(this.stateMachine));
 			return true;

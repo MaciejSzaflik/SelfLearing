@@ -31,6 +31,11 @@ class EnemyQueue extends ArtificialInteligence
 		}	
 	}
 	
+	public function toString()
+	{
+		return "EnemyQueue : " + evaluator;
+	}
+	
 	override public function generateMove():MoveData 
 	{
 		return getEvaluationResult().getBestMove();

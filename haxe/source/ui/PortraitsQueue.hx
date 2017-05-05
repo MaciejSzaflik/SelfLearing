@@ -43,18 +43,21 @@ class PortraitsQueue
 	
 	public function revalidate()
 	{
+		return;
 		setPortrait(GameContext.instance.currentCreature.name);
 		onFill();
 	}
 	
 	private function attachListeners()
 	{
+		return;
 		this.logicData.addFillListener(onFill);
 		this.logicData.addPopListener(onPop);
 	}
 	
 	private function onPop(creaturePoped:Creature)
 	{
+		return;
 		setPortrait(creaturePoped.name);
 		killAll();
 		createOrRevive();
@@ -62,6 +65,7 @@ class PortraitsQueue
 	
 	private function setPortrait(creatureName:String)
 	{
+		return;
 		currentPortrait.loadGraphic(SpriteFactory.instance.getPortraitPath(creatureName), false, 64, 64);
 		currentPortrait.scale.set(2, 2);
 		currentPortrait.setPosition(positionOfPortrait.x+36, positionOfPortrait.y+36);
@@ -69,6 +73,7 @@ class PortraitsQueue
 	
 	private function killAll()
 	{
+		return;
 		portraitGroup.forEach(function(sprite:FlxSprite)
 		{
 			sprite.kill();
@@ -76,6 +81,8 @@ class PortraitsQueue
 	}
 	private function createOrRevive()
 	{
+		return;
+		
 		var i = 0;
 		while (i < maxSize)
 		{
@@ -109,6 +116,8 @@ class PortraitsQueue
 	
 	private function onFill()
 	{
+		return;
+		
 		killAll();
 		createOrRevive();
 	}

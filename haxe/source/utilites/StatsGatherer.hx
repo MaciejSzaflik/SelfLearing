@@ -2,11 +2,13 @@ package utilites;
 import gameLogic.GameContext;
 import gameLogic.GamePlayer;
 import gameLogic.ai.CurrentStateData.MoveDiagnose;
+import gameLogic.ai.genetic.RewardGenetic;
 import gameLogic.moves.MoveType;
 #if neko
 import sys.io.File;
 import sys.io.FileOutput;
 #end
+import gameLogic.states.SelectMoveState;
 import thx.Tuple.Tuple3;
 
 /**
@@ -113,10 +115,14 @@ class StatsGatherer
 			//trace(value);
 		}
 		
+		var healthLost = new Array<Float>();
 		for (i in 0...startHealth.length)
 		{
+			healthLost.push((startHealth[i] - endHealth[i]) / startHealth[i]);
 			trace("Player " + i + " health lost: " + ((startHealth[i] - endHealth[i]) / startHealth[i]));
 		}
+		
+		RewardGenetic.instance.reportEvaluation(healthLost[0] / (healthLost[1] == 0 ? 1 : healthLost[1]));
 		
 		
 		for (player in GameContext.instance.mapOfPlayers)
@@ -136,8 +142,8 @@ class StatsGatherer
 		finished = true;
 		
 		gameCounter++;
-		trace(gameCounter);
-		if (gameCounter < 30)
+		trace(SelectMoveState.moveCounter);
+		if (gameCounter < RewardGenetic.instance.sizeOfPopulation)
 			MainState.getInstance().restartFlag = true;
 		else
 			trace(wins);

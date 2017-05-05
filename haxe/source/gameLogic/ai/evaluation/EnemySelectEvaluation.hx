@@ -26,6 +26,11 @@ class EnemySelectEvaluation implements EvaluationMethod
 	{
 	}
 	
+	public function toString()
+	{
+		return "EnemySelectEvaluation";
+	}
+	
 	public function SetEnemyQueue(enemyQueue : EnemyQueue) 
 	{
 		this.enemyQueue = enemyQueue;

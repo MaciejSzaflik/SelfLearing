@@ -14,7 +14,7 @@ class EndState extends State
 	{
 		super(stateMachine);
 		this.stateName = "End";
-		
+		MainState.getInstance().gameEnded = true;
 		MainState.getInstance().getDrawer().clear(1);
 		MainState.getInstance().getDrawer().clear(2);
 		

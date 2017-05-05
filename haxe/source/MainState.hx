@@ -92,6 +92,8 @@ class MainState extends FlxUIState
 	
 	private var portraitQueue:PortraitsQueue;
 	
+	public var gameEnded : Bool;
+	
 	public function getHexMap() : HexMap
 	{
 		if (hexMap == null)
@@ -224,14 +226,13 @@ class MainState extends FlxUIState
 		GameContext.instance.map.getGraph().impassableVertices = new Map<Int,Bool>();
 		for (creature in GameContext.instance.creaturesMap)
 		{
-			//trace(creature.id);
 			creature.enable(false);
 		}
 		
 		GameContext.instance.tileToCreature = new Map<Int,Creature>();
 		GameContext.instance.actionLog = new ActionLog();
 		GameContext.instance.creaturesMap = new Map<Int,Creature>();
-		
+		gameEnded = false;
 		CreateGameContex();
 	}
 	
@@ -244,8 +245,8 @@ class MainState extends FlxUIState
 		StatsGatherer.instance.initialize([player1.totalHp(), player2.totalHp()]);
 		
 		GameContext.instance.Init(getHexMap(), [player1, player2]); 
-		player1.setAI(new ConcreteAlphaBeta(2,true));
-		player2.setAI(new ConcreteAlphaBeta(1,true));
+		player1.setAI(new EnemyQueue(0, new EnemySelectEvaluation()));
+		player2.setAI(new EnemyQueue(1, new RewardBasedEvaluation(true)));
 		CreateUIQueue();
 		GameContext.instance.stateMachine.addNewStateChangeListener(function(state:String)
 		{
@@ -319,7 +320,7 @@ class MainState extends FlxUIState
 		knight.addCreatureToState(this);
 		knight = Creature.fromDefinition(knightDefinition,15);
 		creatureList.push(knight);
-		knight.addCreatureToState(this);/*
+		knight.addCreatureToState(this);
 		knight = Creature.fromDefinition(knightDefinition,15);
 		creatureList.push(knight);
 		knight.addCreatureToState(this);/*
@@ -333,10 +334,10 @@ class MainState extends FlxUIState
 		*/
 		var archer = Creature.fromDefinition(archerDefinition,10);
 		creatureList.push(archer);
-		archer.addCreatureToState(this);/*
+		archer.addCreatureToState(this);
 		archer = Creature.fromDefinition(archerDefinition,10);
 		creatureList.push(archer);
-		archer.addCreatureToState(this);
+		archer.addCreatureToState(this);/*
 		archer = Creature.fromDefinition(archerDefinition,10);
 		creatureList.push(archer);
 		archer.addCreatureToState(this);
@@ -462,14 +463,20 @@ class MainState extends FlxUIState
 		
 		if (restartFlag)
 		{
-			restartFlag = false;
-			TryToRestart();
+			if (restartCounter > 10)
+			{
+				restartFlag = false;
+				restartCounter = 0;
+				TryToRestart();
+			}
+			else
+				restartCounter++;
 		}
 		
 		super.update(elapsed);
 	}
 	public var restartFlag : Bool = false;
-	
+	public var restartCounter : Int = 0;
 	
 	private function onClick()
 	{
@@ -544,7 +551,7 @@ class MainState extends FlxUIState
 		}
 		else if (buttonName == "eval_2")
 		{
-			var a1 = new EnemyQueue(GameContext.instance.currentPlayerIndex, new RewardBasedEvaluation());	
+			var a1 = new EnemyQueue(GameContext.instance.currentPlayerIndex, new RewardBasedEvaluation(false));	
 			var result = a1.getEvaluationResult();
 			EvalCurrentSituation(!evalShown,result);
 		}
