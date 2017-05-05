@@ -109,6 +109,7 @@ class MainState extends FlxUIState
 
 	override public function create():Void
 	{
+		FlxG.autoPause = false;
 		_xml_id = "battle_state";
 		super.create();
 		
@@ -463,7 +464,7 @@ class MainState extends FlxUIState
 		
 		if (restartFlag)
 		{
-			if (restartCounter > 10)
+			if (restartCounter > 2)
 			{
 				restartFlag = false;
 				restartCounter = 0;

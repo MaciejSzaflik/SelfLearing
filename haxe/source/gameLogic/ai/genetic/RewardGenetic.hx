@@ -12,7 +12,7 @@ class RewardGenetic
 	public static var instance(get, null):RewardGenetic;
 	private static function get_instance():RewardGenetic {
         if(instance == null) {
-            instance = new RewardGenetic(1000);
+            instance = new RewardGenetic(50);
         }
         return instance;
     }
