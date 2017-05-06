@@ -143,7 +143,7 @@ class StatsGatherer
 		
 		gameCounter++;
 		trace(SelectMoveState.moveCounter);
-		if (gameCounter < RewardGenetic.instance.sizeOfPopulation)
+		if (RewardGenetic.instance.currentItemEvaluated < RewardGenetic.instance.sizeOfPopulation)
 			MainState.getInstance().restartFlag = true;
 		else
 			trace(wins);

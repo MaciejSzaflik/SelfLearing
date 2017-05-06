@@ -5,7 +5,7 @@ import thx.Tuple.Tuple2;
 import utilites.MathUtil;
 import utilites.RandomUtil;
 import utilites.StorageHelper;
-
+import thx.Ints;
 /**
  * ...
  * @author ...
@@ -13,11 +13,11 @@ import utilites.StorageHelper;
 class RewardGenetic
 {
 	public var sizeOfPopulation = 50;
-	public var generationNumber = 10;
+	public var generationNumber = 20;
 	public static var instance(get, null):RewardGenetic;
 	private static function get_instance():RewardGenetic {
         if(instance == null) {
-            instance = new RewardGenetic(5);
+            instance = new RewardGenetic(30,20);
         }
         return instance;
     }
@@ -34,10 +34,10 @@ class RewardGenetic
 	public var elitism : Int = 1;
 	public var mutationPosibility : Float = 0.01;
 	
-	public function new(populationSize : Int) 
+	public function new(populationSize : Int, generationNumber : Int) 
 	{
 		this.sizeOfPopulation = populationSize;
-		//currentPopulation = new Array<Array<Float>>();
+		this.generationNumber = generationNumber;
 		generateInitialPopulation();
 	}
 	
@@ -50,15 +50,24 @@ class RewardGenetic
 	{
 		evaluations[currentItemEvaluated] = value;
 		currentItemEvaluated++;
-		saveCurrent();
 		
-		if (currentItemEvaluated == sizeOfPopulation)
-			generateNewPopulation();
-			
+		
+		if (currentItemEvaluated == sizeOfPopulation && currentPopulationNumber < generationNumber)
+		{
+			currentItemEvaluated = 0;
+			currentPopulationNumber++;
+			currentPopulation = generateNewPopulation();
+		}
+		
+		if (currentPopulationNumber == generationNumber)
+			trace(best);
+		
+		saveCurrent();
 	}
 	
-	public function generateNewPopulation()
+	private function generateNewPopulation() : Array<Array<Float>>
 	{
+		trace("generateNewPopulation");
 		var newPopulation = new Array<Array<Float>>();
 		
 		var currentRank = new Array<Tuple2<Int,Float>>();
@@ -74,19 +83,60 @@ class RewardGenetic
 			bestEver = new Tuple2(currentRank[0]._1, currentPopulation[currentRank[0]._0]);
 		}
 		
-		
+		var maximumRankValue = MathUtil.artmeticProgressionSum(0, sizeOfPopulation + 2, 1);
 		for (i in 0...sizeOfPopulation)
 		{
 			var last = 0.0;
 			if (i == 0)
-				last = MathUtil.artmeticProgressionSum(0, sizeOfPopulation + 2, 1) 
+				last = maximumRankValue;
 			else
 				last = currentRank[i - 1]._1;
 			
 			currentRank[i]._1 = last - MathUtil.artmeticProgressionElement(0, sizeOfPopulation - i + 2, 1);
 		}
 		
-		trace(currentRank);
+		var childrenGenerated = 0;
+		
+		for (i in 0...elitism)
+		{
+			newPopulation.push(currentPopulation[currentRank[i]._0]);
+			childrenGenerated++;
+		}
+		trace(elitism + "  " + sizeOfPopulation);
+		for (i in elitism...sizeOfPopulation)
+		{
+			trace("generateParents");
+			var parentA = selectParentBasedOnRank(currentRank, maximumRankValue);
+			var parentB = selectParentBasedOnRank(currentRank, maximumRankValue);
+			
+			var children = blxCrossover(parentA, parentB, 0.5);
+			mutateChildren(parentA,parentB,children);
+			
+			if (newPopulation.length < sizeOfPopulation)
+			{
+				newPopulation.push(children._0);
+			}
+			if (newPopulation.length < sizeOfPopulation)
+			{
+				newPopulation.push(children._1);
+			}
+		}
+		
+		return newPopulation;
+	}
+	
+	private function selectParentBasedOnRank(ranks : Array<Tuple2<Int,Float>>, maxiumum : Float) : Array<Float>
+	{
+		var parentSelection = Random.float(0, maxiumum);
+		var iterator = new RangeIterator(ranks.length - 1, 0, -1);
+		for (i in iterator)
+		{
+			if (parentSelection < ranks[i]._1)
+			{
+				return currentPopulation[ranks[i]._0];
+			}
+		}
+		return currentPopulation[0];
 	}
 	
 	
