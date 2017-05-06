@@ -1,4 +1,6 @@
 package gameLogic.ai.genetic;
+import flixel.math.FlxRandom;
+import thx.Floats;
 import thx.Tuple.Tuple2;
 import utilites.StorageHelper;
 
@@ -12,7 +14,7 @@ class RewardGenetic
 	public static var instance(get, null):RewardGenetic;
 	private static function get_instance():RewardGenetic {
         if(instance == null) {
-            instance = new RewardGenetic(50);
+            instance = new RewardGenetic(5);
         }
         return instance;
     }
@@ -22,6 +24,8 @@ class RewardGenetic
 	
 	public var evaluations : Array<Float>;
 	public var currentPopulation : Array<Array<Float>>;
+	
+	public var elitism : Int = 3;
 	
 	public function new(populationSize : Int) 
 	{
@@ -40,6 +44,22 @@ class RewardGenetic
 		evaluations[currentItemEvaluated] = value;
 		currentItemEvaluated++;
 		saveCurrent();
+		
+		if (currentItemEvaluated == sizeOfPopulation)
+			generateNewPopulation();
+	}
+	
+	public function generateNewPopulation()
+	{
+		var newPopulation = new Array<Array<Float>>();
+		
+		var currentRank = new Array<Tuple2<Int,Float>>();
+		for (i in 0...sizeOfPopulation)
+		{
+			currentRank.push(new Tuple2(i, evaluations[i]));
+		}
+		currentRank.sort(function(x:Tuple2<Int,Float>, y:Tuple2<Int,Float>):Int {return -Floats.compare(x._1, y._1); });
+		trace(currentRank);
 	}
 	
 	public function generateInitialPopulation()

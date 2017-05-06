@@ -6,6 +6,7 @@ import haxe.unit.TestRunner;
 import openfl.Lib;
 import openfl.display.Sprite;
 import test.AlphaBetaTest;
+import utilites.RandomUtil;
 import utilites.StorageHelper;
 
 class Main extends Sprite
@@ -16,14 +17,14 @@ class Main extends Sprite
 		
 		StorageHelper.instance.saveItem("Hello", "Hello");
 		
-		addChild(new FlxGame(0, 0, MainState));
+		addChild(new FlxGame(0, 0, MainState,1,60,60,true));
 		runTest();
 		checkBlend();
 	}
 	
 	public function checkBlend()
 	{
-		var tuple = RewardGenetic.instance.blxCrossover([1, 2, 3], [10, 12, 14], 0.25);
+		var tuple = RewardGenetic.instance.blxCrossover([1, 2, 3], [10, 12, 14], 0.5);
 		trace(tuple._0);
 		trace(tuple._1);
 	}
