@@ -9,6 +9,16 @@ import haxe.Constraints.FlatEnum;
 class MathUtil
 {
 	
+	static inline public function artmeticProgressionSum(a1 : Float, n : Int, r : Float) : Float
+	{
+		return (2 * a1 + (n - 1) * r) * 0.5 * n;
+	}
+	
+	static inline public function artmeticProgressionElement(a1 : Float, n : Int, r : Float) : Float
+	{
+		return a1 + (n - 1) * r;
+	}
+	
 	static inline public function smooothStep (a:Float,b:Float,t:Float):Float
 	{
 		t = clamp01((t - a) / (b - a));
