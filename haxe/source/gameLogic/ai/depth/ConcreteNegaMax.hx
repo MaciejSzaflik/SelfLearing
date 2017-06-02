@@ -42,7 +42,7 @@ class ConcreteNegaMax extends ConcreteAlphaBeta
 		return (node.playerId == playerId) ? 1 : -1;
 	}
 
-	override function evaluateMinMaxNode(node : TreeVertex<MinMaxNode>) : Tuple2<TreeVertex<MinMaxNode>,Float>
+	override function evaluateMinMaxNode(value:Bool,node : TreeVertex<MinMaxNode>) : Tuple2<TreeVertex<MinMaxNode>,Float>
 	{
 		var time = Timer.stamp();
 		var move = node.value.moveData;
@@ -50,25 +50,21 @@ class ConcreteNegaMax extends ConcreteAlphaBeta
 		var value = 0.0;
 		if (action != null && move!=null)
 		{
-			var tryToEvalState = CurrentStateData.CalculateForCreature(move.performer, move.type);
 			action.performAction();
-			movesPerformed++;
 			node.value.wasLeaf = true;
-			nodesVistied++;
 			
-			var afterState = CurrentStateData.CalculateForCreature(move.performer, move.type);
-			node.value.data = CurrentStateData.Evaluate(tryToEvalState, afterState);
-			value = node.value.data._0;
+			value = CurrentStateData.EvaluateForPlayer(this.playerId);
 			
 			GameContext.instance.undoNextAction();
 			movesReversed++;
 		}
 		else
 		{
-			value = boardEvaluator.evaluateStateSingle(playerId, enemyPlayerId, move);
+			value = CurrentStateData.EvaluateForPlayer(this.playerId);
 			nodesVistied++;
 		}
 		value *= getPlayerColor(node.value);
+		
 		evaluationTimer += Timer.stamp() - time;
 		return new Tuple2<TreeVertex<MinMaxNode>,Float>(node, value);
 	}

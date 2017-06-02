@@ -14,7 +14,9 @@ import gameLogic.ai.CurrentStateData;
 import gameLogic.moves.ListOfMoves;
 import gameLogic.moves.MoveData;
 import gameLogic.moves.MoveType;
+import haxe.CallStack;
 import haxe.Constraints.Function;
+import haxe.Timer;
 import source.Drawer;
 import source.animation.WaitFrame;
 import ui.ColorTable;
@@ -36,22 +38,40 @@ class SelectMoveState extends State
 	private var enableAnimations = false;
 	
 	public static var moveCounter = 0;
+	public static var moveCounterPerPlayer : Array<Int> = new Array<Int>();
 	
 	private var beforeMove : CurrentStateData;
 	private var moveTypeSelected : MoveType;
+	
+	private var time : Float;
 	
 	public function new(stateMachine:StateMachine,creature:Creature) 
 	{
 		this.stateName = "Select Move";
 		moveCounter++;
+		time = Timer.stamp();
+		
+		if (moveCounterPerPlayer == null || moveCounterPerPlayer.length != 2)
+		{
+			moveCounterPerPlayer = new Array<Int>();
+			moveCounterPerPlayer.push(0);
+			moveCounterPerPlayer.push(1);
+		}
+		else
+		{
+			moveCounterPerPlayer[creature.idPlayerId]++;
+		}
+		
+		
 		super(stateMachine);
 		clearAll();
 		cleanUpImpossibleCreatures();
-		
 		if (checkEndCondition())
 			return;
 		
 		GameContext.instance.currentPlayerIndex = creature.idPlayerId;
+		
+		
 		
 		beforeMove = CurrentStateData.CalculateForCreature(creature, MoveType.Pass);
 		selectedCreature = creature;
@@ -258,6 +278,7 @@ class SelectMoveState extends State
 	private function endState()
 	{
 		selectedCreature.redrawPosition();
+		StatsGatherer.instance.AddToTime(Timer.stamp() - time, selectedCreature.idPlayerId);
 		var afterMove = CurrentStateData.CalculateForCreature(selectedCreature, moveTypeSelected);
 		var result = CurrentStateData.Evaluate(beforeMove, afterMove);
 		StatsGatherer.instance.onMovePerformed(result);

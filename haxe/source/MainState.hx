@@ -26,6 +26,7 @@ import gameLogic.ai.AlphaBeta;
 import gameLogic.ai.BestMove;
 import gameLogic.ai.EnemyQueue;
 import gameLogic.ai.MinMax;
+import gameLogic.ai.NegaMax;
 import gameLogic.ai.RandomAI;
 import gameLogic.ai.depth.ConcreteAlphaBeta;
 import gameLogic.ai.depth.ConcreteNegaMax;
@@ -47,6 +48,7 @@ import haxe.Timer;
 import hex.HexMap;
 import hex.HexTopping;
 import hex.RectangleHexMap;
+import hex.TestMapType;
 import openfl.events.Event;
 import source.Drawer;
 import source.SpriteFactory;
@@ -239,15 +241,34 @@ class MainState extends FlxUIState
 	
 	private function CreateGameContex()
 	{
-		var player1 = new GamePlayer(0, DebugArmy(), ColorTable.PLAYER1_COLOR, PlayerType.AI,true);
-		var player2 = new GamePlayer(1, DebugArmy(), ColorTable.PLAYER2_COLOR, PlayerType.AI, false);
+		var player1 = new GamePlayer(0, GetArmy(), ColorTable.PLAYER1_COLOR, PlayerType.AI,true);
+		var player2 = new GamePlayer(1, GetArmy(), ColorTable.PLAYER2_COLOR, PlayerType.AI, false);
 		
 		
 		StatsGatherer.instance.initialize([player1.totalHp(), player2.totalHp()]);
 		
 		GameContext.instance.Init(getHexMap(), [player1, player2]); 
-		player1.setAI(new EnemyQueue(0, new EnemySelectEvaluation()));
-		player2.setAI(new EnemyQueue(1, new RewardBasedEvaluation(true)));
+		
+		
+		//player1.setAI(new ConcreteAlphaBeta(3,false));
+		//player1.setAI(new ConcreteAlphaBeta(3,true));
+		//player1.setAI(new ConcreteAlphaBeta(1, true));
+		player1.setAI(new ConcreteNegaMax(3,true,false));
+		//player1.setAI(new EnemyQueue(0, new RewardBasedEvaluation(false)));
+		//player1.setAI(new ConcreteAlphaBeta(5,true));
+		//player1.setAI(new BestMove( new RiskMinimaizer()));
+		//player1.setAI(new BestMove(new KillTheWeakest(false)));
+		//player1.setAI(new BestMove(new KillTheWeakest(false)));
+		player2.setAI(new EnemyQueue(1, new EnemySelectEvaluation()));
+		
+		//player1.setAI(new ConcreteAlphaBeta(1, true));
+		//player2.setAI(new ConcreteAlphaBeta(1, false));
+		//player2.setAI(new EnemyQueue(1, new RewardBasedEvaluation(true)));
+		//player2.setAI(new ConcreteAlphaBeta(2,false));
+		//player2.setAI(new EnemyQueue(1, new EnemySelectEvaluation()));
+		
+				//player2.setAI(new RandomAI());
+		
 		CreateUIQueue();
 		GameContext.instance.stateMachine.addNewStateChangeListener(function(state:String)
 		{
@@ -307,8 +328,47 @@ class MainState extends FlxUIState
 		return creatureList;
 	}
 	
+	private function GetArmy():Array<Creature>
+	{
+		switch(MainState.getInstance().typeTest)
+		{
+			case TestMapType.None:
+				return DebugArmy();
+			case TestMapType.Small:
+				return SmallArmy();
+			case TestMapType.Medium:
+				return MediumArmy();
+			case TestMapType.Large:
+				return LargeArmy();
+		}
+		return null;
+	}
 	
-	private function DebugArmy():Array<Creature>
+	
+	private function SmallArmy():Array<Creature>
+	{
+		var creatureList = new Array<Creature>();
+		
+		var knightDefinition = GameConfiguration.instance.creatures.get(0);
+		var archerDefinition = GameConfiguration.instance.creatures.get(1);
+		var priestDefinition = GameConfiguration.instance.creatures.get(2);
+		
+		var knight = Creature.fromDefinition(knightDefinition,6);
+		creatureList.push(knight);
+		knight.addCreatureToState(this);
+		
+		knight = Creature.fromDefinition(knightDefinition,6);
+		creatureList.push(knight);
+		knight.addCreatureToState(this);
+		
+		
+		var archer = Creature.fromDefinition(archerDefinition,4);
+		creatureList.push(archer);
+		archer.addCreatureToState(this);
+		return creatureList;
+	}
+	
+	private function MediumArmy():Array<Creature>
 	{
 		var creatureList = new Array<Creature>();
 		
@@ -324,6 +384,71 @@ class MainState extends FlxUIState
 		knight.addCreatureToState(this);
 		knight = Creature.fromDefinition(knightDefinition,15);
 		creatureList.push(knight);
+		knight.addCreatureToState(this);
+		
+		var archer = Creature.fromDefinition(archerDefinition,10);
+		creatureList.push(archer);
+		archer.addCreatureToState(this);
+		archer = Creature.fromDefinition(archerDefinition,10);
+		creatureList.push(archer);
+		archer.addCreatureToState(this);
+		return creatureList;
+	}
+	
+	
+	private function LargeArmy():Array<Creature>
+	{
+		var creatureList = new Array<Creature>();
+		
+		var knightDefinition = GameConfiguration.instance.creatures.get(0);
+		var archerDefinition = GameConfiguration.instance.creatures.get(1);
+		var priestDefinition = GameConfiguration.instance.creatures.get(2);
+		
+		var knight = Creature.fromDefinition(knightDefinition,20);
+		creatureList.push(knight);
+		knight.addCreatureToState(this);
+		knight = Creature.fromDefinition(knightDefinition,20);
+		creatureList.push(knight);
+		knight.addCreatureToState(this);
+		knight = Creature.fromDefinition(knightDefinition,20);
+		creatureList.push(knight);
+		knight.addCreatureToState(this);
+		knight = Creature.fromDefinition(knightDefinition,20);
+		creatureList.push(knight);
+		knight.addCreatureToState(this);
+		
+		var archer = Creature.fromDefinition(archerDefinition,30);
+		creatureList.push(archer);
+		archer.addCreatureToState(this);
+		archer = Creature.fromDefinition(archerDefinition,30);
+		creatureList.push(archer);
+		archer.addCreatureToState(this);
+		
+		var priest = Creature.fromDefinition(priestDefinition,15);
+		creatureList.push(priest);
+		priest.addCreatureToState(this);
+		
+		return creatureList;
+
+	}
+	
+	
+	private function DebugArmy():Array<Creature>
+	{
+		var creatureList = new Array<Creature>();
+		
+		var knightDefinition = GameConfiguration.instance.creatures.get(0);
+		var archerDefinition = GameConfiguration.instance.creatures.get(1);
+		var priestDefinition = GameConfiguration.instance.creatures.get(2);
+		
+		var knight = Creature.fromDefinition(knightDefinition,15);
+		creatureList.push(knight);
+		knight.addCreatureToState(this);
+		/*knight = Creature.fromDefinition(knightDefinition,15);
+		creatureList.push(knight);
+		knight.addCreatureToState(this);
+		knight = Creature.fromDefinition(knightDefinition,15);
+		creatureList.push(knight);
 		knight.addCreatureToState(this);/*
 		knight = Creature.fromDefinition(knightDefinition,15);
 		creatureList.push(knight);
@@ -333,7 +458,7 @@ class MainState extends FlxUIState
 		knight.addCreatureToState(this);
 		
 		*/
-		var archer = Creature.fromDefinition(archerDefinition,10);
+		/*var archer = Creature.fromDefinition(archerDefinition,10);
 		creatureList.push(archer);
 		archer.addCreatureToState(this);
 		archer = Creature.fromDefinition(archerDefinition,10);
@@ -384,6 +509,9 @@ class MainState extends FlxUIState
 			textObj.text = text;
 	}
 	
+	
+	public var typeTest : TestMapType = TestMapType.Small;
+	
 	private function createMap():Void
 	{
 		var mapWidth = stageDescription.mapCols * stageDescription.mapHexSize;
@@ -391,14 +519,15 @@ class MainState extends FlxUIState
 		
 		var startPoisitionX =  0.15 + stageDescription.mapHexSize/ FlxG.width;
 		
-		var startPoisitionY = 1 - ((1- (mapHeight / FlxG.height))*0.82);
+		var startPoisitionY = 1 - ((1- (mapHeight / FlxG.height))*0.4);
 		var mapCenter = new FlxPoint(FlxG.width * startPoisitionX, FlxG.height * startPoisitionY);
 		this.hexMap = new RectangleHexMap(
 			mapCenter,
 			stageDescription.mapHexSize,
 			stageDescription.mapCols,
 			stageDescription.mapRows,
-			stageDescription.waterLevel);
+			stageDescription.waterLevel,
+			typeTest);
 			
 		this.hexMap.InitPoints();
 	}
@@ -558,7 +687,7 @@ class MainState extends FlxUIState
 		}
 		else if (buttonName == "eval_3")
 		{
-			var alpha = new ConcreteAlphaBeta(4,true);
+			var alpha = new ConcreteAlphaBeta(8,true);
 			SaveMomento();
 			Creature.ignoreUpdate = true;
 			RotateHourglass();
@@ -566,7 +695,8 @@ class MainState extends FlxUIState
 				try{
 					var moveData : MoveData =  alpha.generateMove();
 					getDrawer().clear(3);
-					
+					trace(moveData == null);
+					trace(moveData.type);
 
 					var color = GameContext.instance.getPlayerColor(moveData.performer.idPlayerId);
 					if(moveData.type == MoveType.Attack)

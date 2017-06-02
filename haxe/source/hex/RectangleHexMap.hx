@@ -1,11 +1,13 @@
 package hex;
 
+import flash.display.InteractiveObject;
 import flash.display3D.IndexBuffer3D;
 import flixel.FlxG;
 import flixel.math.FlxPoint;
 import graph.BreadthFirstSearch;
 import graph.Graph;
 import libnoise.generator.Perlin;
+import thx.Set;
 import utilites.IntPair;
 import libnoise.QualityMode;
 import source.BoardMap;
@@ -13,24 +15,71 @@ import utilites.UtilUtil;
 
 
 class RectangleHexMap extends HexMap
-{	
+{		
 	var waterLevel:Float;
-	public function new(mapCenter:FlxPoint, hexSize:Float,width:Int,height:Int,waterLevel:Float) 
+	var type : TestMapType;
+	public function new(mapCenter:FlxPoint, hexSize:Float,width:Int,height:Int,waterLevel:Float,type : TestMapType) 
 	{
 		super(mapCenter, hexSize);
 		this.width = width;
 		this.height = height; 
 		this.waterLevel = waterLevel;
+		this.type = type;
 	}
 	
 	override public function InitPoints() 
 	{
 		graphConnections = new Graph();
 		resetLists();
-		CalculatePoints();
+		//CalculatePoints();
+		
+		
+		switch(type)
+		{
+			case TestMapType.Small:
+				TestSmallestMap();
+			case TestMapType.Medium:
+				TestMediumMap();
+			case TestMapType.Large:
+				TestLargeMap();
+			case TestMapType.None:
+				CalculatePoints();
+		}
+		
 	}
 	
-	private function CalculatePoints():Void
+	private function TestSmallestMap()
+	{
+		var smallSet = Set.createInt([4,11]);
+		this.width = 4;
+		this.height = 3; 
+		this.waterLevel = 1;
+		CalculatePoints(smallSet);
+	}
+	
+	private function TestMediumMap()
+	{
+		var smallSet = Set.createInt([20, 19, 26, 25,
+		15, 16, 22, 21,
+		12512506,9 ,47 ,38]);
+		this.width = 9;
+		this.height = 6; 
+		this.waterLevel = 1;
+		CalculatePoints(smallSet);
+	}
+	
+	private function TestLargeMap()
+	{
+		var smallSet = Set.createInt([33, 41, 50, 42, 51,
+		47, 57, 46,27,71,12527521,12532528,
+		12,18,84,33]);
+		this.width = 12;
+		this.height = 9; 
+		this.waterLevel = 1;
+		CalculatePoints(smallSet);
+	}
+	
+	private function CalculatePoints(restrictedPoints : Set<Int> = null):Void
 	{
 		var frequency = 0.01;
 		var lacunarity = 1.0;
@@ -71,7 +120,7 @@ class RectangleHexMap extends HexMap
 				j++;
 				
 				var noiseValue = getGreyValue(module.getValue(hex.center.x,hex.center.y, 0))/255;
-				if (noiseValue > this.waterLevel)
+				if (noiseValue > this.waterLevel  || (restrictedPoints!=null && restrictedPoints.exists(hexIndex)))
 				{
 					toRemove.set(hexIndex,true);
 				}

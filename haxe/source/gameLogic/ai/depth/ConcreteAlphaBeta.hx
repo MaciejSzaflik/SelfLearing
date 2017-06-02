@@ -58,7 +58,7 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 		return false;
 	}
 	
-	private function evaluateMinMaxNode(node : TreeVertex<MinMaxNode>) : Tuple2<TreeVertex<MinMaxNode>,Float>
+	private function evaluateMinMaxNode(shouldPeform : Bool, node : TreeVertex<MinMaxNode>) : Tuple2<TreeVertex<MinMaxNode>,Float>
 	{
 		var time = Timer.stamp();
 		var action = ActionFactory.actionFromMoveData(node.value.moveData, null);
@@ -68,7 +68,6 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 		{
 			var tryToEvalState = CurrentStateData.CalculateForCreature(move.performer, move.type);
 			action.performAction();
-			movesPerformed++;
 			node.value.wasLeaf = true;
 			nodesVistied++;
 			
@@ -80,10 +79,15 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 			StatsGatherer.instance.onMoveEvaluated(node.value.data);
 
 			GameContext.instance.undoNextAction();
-			movesReversed++;
 		}
 		evaluationTimer += Timer.stamp() - time;
-		node.value.nodeValue = value;
+		
+		
+		/*if(node.value.playerId == playerId)
+			node.value.nodeValue = value;
+		else
+			node.value.nodeValue = -value;*/
+			
 		return new Tuple2<TreeVertex<MinMaxNode>,Float>(node,value);
 	}
 	
@@ -146,7 +150,13 @@ class ConcreteAlphaBeta extends ArtificialInteligence
 		GameContext.instance.redrawCreaturesPositions();
 
 		StatsGatherer.instance.write(false,SelectMoveState.moveCounter, (Timer.stamp() - totalTimer), moveGenerationTimer, evaluationTimer, nodesVistied, movesGenerated);
-		//trace("oki");
+		/*trace("Total time: " + (Timer.stamp() - totalTimer));
+		trace("Move generation time: " + moveGenerationTimer);
+		trace("Evaluation time: " + evaluationTimer);
+		trace("Nodes visited: " + nodesVistied);
+		trace("Children Generated: " + movesGenerated);
+		trace("Moves Reversed: " + movesReversed);
+		trace("Moves Performed: " + movesPerformed);*/
 		if (movesPerformed != movesReversed)
 			MainState.getInstance().RestoreMomento(false);
 	}

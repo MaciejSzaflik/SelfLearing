@@ -22,12 +22,12 @@ class AlphaBetaTest extends TestCase
 	}
 	
 	
-	public function testGenericTreeAlfaBeta()
+	/*public function testGenericTreeAlfaBeta()
 	{
 		TreeVertex.idGenerator = 0;
 		var firstTree = generateTree1();
 		var value = AlphaBeta.genericAlfaBeta(2, 0, firstTree,
-			function(node : TreeVertex<SimpleNode>) { return new Tuple2<TreeVertex<SimpleNode>,Float>(node,node.value.getValue()); },
+			function(value:Bool,node : TreeVertex<SimpleNode>) { return new Tuple2<TreeVertex<SimpleNode>,Float>(node,node.value.getValue()); },
 			function(node : SimpleNode) { return node.getPlayerType(); },
 			function(node : TreeVertex<SimpleNode>, currentDepth : Int) { return node.children; },
 			-1000, 1000);
@@ -36,7 +36,7 @@ class AlphaBetaTest extends TestCase
 			
 		var secondTree = generateTree2();
 		value = AlphaBeta.genericAlfaBeta(5, 0, secondTree,
-			function(node : TreeVertex<SimpleNode>) { return new Tuple2<TreeVertex<SimpleNode>,Float>(node,node.value.getValue()); },
+			function(value:Bool,node : TreeVertex<SimpleNode>) { return new Tuple2<TreeVertex<SimpleNode>,Float>(node,node.value.getValue()); },
 			function(node : SimpleNode) { return node.getPlayerType(); },
 			function(node : TreeVertex<SimpleNode>, currentDepth : Int) { return node.children; },
 			-1000, 1000);
@@ -138,6 +138,6 @@ class AlphaBetaTest extends TestCase
 		var secLayer3_3 = new TreeVertex<SimpleNode>(firstLayer3, new SimpleNode(2, true));
 		
 		return treeRoot;
-	}
+	}*/
 	
 }

@@ -14,7 +14,7 @@ class NegaScout
 	
 	public static function genericNegaScout<T>(node : TreeVertex<T>, maxDepth : Int, depth : Int, alfa :  Tuple2<TreeVertex<T>,Float>, beta : Tuple2<TreeVertex<T>,Float>,
 		getColor : T->Int,
-		getValue : TreeVertex<T>->Tuple2<TreeVertex<T>,Float>, 
+		getValue : Bool -> TreeVertex<T>->Tuple2<TreeVertex<T>,Float>, 
 		getChildren : TreeVertex<T> -> Int -> Iterable<TreeVertex<T>>,
 		beforeReturn : T-> Bool = null) : Tuple2<TreeVertex<T>,Float>
 	{
@@ -25,7 +25,7 @@ class NegaScout
 		
 		if (depth == maxDepth)
 		{
-			a = new Tuple2<TreeVertex<T>,Float> (node, getValue(node)._1);
+			a = new Tuple2<TreeVertex<T>,Float> (node, getValue(true,node)._1);
 		}
 		else
 		{
@@ -50,7 +50,7 @@ class NegaScout
 			}
 			
 			if (index == 0)
-				a = new Tuple2<TreeVertex<T>,Float> (node, getValue(node)._1);
+				a = new Tuple2<TreeVertex<T>,Float> (node, getValue(false,node)._1);
 		}
 		if (beforeReturn != null)
 		{

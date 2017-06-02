@@ -34,7 +34,7 @@ class AlphaBeta
 		maxDepth : Int, 
 		currentDepth : Int,
 		node : TreeVertex<T>, 
-		getValue : TreeVertex<T>-> Tuple2<TreeVertex<T>,Float>, 
+		getValue : Bool -> TreeVertex<T>-> Tuple2<TreeVertex<T>,Float>, 
 		getPlayerType : T -> Bool, 
 		getChildren : TreeVertex<T> -> Int -> Iterable<TreeVertex<T>>,
 		alpha : Float,
@@ -45,7 +45,7 @@ class AlphaBeta
 		
 		if (currentDepth == maxDepth)
 		{
-			bestValue = getValue(node);
+			bestValue = getValue(true,node);
 		}
 		else if (getPlayerType(node.value))
 		{
@@ -65,7 +65,7 @@ class AlphaBeta
 				}
 			}
 			if (counter == 0)
-				bestValue = getValue(node);
+				bestValue = getValue(false,node);
 		}
 		else
 		{
@@ -85,7 +85,7 @@ class AlphaBeta
 				}
 			}
 			if (counter == 0)
-				bestValue = getValue(node);
+				bestValue = getValue(false,node);
 		}
 		if (beforeReturn != null)
 			beforeReturn(node.value);

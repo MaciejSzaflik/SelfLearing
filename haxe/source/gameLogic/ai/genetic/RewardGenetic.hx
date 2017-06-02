@@ -12,12 +12,12 @@ import thx.Ints;
  */
 class RewardGenetic
 {
-	public var sizeOfPopulation = 50;
-	public var generationNumber = 20;
+	public var sizeOfPopulation = 5;
+	public var generationNumber = 5;
 	public static var instance(get, null):RewardGenetic;
 	private static function get_instance():RewardGenetic {
         if(instance == null) {
-            instance = new RewardGenetic(30,20);
+            instance = new RewardGenetic(30,30);
         }
         return instance;
     }
@@ -31,6 +31,8 @@ class RewardGenetic
 	public var best : Array<Tuple2<Float,Array<Float>>>;
 	public var bestEver : Tuple2<Float,Array<Float>>;
 	
+	public var generationMean : Array<Float>;	
+	
 	public var elitism : Int = 1;
 	public var mutationPosibility : Float = 0.01;
 	
@@ -38,6 +40,7 @@ class RewardGenetic
 	{
 		this.sizeOfPopulation = populationSize;
 		this.generationNumber = generationNumber;
+		this.generationMean = new Array<Float>();
 		generateInitialPopulation();
 	}
 	
@@ -56,6 +59,15 @@ class RewardGenetic
 		{
 			currentItemEvaluated = 0;
 			currentPopulationNumber++;
+			
+			var sum = 0.0;
+			for (value in evaluations)
+			{
+				sum += value;
+			}
+			sum /= evaluations.length;
+			generationMean.push(sum);
+			
 			currentPopulation = generateNewPopulation();
 		}
 		
