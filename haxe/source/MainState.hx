@@ -253,7 +253,7 @@ class MainState extends FlxUIState
 		//player1.setAI(new ConcreteAlphaBeta(3,false));
 		//player1.setAI(new ConcreteAlphaBeta(3,true));
 		//player1.setAI(new ConcreteAlphaBeta(1, true));
-		player1.setAI(new ConcreteNegaMax(3,true,false));
+		player1.setAI(new ConcreteNegaScout(6,true,true));
 		//player1.setAI(new EnemyQueue(0, new RewardBasedEvaluation(false)));
 		//player1.setAI(new ConcreteAlphaBeta(5,true));
 		//player1.setAI(new BestMove( new RiskMinimaizer()));
@@ -510,7 +510,7 @@ class MainState extends FlxUIState
 	}
 	
 	
-	public var typeTest : TestMapType = TestMapType.Small;
+	public var typeTest : TestMapType = TestMapType.Medium;
 	
 	private function createMap():Void
 	{

@@ -32,11 +32,28 @@ class NegaScout
 			var index = 0;
 			for (child in getChildren(node,depth))
 			{
-				t = flipValue(genericNegaScout(child, maxDepth, depth + 1, flipWithCopy(b), flipWithCopy(a), getColor, getValue, getChildren, beforeReturn));
 				
-				if ((t._1 > a._1) && (t._1 < beta._1) && index > 0)
+				var shouldFlip = true;
+				if (getColor(child.value) == getColor(node.value))
+					shouldFlip = false;
+				
+				if (shouldFlip)	
 				{
-					a = flipValue(genericNegaScout(child, maxDepth, depth + 1, flipWithCopy(beta), flipWithCopy(t), getColor, getValue, getChildren , beforeReturn));
+					t = flipValue(genericNegaScout(child, maxDepth, depth + 1, flipWithCopy(b), flipWithCopy(a), getColor, getValue, getChildren, beforeReturn));
+					
+					if ((t._1 > a._1) && (t._1 < beta._1) && index > 0)
+					{
+						a = flipValue(genericNegaScout(child, maxDepth, depth + 1, flipWithCopy(beta), flipWithCopy(t), getColor, getValue, getChildren , beforeReturn));
+					}
+				}
+				else
+				{
+					t = (genericNegaScout(child, maxDepth, depth + 1, (b), (a), getColor, getValue, getChildren, beforeReturn));
+					
+					if ((t._1 > a._1) && (t._1 < beta._1) && index > 0)
+					{
+						a = (genericNegaScout(child, maxDepth, depth + 1, (beta), (t), getColor, getValue, getChildren , beforeReturn));
+					}
 				}
 				
 				if(t._1 > a._1)
